@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Events - Eventify</title>
+    <meta name="description" content="Discover and browse university club events. Filter by category, location, and date to find events that match your interests.">
+    
+    <!-- Tailwind CSS -->
+    <link href="./styles/output.css" rel="stylesheet">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
+</head>
+<body class="bg-brand-surface text-brand-text font-body min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-brand-card/80 backdrop-blur border-b border-white/10 sticky top-0 z-40">
+        <div class="container-custom">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold text-brand-text">Eventify</span>
+                    </a>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="p-2 text-brand-muted hover:text-brand-text transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-8">
+        <div class="container-custom">
+            <!-- Page Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-brand-text mb-4">
+                    Discover Events
+                </h1>
+                <p class="text-lg text-brand-muted">
+                    Find exciting university club events that match your interests
+                </p>
+            </div>
+
+            <!-- Search and Filters Toolbar -->
+            <div class="card p-6 mb-8">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                    <!-- Search -->
+                    <div class="lg:col-span-2">
+                        <label for="search" class="block text-sm font-medium text-brand-text mb-2">
+                            Search Events
+                        </label>
+                        <div class="relative">
+                            <input
+                                type="text"
+                                id="search"
+                                placeholder="Search by title, description, or category..."
+                                class="input pl-10"
+                            >
+                            <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-brand-text mb-2">
+                            Category
+                        </label>
+                        <select id="category" class="input">
+                            <option value="">All Categories</option>
+                            <option value="academic">Academic</option>
+                            <option value="social">Social</option>
+                            <option value="sports">Sports</option>
+                            <option value="cultural">Cultural</option>
+                            <option value="technology">Technology</option>
+                            <option value="arts">Arts & Music</option>
+                            <option value="career">Career</option>
+                            <option value="volunteer">Volunteer</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Filter -->
+                    <div>
+                        <label for="date-filter" class="block text-sm font-medium text-brand-text mb-2">
+                            Date Range
+                        </label>
+                        <select id="date-filter" class="input">
+                            <option value="">All Dates</option>
+                            <option value="today">Today</option>
+                            <option value="tomorrow">Tomorrow</option>
+                            <option value="this-week">This Week</option>
+                            <option value="this-month">This Month</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Events Grid -->
+            <div id="events-grid" class="grid-responsive">
+                <!-- Events will be loaded here -->
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination" class="mt-12">
+                <!-- Pagination will be rendered here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyASOYZU9OI454p5t9obtZP3mkA6ncawCBw",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.firebasestorage.app",
+            messagingSenderId: "1035518806464",
+            appId: "1:1035518806464:web:c5fb9df49b319cd639a025",
+            measurementId: "G-0ZC704LYMG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allEvents = [];
+        let filteredEvents = [];
+
+        // Load events from Firebase
+        async function loadEvents() {
+            try {
+                const eventsContainer = document.getElementById('events-grid');
+                eventsContainer.innerHTML = '<div class="text-center py-12"><div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4"><svg class="w-8 h-8 text-brand-primary animate-spin" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg></div><p class="text-brand-muted">Loading events...</p></div>';
+
+                const eventsRef = collection(db, 'events');
+                const q = query(eventsRef, orderBy('startAt', 'asc'));
+                const querySnapshot = await getDocs(q);
+                
+                allEvents = [];
+                querySnapshot.forEach((doc) => {
+                    allEvents.push({ id: doc.id, ...doc.data() });
+                });
+
+                console.log('Loaded events:', allEvents);
+                filteredEvents = [...allEvents];
+                displayEvents();
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                const eventsContainer = document.getElementById('events-grid');
+                eventsContainer.innerHTML = '<div class="text-center py-12"><div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500/20 to-red-600/20 rounded-2xl mb-4"><svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div><p class="text-red-400">Failed to load events. Please try again.</p></div>';
+            }
+        }
+
+        // Display events
+        function displayEvents() {
+            const eventsContainer = document.getElementById('events-grid');
+            
+            if (filteredEvents.length === 0) {
+                eventsContainer.innerHTML = '<div class="text-center py-12"><div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4"><svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3 class="text-lg font-semibold text-brand-text mb-2">No Events Found</h3><p class="text-brand-muted">Try adjusting your search or filters.</p></div>';
+                return;
+            }
+
+            const eventsHTML = filteredEvents.map(event => {
+                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
+                const endDate = event.endAt ? new Date(event.endAt.seconds * 1000) : new Date();
+                
+                return `
+                    <div class="card p-6 hover:scale-105 transition-all duration-300 cursor-pointer" onclick="window.location.href='event.html?id=${event.id}'">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-semibold text-brand-text mb-2">${event.title}</h3>
+                                <p class="text-brand-muted mb-3 line-clamp-2">${event.description || 'No description available'}</p>
+                            </div>
+                            <div class="ml-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-primary/20 text-brand-primary">
+                                    ${event.category || 'General'}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-brand-text">${startDate.toLocaleDateString()}</span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-brand-text">${event.location || 'Location TBD'}</span>
+                            </div>
+                            
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                                </svg>
+                                <span class="text-brand-text">${event.attendeeCount || 0} attending</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            eventsContainer.innerHTML = eventsHTML;
+        }
+
+        // Search and filter functionality
+        function filterEvents() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const categoryFilter = document.getElementById('category').value;
+            const dateFilter = document.getElementById('date-filter').value;
+
+            filteredEvents = allEvents.filter(event => {
+                const matchesSearch = !searchTerm || 
+                    event.title.toLowerCase().includes(searchTerm) ||
+                    (event.description && event.description.toLowerCase().includes(searchTerm)) ||
+                    (event.category && event.category.toLowerCase().includes(searchTerm));
+                
+                const matchesCategory = !categoryFilter || event.category === categoryFilter;
+                
+                let matchesDate = true;
+                if (dateFilter && event.startAt) {
+                    const eventDate = new Date(event.startAt.seconds * 1000);
+                    const today = new Date();
+                    
+                    switch (dateFilter) {
+                        case 'today':
+                            matchesDate = eventDate.toDateString() === today.toDateString();
+                            break;
+                        case 'week':
+                            const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+                            matchesDate = eventDate >= today && eventDate <= weekFromNow;
+                            break;
+                        case 'month':
+                            const monthFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+                            matchesDate = eventDate >= today && eventDate <= monthFromNow;
+                            break;
+                    }
+                }
+                
+                return matchesSearch && matchesCategory && matchesDate;
+            });
+
+            displayEvents();
+        }
+
+        // Event listeners
+        document.getElementById('search').addEventListener('input', filterEvents);
+        document.getElementById('category').addEventListener('change', filterEvents);
+        document.getElementById('date-filter').addEventListener('change', filterEvents);
+
+        // Theme toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Load events when page loads
+        document.addEventListener('DOMContentLoaded', loadEvents);
+    </script>
+</body>
+</html>

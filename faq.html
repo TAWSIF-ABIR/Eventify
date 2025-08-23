@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Eventify</title>
+    <meta name="description" content="Frequently asked questions about Eventify. Find answers to common questions about event registration, management, and platform usage.">
+    
+    <!-- Tailwind CSS -->
+    <link href="./styles/output.css" rel="stylesheet">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
+</head>
+<body class="bg-brand-surface text-brand-text font-body min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-brand-card/80 backdrop-blur border-b border-white/10">
+        <div class="container-custom">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold text-brand-text">Eventify</span>
+                    </a>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="p-2 text-brand-muted hover:text-brand-text transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="container-custom max-w-4xl">
+            <!-- Page Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-brand-text mb-4">
+                    Frequently Asked Questions
+                </h1>
+                <p class="text-lg text-brand-muted">
+                    Find answers to common questions about Eventify
+                </p>
+            </div>
+
+            <!-- FAQ Sections -->
+            <div class="space-y-8">
+                <!-- Getting Started -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-brand-text mb-6">Getting Started</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                How do I create an account?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Click the "Sign Up" button in the top navigation. You'll need to provide your full name, email address, choose a role (Student or Admin), and create a password. Once verified, you can start using Eventify.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                What's the difference between Student and Admin roles?
+                            </h3>
+                            <p class="text-brand-muted">
+                                <strong>Students</strong> can browse events, register for events, manage their registrations, and view their dashboard. <strong>Admins</strong> can create and manage events, view attendee lists, and access analytics and management tools.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                How do I log in to my account?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Use the "Login" button in the top navigation. Enter your email address and password. If you've forgotten your password, use the "Forgot Password" link to reset it.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Event Registration -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-brand-text mb-6">Event Registration</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                How do I register for an event?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Browse events on the Events page or from the home page. Click on an event to view details, then click the "Register" button. You'll receive a confirmation and the event will appear in your dashboard.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                Can I cancel my registration?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Yes, you can cancel your registration up until the event's registration deadline. Go to your dashboard or the event page and click "Unregister" or "Cancel Registration".
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                What happens if an event is full?
+                            </h3>
+                            <p class="text-brand-muted">
+                                If an event reaches its capacity, the registration button will be disabled and show "Full". You can check back later as spots may become available if other students cancel their registrations.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                Is there a deadline for registration?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Yes, each event has a registration deadline set by the organizer. You cannot register after this deadline has passed. The deadline is clearly displayed on each event page.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Event Management (Admin) -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-brand-text mb-6">Event Management (Admin)</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                How do I create a new event?
+                            </h3>
+                            <p class="text-brand-muted">
+                                As an Admin, go to your Admin Dashboard and click "Create Event". Fill out the event details including title, description, date/time, location, category, and capacity. You can also upload an event poster image.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                Can I edit an event after creating it?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Yes, you can edit event details from the Admin Dashboard. Click on the event and select "Edit". You can modify most details, but be careful about changing dates or times if students have already registered.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                How do I manage event attendees?
+                            </h3>
+                            <p class="text-brand-muted">
+                                From the Admin Dashboard, click on an event and select "Attendees". You can view the list of registered students, mark attendance, export attendee data, and remove registrations if needed.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Technical Support -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-brand-text mb-6">Technical Support</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                What browsers are supported?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Eventify works on all modern browsers including Chrome, Firefox, Safari, and Edge. For the best experience, we recommend using the latest version of your browser.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                Is Eventify mobile-friendly?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Yes! Eventify is fully responsive and works great on mobile devices. You can browse events, register, and manage your account from any smartphone or tablet.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                What should I do if I encounter an error?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Try refreshing the page first. If the problem persists, check your internet connection and try again. For persistent issues, you can contact support through the Help Center.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Privacy & Security -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-brand-text mb-6">Privacy & Security</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                Is my personal information secure?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Yes, Eventify uses industry-standard security measures. Your password is encrypted, and we use Firebase's secure authentication system. We never share your personal information with third parties.
+                            </p>
+                        </div>
+
+                        <div class="card p-6">
+                            <h3 class="text-lg font-medium text-brand-text mb-3">
+                                Who can see my event registrations?
+                            </h3>
+                            <p class="text-brand-muted">
+                                Only you and the event organizers (Admins) can see your registrations. Other students cannot see which events you've registered for unless you choose to share that information.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="text-center mt-16">
+                <div class="card p-8">
+                    <h2 class="text-2xl font-semibold text-brand-text mb-4">
+                        Still have questions?
+                    </h2>
+                    <p class="text-brand-muted mb-6">
+                        Can't find the answer you're looking for? Our support team is here to help.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="index.html" class="btn btn-primary">
+                            Back to Home
+                        </a>
+                        <a href="#" class="btn btn-ghost">
+                            Contact Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module" src="./js/firebase-init.js"></script>
+    <script type="module" src="./js/auth.js"></script>
+    <script type="module" src="./js/ui.js"></script>
+    <script type="module" src="./js/toast.js"></script>
+</body>
+</html>

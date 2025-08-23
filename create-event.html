@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event - Eventify</title>
+    <meta name="description" content="Create and organize new university club events on Eventify.">
+    
+    <!-- Tailwind CSS -->
+    <link href="./styles/output.css" rel="stylesheet">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
+</head>
+<body class="bg-brand-surface text-brand-text font-body min-h-screen">
+    <!-- Navigation -->
+    <nav class="nav-blur sticky top-0 z-40">
+        <div class="container-custom">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center glow-effect">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold text-gradient">Eventify</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="admin-dashboard.html" class="text-brand-muted hover:text-brand-text transition-colors">Dashboard</a>
+                    <a href="create-event.html" class="text-brand-primary font-medium">Create Event</a>
+                    <a href="analytics.html" class="text-brand-muted hover:text-brand-text transition-colors">Analytics</a>
+                    <a href="rooms.html" class="text-brand-muted hover:text-brand-text transition-colors">Rooms</a>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="p-2 text-brand-muted hover:text-brand-text transition-colors rounded-xl hover:bg-white/5">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 000 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+
+                    <!-- User Dropdown -->
+                    <div class="relative" id="user-menu">
+                        <button class="flex items-center space-x-2 text-brand-text hover:text-brand-primary transition-colors">
+                            <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center" id="user-avatar">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span id="user-name" class="font-medium">Admin</span>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414L10 11.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 10 5.293 6.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute right-0 mt-2 w-48 glass-effect rounded-2xl shadow-2xl opacity-0 invisible transition-all duration-200">
+                            <div class="py-2">
+                                <a href="profile.html" class="block px-4 py-2 text-sm text-brand-text hover:bg-white/5 transition-colors">Profile</a>
+                                <a href="settings.html" class="block px-4 py-2 text-sm text-brand-text hover:bg-white/5 transition-colors">Settings</a>
+                                <hr class="border-white/10 my-2">
+                                <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-brand-danger hover:bg-white/5 transition-colors">Logout</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-button" class="md:hidden p-2 text-brand-muted hover:text-brand-text transition-colors rounded-xl hover:bg-white/5">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-white/10">
+                <div class="flex flex-col space-y-4 pt-4">
+                    <a href="admin-dashboard.html" class="text-brand-muted hover:text-brand-text transition-colors">Dashboard</a>
+                    <a href="create-event.html" class="text-brand-primary font-medium">Create Event</a>
+                    <a href="analytics.html" class="text-brand-muted hover:text-brand-text transition-colors">Analytics</a>
+                    <a href="rooms.html" class="text-brand-muted hover:text-brand-text transition-colors">Rooms</a>
+                    <hr class="border-white/10">
+                    <a href="profile.html" class="text-brand-muted hover:text-brand-text transition-colors">Profile</a>
+                    <a href="settings.html" class="text-brand-muted hover:text-brand-text transition-colors">Settings</a>
+                    <button id="mobile-logout-btn" class="text-left text-brand-danger hover:text-brand-danger/80 transition-colors">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-8">
+        <div class="container-custom">
+            <!-- Header -->
+            <div class="mb-8 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="heading-medium mb-2">Create New Event</h1>
+                        <p class="text-lead">Organize an exciting club event for your university community</p>
+                    </div>
+                    <a href="admin-dashboard.html" class="btn btn-ghost">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Create Event Form -->
+            <div class="max-w-4xl mx-auto">
+                <form id="create-event-form" class="space-y-8">
+                    <!-- Basic Information -->
+                    <div class="card p-8">
+                        <h2 class="text-xl font-semibold text-brand-text mb-6">Basic Information</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label for="event-title" class="form-label">Event Title *</label>
+                                <input 
+                                    type="text" 
+                                    id="event-title" 
+                                    name="title" 
+                                    class="input" 
+                                    placeholder="Enter event title"
+                                    required
+                                >
+                                <div class="form-error" id="title-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event-category" class="form-label">Category *</label>
+                                <select id="event-category" name="category" class="input" required>
+                                    <option value="">Select category</option>
+                                    <option value="academic">Academic</option>
+                                    <option value="social">Social</option>
+                                    <option value="cultural">Cultural</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="arts">Arts & Music</option>
+                                    <option value="career">Career Development</option>
+                                    <option value="workshop">Workshop</option>
+                                    <option value="conference">Conference</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="form-error" id="category-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-6">
+                            <label for="event-description" class="form-label">Description *</label>
+                            <textarea 
+                                id="event-description" 
+                                name="description" 
+                                rows="4" 
+                                class="input" 
+                                placeholder="Describe your event in detail..."
+                                required
+                            ></textarea>
+                            <div class="form-error" id="description-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- Date & Time -->
+                    <div class="card p-8">
+                        <h2 class="text-xl font-semibold text-brand-text mb-6">Date & Time</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="form-group">
+                                <label for="event-date" class="form-label">Event Date *</label>
+                                <input 
+                                    type="date" 
+                                    id="event-date" 
+                                    name="date" 
+                                    class="input" 
+                                    required
+                                >
+                                <div class="form-error" id="date-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event-start-time" class="form-label">Start Time *</label>
+                                <input 
+                                    type="time" 
+                                    id="event-start-time" 
+                                    name="startTime" 
+                                    class="input" 
+                                    required
+                                >
+                                <div class="form-error" id="start-time-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event-end-time" class="form-label">End Time *</label>
+                                <input 
+                                    type="time" 
+                                    id="event-end-time" 
+                                    name="endTime" 
+                                    class="input" 
+                                    required
+                                >
+                                <div class="form-error" id="end-time-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="all-day-event" name="allDay" class="w-4 h-4 text-brand-primary bg-white/5 border-white/20 rounded focus:ring-brand-primary focus:ring-offset-brand-surface">
+                                <span class="text-sm text-brand-muted">This is an all-day event</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Location & Capacity -->
+                    <div class="card p-8">
+                        <h2 class="text-xl font-semibold text-brand-text mb-6">Location & Capacity</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label for="event-location" class="form-label">Location *</label>
+                                <input 
+                                    type="text" 
+                                    id="event-location" 
+                                    name="location" 
+                                    class="input" 
+                                    placeholder="Enter event location"
+                                    required
+                                >
+                                <div class="form-error" id="location-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event-room" class="form-label">Room/Venue</label>
+                                <select id="event-room" name="room" class="input">
+                                    <option value="">Select room (optional)</option>
+                                    <option value="auditorium">Main Auditorium</option>
+                                    <option value="conference-room-1">Conference Room 1</option>
+                                    <option value="conference-room-2">Conference Room 2</option>
+                                    <option value="seminar-hall">Seminar Hall</option>
+                                    <option value="lab-101">Computer Lab 101</option>
+                                    <option value="lab-102">Computer Lab 102</option>
+                                    <option value="outdoor">Outdoor Venue</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="form-error" id="room-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div class="form-group">
+                                <label for="event-capacity" class="form-label">Maximum Capacity</label>
+                                <input 
+                                    type="number" 
+                                    id="event-capacity" 
+                                    name="capacity" 
+                                    class="input" 
+                                    placeholder="Enter max capacity"
+                                    min="1"
+                                >
+                                <div class="form-error" id="capacity-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event-registration-deadline" class="form-label">Registration Deadline</label>
+                                <input 
+                                    type="datetime-local" 
+                                    id="event-registration-deadline" 
+                                    name="registrationDeadline" 
+                                    class="input"
+                                >
+                                <div class="form-error" id="registration-deadline-error"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Image -->
+                    <div class="card p-8">
+                        <h2 class="text-xl font-semibold text-brand-text mb-6">Event Image</h2>
+                        
+                        <div class="form-group">
+                            <label for="event-poster" class="form-label">Event Poster/Image</label>
+                            <div class="mt-2">
+                                <div class="flex justify-center px-6 pt-5 pb-6 border-2 border-white/20 border-dashed rounded-2xl hover:border-brand-primary/50 transition-colors">
+                                    <div class="space-y-2 text-center">
+                                        <svg class="mx-auto h-12 w-12 text-brand-muted" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <div class="flex text-sm text-brand-muted">
+                                            <label for="event-poster" class="relative cursor-pointer bg-transparent rounded-md font-medium text-brand-primary hover:text-brand-primary/80 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-brand-primary">
+                                                <span>Upload a file</span>
+                                                <input id="event-poster" name="poster" type="file" class="sr-only" accept="image/*">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-brand-muted">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-error" id="poster-error"></div>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div id="image-preview" class="hidden mt-4">
+                            <img id="preview-img" class="w-full max-w-md h-48 object-cover rounded-2xl" alt="Event poster preview">
+                            <button type="button" id="remove-image" class="btn btn-secondary mt-2">
+                                Remove Image
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Additional Settings -->
+                    <div class="card p-8">
+                        <h2 class="text-xl font-semibold text-brand-text mb-6">Additional Settings</h2>
+                        
+                        <div class="space-y-4">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="require-approval" name="requireApproval" class="w-4 h-4 text-brand-primary bg-white/5 border-white/20 rounded focus:ring-brand-primary focus:ring-offset-brand-surface">
+                                <span class="text-sm text-brand-muted">Require approval for registrations</span>
+                            </label>
+
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="allow-waitlist" name="allowWaitlist" class="w-4 h-4 text-brand-primary bg-white/5 border-white/20 rounded focus:ring-brand-primary focus:ring-offset-brand-surface">
+                                <span class="text-sm text-brand-muted">Allow waitlist when event is full</span>
+                            </label>
+
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="send-reminders" name="sendReminders" class="w-4 h-4 text-brand-primary bg-white/5 border-white/20 rounded focus:ring-brand-primary focus:ring-offset-brand-surface">
+                                <span class="text-sm text-brand-muted">Send reminder emails to attendees</span>
+                            </label>
+
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" id="generate-certificates" name="generateCertificates" class="w-4 h-4 text-brand-primary bg-white/5 border-white/20 rounded focus:ring-brand-primary focus:ring-offset-brand-surface">
+                                <span class="text-sm text-brand-muted">Generate certificates for participants</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-end">
+                        <button type="button" id="save-draft" class="btn btn-secondary">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h-1v5.586l-2.293-2.293z"/>
+                            </svg>
+                            Save as Draft
+                        </button>
+                        
+                        <button type="submit" id="create-event-btn" class="btn btn-primary">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Create Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyASOYZU9OI454p5t9obtZP3mkA6ncawCBw",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.firebasestorage.app",
+            messagingSenderId: "1035518806464",
+            appId: "1:1035518806464:web:c5fb9df49b319cd639a025",
+            measurementId: "G-0ZC704LYMG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Check authentication
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'auth-new.html';
+                return;
+            }
+            
+            // Update user info
+            const userName = document.getElementById('user-name');
+            if (userName) {
+                userName.textContent = user.displayName || user.email;
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('create-event-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const createBtn = document.getElementById('create-event-btn');
+            const originalText = createBtn.innerHTML;
+            createBtn.disabled = true;
+            createBtn.innerHTML = '<svg class="w-5 h-5 animate-spin mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg> Creating Event...';
+            
+            try {
+                // Get form data
+                const formData = new FormData(e.target);
+                const eventData = {
+                    title: formData.get('title'),
+                    description: formData.get('description'),
+                    category: formData.get('category'),
+                    startDate: formData.get('date'), // Use 'date' for date
+                    startTime: formData.get('startTime'),
+                    endDate: formData.get('date'), // Use 'date' for date
+                    endTime: formData.get('endTime'),
+                    allDay: formData.get('allDay') === 'on',
+                    location: formData.get('location'),
+                    room: formData.get('room'),
+                    capacity: formData.get('capacity') ? parseInt(formData.get('capacity')) : null,
+                    registrationDeadline: formData.get('registrationDeadline'),
+                    requireApproval: formData.get('requireApproval') === 'on',
+                    allowWaitlist: formData.get('allowWaitlist') === 'on',
+                    sendReminders: formData.get('sendReminders') === 'on',
+                    generateCertificates: formData.get('generateCertificates') === 'on',
+                    createdBy: auth.currentUser.uid,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp(),
+                    status: 'upcoming',
+                    visibility: 'public',
+                    attendeeCount: 0
+                };
+
+                // Combine date and time
+                if (eventData.startDate && eventData.startTime) {
+                    const startDateTime = new Date(`${eventData.startDate}T${eventData.startTime}`);
+                    eventData.startAt = startDateTime;
+                }
+                if (eventData.endDate && eventData.endTime) {
+                    const endDateTime = new Date(`${eventData.endDate}T${eventData.endTime}`);
+                    eventData.endAt = endDateTime;
+                }
+
+                // Remove separate date/time fields
+                delete eventData.startDate;
+                delete eventData.startTime;
+                delete eventData.endDate;
+                delete eventData.endTime;
+
+                console.log('Creating event:', eventData);
+
+                // Save to Firestore
+                const docRef = await addDoc(collection(db, 'events'), eventData);
+                
+                console.log('Event created with ID:', docRef.id);
+                
+                // Show success message
+                alert('Event created successfully!');
+                
+                // Redirect to admin dashboard
+                window.location.href = 'admin-dashboard.html';
+                
+            } catch (error) {
+                console.error('Error creating event:', error);
+                alert('Failed to create event: ' + error.message);
+            } finally {
+                createBtn.disabled = false;
+                createBtn.innerHTML = originalText;
+            }
+        });
+
+        // Handle logout
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                window.location.href = 'auth-new.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // Mobile logout
+        document.getElementById('mobile-logout-btn').addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                window.location.href = 'auth-new.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Theme toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Image preview functionality
+        const posterInput = document.getElementById('event-poster');
+        const imagePreview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+        const removeImageBtn = document.getElementById('remove-image');
+
+        posterInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeImageBtn.addEventListener('click', () => {
+            posterInput.value = '';
+            imagePreview.classList.add('hidden');
+        });
+
+        // Save draft functionality
+        document.getElementById('save-draft').addEventListener('click', () => {
+            alert('Draft saved! (This feature will be implemented later)');
+        });
+    </script>
+</body>
+</html>

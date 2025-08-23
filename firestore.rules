@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read and write their own profile
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Admins can read all user data (for admin dashboard)
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Users can read and write their own registrations subcollection
+    match /users/{userId}/registrations/{registrationId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Users can read and write their own certificates subcollection
+    match /users/{userId}/certificates/{certificateId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Users can read all events
+    match /events/{eventId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        (resource == null || resource.data.createdBy == request.auth.uid);
+    }
+    
+    // Users can read and write their own event registrations
+    match /events/{eventId}/registrations/{registrationId} {
+      allow read, write: if request.auth != null && 
+        request.auth.uid == registrationId;
+    }
+    
+    // Users can read and write their own event attendance
+    match /events/{eventId}/attendance/{attendanceId} {
+      allow read, write: if request.auth != null && 
+        request.auth.uid == attendanceId;
+    }
+    
+    // Rooms - readable by all authenticated users, writable by admins
+    match /rooms/{roomId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Certificates - users can read their own
+    match /certificates/{certificateId} {
+      allow read: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      allow write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}

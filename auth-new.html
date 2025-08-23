@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication - Eventify</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #0b1020; color: #e2e8f0; }
+        .container { max-width: 400px; margin: 0 auto; background: #0f172a; padding: 30px; border-radius: 10px; border: 1px solid #334155; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #334155; border-radius: 5px; background: #1e293b; color: #e2e8f0; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #1d4ed8; }
+        button:disabled { background: #64748b; cursor: not-allowed; }
+        .toggle { text-align: center; margin-top: 20px; }
+        .toggle button { background: none; border: none; color: #3b82f6; cursor: pointer; text-decoration: underline; }
+        .status { margin-top: 15px; padding: 10px; border-radius: 5px; }
+        .success { background: #065f46; color: #d1fae5; }
+        .error { background: #991b1b; color: #fecaca; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 30px;">Eventify Authentication</h1>
+        
+        <!-- Login Form -->
+        <form id="login-form">
+            <h2>Sign In</h2>
+            <div class="form-group">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" required>
+            </div>
+            <button type="submit" id="login-btn">Sign In</button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signup-form" class="hidden">
+            <h2>Create Account</h2>
+            <div class="form-group">
+                <label for="signup-email">Email:</label>
+                <input type="email" id="signup-email" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-name">Full Name:</label>
+                <input type="text" id="signup-name" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-role">Role:</label>
+                <select id="signup-role" required>
+                    <option value="">Select role</option>
+                    <option value="student">Student</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="signup-student-id">Student ID:</label>
+                <input type="text" id="signup-student-id">
+            </div>
+            <button type="submit" id="signup-btn">Create Account</button>
+        </form>
+
+        <div class="toggle">
+            <button type="button" id="toggle-btn">Don't have an account? Sign up</button>
+        </div>
+
+        <div id="status"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyASOYZU9OI454p5t9obtZP3mkA6ncawCBw",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.firebasestorage.app",
+            messagingSenderId: "1035518806464",
+            appId: "1:1035518806464:web:c5fb9df49b319cd639a025",
+            measurementId: "G-0ZC704LYMG"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const toggleBtn = document.getElementById('toggle-btn');
+        const statusDiv = document.getElementById('status');
+
+        let isLoginMode = true;
+
+        // Check auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('User signed in:', user.email);
+                if (user.email === 'admin@eventify.com') {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        });
+
+        // Toggle forms
+        toggleBtn.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            if (isLoginMode) {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                toggleBtn.textContent = "Don't have an account? Sign up";
+            } else {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+                toggleBtn.textContent = "Already have an account? Sign in";
+            }
+            statusDiv.innerHTML = '';
+        });
+
+        // Handle login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const loginBtn = document.getElementById('login-btn');
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Signing in...';
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                statusDiv.innerHTML = '<div class="status success">Login successful! Redirecting...</div>';
+            } catch (error) {
+                console.error('Login error:', error);
+                let message = 'Login failed. Please try again.';
+                if (error.code === 'auth/user-not-found') message = 'No account found with this email.';
+                else if (error.code === 'auth/wrong-password') message = 'Incorrect password.';
+                statusDiv.innerHTML = `<div class="status error">${message}</div>`;
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Sign In';
+            }
+        });
+
+        // Handle signup
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const name = document.getElementById('signup-name').value;
+            const role = document.getElementById('signup-role').value;
+            const studentId = document.getElementById('signup-student-id').value;
+            const signupBtn = document.getElementById('signup-btn');
+            
+            signupBtn.disabled = true;
+            signupBtn.textContent = 'Creating account...';
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                await setDoc(doc(db, 'users', user.uid), {
+                    uid: user.uid,
+                    email: email,
+                    displayName: name,
+                    role: role,
+                    studentId: studentId || null,
+                    session: '2024-2025',
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
+                
+                statusDiv.innerHTML = '<div class="status success">Account created successfully! Redirecting...</div>';
+            } catch (error) {
+                console.error('Signup error:', error);
+                let message = 'Failed to create account. Please try again.';
+                if (error.code === 'auth/email-already-in-use') message = 'An account with this email already exists.';
+                else if (error.code === 'auth/weak-password') message = 'Password should be at least 6 characters.';
+                statusDiv.innerHTML = `<div class="status error">${message}</div>`;
+            } finally {
+                signupBtn.disabled = false;
+                signupBtn.textContent = 'Create Account';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Eventify</title>
+    <meta name="description" content="Manage events, view analytics, and oversee your university club events on Eventify.">
+    
+    <!-- Tailwind CSS -->
+    <link href="./styles/output.css" rel="stylesheet">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
+</head>
+<body class="bg-brand-surface text-brand-text font-body min-h-screen">
+    <!-- Sidebar -->
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gradient-to-b from-brand-card to-brand-card/80 border-r border-white/10 flex-shrink-0 backdrop-blur-sm">
+            <!-- Logo Section -->
+            <div class="p-6 border-b border-white/10">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center glow-effect group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold text-gradient">Eventify</span>
+                        <p class="text-xs text-brand-muted font-medium">Admin Panel</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-6 space-y-2">
+                <a href="admin-dashboard.html" class="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-brand-primary/20 to-brand-primary/10 text-brand-primary rounded-lg font-medium border border-brand-primary/20 shadow-lg hover:shadow-xl hover:shadow-brand-primary/20 transition-all duration-300 group">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    </svg>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+                
+                <a href="create-event.html" class="flex items-center space-x-3 px-3 py-2 text-brand-muted hover:text-brand-text hover:bg-white/5 rounded-lg transition-all duration-300 group hover:shadow-lg hover:shadow-brand-accent/20">
+                    <div class="w-4 h-4 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-3 h-3 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="font-medium text-sm">Create Event</span>
+                </a>
+            </nav>
+
+            <!-- Profile Section -->
+            <div class="p-6 border-t border-white/10 mt-auto">
+                <div class="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 rounded-xl p-4 border border-white/10">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center ring-2 ring-white/10" id="user-avatar">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-brand-text text-sm" id="user-name">Admin</p>
+                            <p class="text-xs text-brand-muted" id="user-email">admin@eventify.com</p>
+                        </div>
+                    </div>
+                    
+                    <button id="logout-btn" class="w-full flex items-center justify-center space-x-2 px-3 py-2 text-brand-danger hover:bg-brand-danger/10 rounded-lg transition-all duration-300 font-medium text-sm">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-2.293 2.293z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-gradient-to-br from-brand-surface via-brand-surface to-brand-surface/95">
+            <!-- Top Bar -->
+            <div class="bg-gradient-to-r from-brand-card/80 to-brand-card/60 border-b border-white/10 px-6 py-4 backdrop-blur-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-brand-text mb-1">Admin Dashboard</h1>
+                        <p class="text-brand-muted">Welcome back, <span id="welcome-name" class="text-brand-primary font-semibold">Admin</span>! 👋</p>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="p-2 text-brand-muted hover:text-brand-text transition-all duration-300 rounded-xl hover:bg-white/5 hover:scale-105">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 000 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="p-6 space-y-6 max-w-7xl mx-auto">
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full" onclick="adminDashboardPage.showTotalEventsDetails()">
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-brand-text mb-2" id="total-events">0</h3>
+                        <p class="text-brand-muted font-medium">Total Events</p>
+                        <div class="w-12 h-1 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full mx-auto mt-3"></div>
+                        <p class="text-xs text-brand-primary mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
+                    </div>
+
+                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full" onclick="adminDashboardPage.showUpcomingEventsDetails()">
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-brand-text mb-2" id="upcoming-events">0</h3>
+                        <p class="text-brand-muted font-medium">Upcoming Events</p>
+                        <div class="w-12 h-1 bg-gradient-to-r from-brand-success to-brand-success/60 rounded-full mx-auto mt-3"></div>
+                        <p class="text-xs text-brand-success mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
+                    </div>
+
+                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full" onclick="adminDashboardPage.showTotalAttendeesDetails()">
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-brand-text mb-2" id="total-attendees">0</h3>
+                        <p class="text-brand-muted font-medium">Total Attendees</p>
+                        <div class="w-12 h-1 bg-gradient-to-r from-brand-accent to-brand-accent/60 rounded-full mx-auto mt-3"></div>
+                        <p class="text-xs text-brand-accent mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer group max-w-md mx-auto w-full" onclick="adminDashboardPage.showAnalyticsDetails()">
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-brand-text mb-2 group-hover:text-brand-accent transition-colors duration-300">View Analytics</h3>
+                        <p class="text-brand-muted text-sm">Monitor event performance and insights</p>
+                        <div class="w-12 h-1 bg-gradient-to-r from-brand-accent to-brand-accent/60 rounded-full mx-auto mt-3 group-hover:w-16 transition-all duration-300"></div>
+                        <p class="text-xs text-brand-accent mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
+                    </div>
+
+                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer group max-w-md mx-auto w-full" onclick="adminDashboardPage.showRoomsDetails()">
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-brand-text mb-2 group-hover:text-brand-success transition-colors duration-300">Manage Rooms</h3>
+                        <p class="text-brand-muted text-sm">Schedule and organize venues</p>
+                        <div class="w-12 h-1 bg-gradient-to-r from-brand-success to-brand-success/60 rounded-full mx-auto mt-3 group-hover:w-16 transition-all duration-300"></div>
+                        <p class="text-xs text-brand-success mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
+                    </div>
+                </div>
+
+                <!-- Admin Events Section - Moved to Bottom -->
+                <div class="space-y-4 max-w-6xl mx-auto">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-brand-text mb-1">Event Management</h2>
+                            <p class="text-brand-muted text-sm">Manage and organize your university club events</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button id="refresh-events" class="btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                                Refresh
+                            </button>
+                            <a href="create-event.html" class="btn btn-primary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 shadow-lg text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Create Event
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Events List -->
+                    <div id="admin-events" class="space-y-4">
+                        <!-- Loading State -->
+                        <div id="events-loading" class="text-center py-12">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4">
+                                <svg class="w-8 h-8 text-brand-primary animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <p class="text-brand-muted">Loading your events...</p>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="events-empty" class="text-center py-12 hidden">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4">
+                                <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-brand-text mb-2">No Events Created Yet</h3>
+                            <p class="text-brand-muted mb-6">Start creating events to manage your university club activities.</p>
+                            <a href="create-event.html" class="btn btn-primary px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300 shadow-lg">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Create Your First Event
+                            </a>
+                        </div>
+
+                        <!-- Events will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail Modals -->
+    <!-- Total Events Modal -->
+    <div id="total-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-brand-text">Total Events Overview</h3>
+                <button onclick="adminDashboardPage.hideModal('total-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="total-events-content" class="space-y-4">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Events Modal -->
+    <div id="upcoming-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-brand-text">Upcoming Events Details</h3>
+                <button onclick="adminDashboardPage.hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="upcoming-events-content" class="space-y-4">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Attendees Modal -->
+    <div id="total-attendees-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-brand-text">Total Attendees Analysis</h3>
+                <button onclick="adminDashboardPage.hideModal('total-attendees-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="total-attendees-content" class="space-y-4">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div id="analytics-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-brand-text">Analytics Overview</h3>
+                <button onclick="adminDashboardPage.hideModal('analytics-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="analytics-content" class="space-y-4">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Rooms Modal -->
+    <div id="rooms-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-3xl font-bold text-brand-text">Room Management</h3>
+                <button onclick="adminDashboardPage.hideModal('rooms-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="rooms-content" class="space-y-4">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, getDocs, query, orderBy, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyASOYZU9OI454p5t9obtZP3mkA6ncawCBw",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.firebasestorage.app",
+            messagingSenderId: "1035518806464",
+            appId: "1:1035518806464:web:c5fb9df49b319cd639a025",
+            measurementId: "G-0ZC704LYMG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let allEvents = [];
+
+        // Check authentication
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'auth-new.html';
+                return;
+            }
+            
+            // Update user info
+            const userName = document.getElementById('user-name');
+            const userEmail = document.getElementById('user-email');
+            const welcomeName = document.getElementById('welcome-name');
+            
+            if (userName) userName.textContent = user.displayName || 'Admin';
+            if (userEmail) userEmail.textContent = user.email;
+            if (welcomeName) welcomeName.textContent = user.displayName || 'Admin';
+            
+            // Load dashboard data
+            loadDashboardData();
+        });
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                console.log('Loading dashboard data...');
+                
+                // Load events
+                const eventsRef = collection(db, 'events');
+                const eventsQuery = query(eventsRef, orderBy('createdAt', 'desc'));
+                const eventsSnapshot = await getDocs(eventsQuery);
+                
+                allEvents = [];
+                eventsSnapshot.forEach((doc) => {
+                    allEvents.push({ id: doc.id, ...doc.data() });
+                });
+
+                console.log('Loaded events:', allEvents);
+
+                // Update stats
+                updateStats();
+                displayEvents();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                const eventsContainer = document.getElementById('admin-events');
+                eventsContainer.innerHTML = '<div class="text-center py-12"><div class="text-red-400">Failed to load events. Please refresh the page.</div></div>';
+            }
+        }
+
+        // Update dashboard stats
+        function updateStats() {
+            const totalEventsEl = document.getElementById('total-events');
+            const upcomingEventsEl = document.getElementById('upcoming-events');
+            const totalAttendeesEl = document.getElementById('total-attendees');
+
+            const totalEvents = allEvents.length;
+            const now = new Date();
+            const upcomingEvents = allEvents.filter(event => {
+                if (!event.startAt) return false;
+                const eventDate = new Date(event.startAt.seconds * 1000);
+                return eventDate > now;
+            }).length;
+            
+            const totalAttendees = allEvents.reduce((sum, event) => sum + (event.attendeeCount || 0), 0);
+
+            if (totalEventsEl) totalEventsEl.textContent = totalEvents;
+            if (upcomingEventsEl) upcomingEventsEl.textContent = upcomingEvents;
+            if (totalAttendeesEl) totalAttendeesEl.textContent = totalAttendees;
+        }
+
+        // Display events in admin panel
+        function displayEvents() {
+            const eventsContainer = document.getElementById('admin-events');
+            const eventsLoading = document.getElementById('events-loading');
+            const eventsEmpty = document.getElementById('events-empty');
+
+            // Hide loading
+            if (eventsLoading) eventsLoading.classList.add('hidden');
+
+            if (allEvents.length === 0) {
+                if (eventsEmpty) eventsEmpty.classList.remove('hidden');
+                return;
+            }
+
+            // Hide empty state
+            if (eventsEmpty) eventsEmpty.classList.add('hidden');
+
+            const eventsHTML = allEvents.map(event => {
+                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
+                const formattedDate = startDate.toLocaleDateString();
+                const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="card p-6 hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <h3 class="text-xl font-semibold text-brand-text">${event.title}</h3>
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                                        ${event.status || 'upcoming'}
+                                    </span>
+                                </div>
+                                <p class="text-brand-muted mb-4 line-clamp-2">${event.description || 'No description available'}</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-brand-text">${formattedDate}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-brand-text">${formattedTime}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-brand-text">${event.location || 'Location TBD'}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                                        </svg>
+                                        <span class="text-brand-text">${event.attendeeCount || 0} attending</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col space-y-2 ml-4">
+                                <button class="btn btn-secondary text-xs px-3 py-1" onclick="editEvent('${event.id}')">
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger text-xs px-3 py-1" onclick="deleteEvent('${event.id}')">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            eventsContainer.innerHTML = eventsHTML;
+        }
+
+        // Global functions for event actions
+        window.editEvent = function(eventId) {
+            alert(`Edit event functionality will be implemented. Event ID: ${eventId}`);
+        };
+
+        window.deleteEvent = function(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                alert(`Delete event functionality will be implemented. Event ID: ${eventId}`);
+            }
+        };
+
+        // Refresh events
+        document.getElementById('refresh-events').addEventListener('click', () => {
+            loadDashboardData();
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                window.location.href = 'auth-new.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // Theme toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Placeholder functions for modal clicks
+        window.adminDashboardPage = {
+            showTotalEventsDetails: () => {
+                alert(`Total Events: ${allEvents.length}\n\nEvents created: ${allEvents.map(e => e.title).join(', ')}`);
+            },
+            showUpcomingEventsDetails: () => {
+                const upcoming = allEvents.filter(event => {
+                    if (!event.startAt) return false;
+                    const eventDate = new Date(event.startAt.seconds * 1000);
+                    return eventDate > new Date();
+                });
+                alert(`Upcoming Events: ${upcoming.length}\n\nUpcoming: ${upcoming.map(e => e.title).join(', ')}`);
+            },
+            showTotalAttendeesDetails: () => {
+                const totalAttendees = allEvents.reduce((sum, event) => sum + (event.attendeeCount || 0), 0);
+                alert(`Total Attendees: ${totalAttendees}\n\nAcross all events`);
+            },
+            showAnalyticsDetails: () => {
+                alert('Analytics feature will be implemented soon!');
+            },
+            showRoomsDetails: () => {
+                alert('Room management feature will be implemented soon!');
+            },
+            hideModal: (modalId) => {
+                document.getElementById(modalId).classList.add('hidden');
+            }
+        };
+
+        console.log('Admin dashboard script loaded');
+    </script>
+</body>
+</html>
