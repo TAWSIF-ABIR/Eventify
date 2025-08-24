@@ -150,7 +150,7 @@
                     </div>
 
                     <!-- Analytics Grid -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Track Views Card -->
                         <div class="card p-6 hover:shadow-xl transition-all duration-300">
                             <div class="flex items-center justify-between mb-4">
@@ -216,37 +216,7 @@
                             </button>
                         </div>
 
-                        <!-- Top-Attended Events Card -->
-                        <div class="card p-6 hover:shadow-xl transition-all duration-300">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-                                    </svg>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-2xl font-bold text-brand-text" id="top-attended-count">0</p>
-                                    <p class="text-sm text-brand-muted">Top Attended</p>
-                                </div>
-                            </div>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-brand-muted">Most Attended:</span>
-                                    <span class="text-brand-text font-medium" id="most-attended">0</span>
-                                </div>
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-brand-muted">Avg Attendance:</span>
-                                    <span class="text-brand-text font-medium" id="avg-attendance">0</span>
-                                </div>
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-brand-muted">Growth Rate:</span>
-                                    <span class="text-brand-text font-medium" id="growth-rate">0%</span>
-                                </div>
-                            </div>
-                            <button onclick="showTopAttendedModal()" class="w-full mt-4 btn btn-secondary text-sm py-2 hover:scale-105 transition-transform duration-300">
-                                View Details
-                            </button>
-                        </div>
+
                     </div>
 
                     <!-- Analytics Charts Section -->
@@ -410,28 +380,7 @@
         </div>
     </div>
 
-    <!-- Top Attended Events Modal -->
-    <div id="top-attended-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
-                <div class="p-6 border-b border-white/10">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-2xl font-bold text-brand-text">Top Attended Events</h3>
-                        <button onclick="hideModal('top-attended-modal')" class="text-brand-muted hover:text-brand-text transition-colors">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-                    <div id="top-attended-content" class="space-y-6">
-                        <!-- Content will be populated dynamically -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Scripts -->
     <script type="module">
@@ -498,17 +447,7 @@
                 allEvents = [];
                 eventsSnapshot.forEach((doc) => {
                     const eventData = { id: doc.id, ...doc.data() };
-                    
-                    // Filter out demo events
-                    const demoEventTitles = [
-                        '24-Hour Hackathon',
-                        'AI and Machine Learning Seminar',
-                        'Web Development Workshop'
-                    ];
-                    
-                    if (!demoEventTitles.includes(eventData.title)) {
-                        allEvents.push(eventData);
-                    }
+                    allEvents.push(eventData);
                 });
 
                 console.log('Loaded events (filtered):', allEvents);
@@ -543,17 +482,7 @@
                 allEvents = [];
                 snapshot.forEach((doc) => {
                     const eventData = { id: doc.id, ...doc.data() };
-                    
-                    // Filter out demo events
-                    const demoEventTitles = [
-                        '24-Hour Hackathon',
-                        'AI and Machine Learning Seminar',
-                        'Web Development Workshop'
-                    ];
-                    
-                    if (!demoEventTitles.includes(eventData.title)) {
-                        allEvents.push(eventData);
-                    }
+                    allEvents.push(eventData);
                 });
 
                 console.log('Updated events (filtered):', allEvents);
@@ -623,9 +552,6 @@
                 
                 // Load popular events data
                 await loadPopularEventsAnalytics();
-                
-                // Load top attended events data
-                await loadTopAttendedAnalytics();
                 
                 // Initialize charts
                 initializeCharts();
@@ -712,35 +638,7 @@
             }
         }
 
-        // Load top attended events analytics
-        async function loadTopAttendedAnalytics() {
-            try {
-                const attendedEvents = allEvents.filter(e => (e.attendeeCount || 0) > 0);
-                const mostAttended = attendedEvents.length > 0 ? Math.max(...attendedEvents.map(e => e.attendeeCount || 0)) : 0;
-                const avgAttendance = attendedEvents.length > 0 ? 
-                    Math.round(attendedEvents.reduce((sum, e) => sum + (e.attendeeCount || 0), 0) / attendedEvents.length) : 0;
-                
-                // Calculate growth rate (simplified)
-                const growthRate = attendedEvents.length > 0 ? Math.floor(Math.random() * 25) + 5 : 0;
 
-                // Update UI
-                document.getElementById('top-attended-count').textContent = attendedEvents.length;
-                document.getElementById('most-attended').textContent = mostAttended;
-                document.getElementById('avg-attendance').textContent = avgAttendance;
-                document.getElementById('growth-rate').textContent = growthRate + '%';
-
-                // Store for modal
-                window.topAttendedAnalytics = {
-                    attendedEvents,
-                    mostAttended,
-                    avgAttendance,
-                    growthRate
-                };
-
-            } catch (error) {
-                console.error('Error loading top attended analytics:', error);
-            }
-        }
 
         // Initialize charts
         function initializeCharts() {
@@ -1543,10 +1441,7 @@
             populatePopularEventsModal();
         };
 
-        window.showTopAttendedModal = function() {
-            showModal('top-attended-modal');
-            populateTopAttendedModal();
-        };
+
 
         // Populate Views Modal
         function populateViewsModal() {
@@ -1752,12 +1647,8 @@
             }, 100);
         }
 
-        // Populate Top Attended Modal
-        function populateTopAttendedModal() {
-            const container = document.getElementById('top-attended-content');
-            if (!container || !window.topAttendedAnalytics) return;
 
-            const { attendedEvents, mostAttended, avgAttendance, growthRate } = window.topAttendedAnalytics;
+
 
             container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
