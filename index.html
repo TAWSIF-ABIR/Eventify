@@ -343,18 +343,29 @@
         </section>
     </main>
 
-    <!-- Floating Chat Button -->
+    <!-- Enhanced Floating Chat Button -->
     <button 
         id="floating-chat-btn"
         onclick="openAIChat()"
-        class="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-40 flex items-center justify-center group"
+        class="fixed bottom-4 right-4 w-20 h-20 bg-gradient-to-br from-brand-primary via-brand-primary/90 to-brand-accent rounded-3xl shadow-2xl hover:scale-110 transition-all duration-500 z-40 flex items-center justify-center group border-2 border-white/20 backdrop-blur-sm"
     >
-        <svg class="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+        <!-- Main Icon -->
+        <svg class="w-10 h-10 text-white group-hover:rotate-12 transition-transform duration-500" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
         </svg>
         
-        <!-- Pulse Animation -->
-        <div class="absolute inset-0 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full animate-ping opacity-20"></div>
+        <!-- Enhanced Pulse Animation -->
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-primary to-brand-accent rounded-3xl animate-ping opacity-30"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-accent to-brand-primary rounded-3xl animate-pulse opacity-20"></div>
+        
+        <!-- Glow Effect -->
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-primary to-brand-accent rounded-3xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
+        
+        <!-- Tooltip -->
+        <div class="absolute right-full mr-4 px-3 py-2 bg-white/90 backdrop-blur-sm text-brand-text text-sm font-medium rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+            AI FAQ Chat
+            <div class="absolute left-full top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white/90 rotate-45"></div>
+        </div>
     </button>
 
     <!-- AI Chat Popup Modal -->
@@ -363,7 +374,7 @@
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeAIChat()"></div>
         
         <!-- Enhanced Chat Container -->
-        <div class="absolute bottom-6 right-6 w-[420px] h-[680px] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transform transition-all duration-500 scale-95 opacity-0" id="chat-container">
+        <div class="absolute bottom-0 right-0 w-[420px] h-[680px] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transform transition-all duration-500 scale-95 opacity-0" id="chat-container">
             <!-- Enhanced Chat Header with Glass Effect -->
             <div class="relative bg-gradient-to-r from-brand-primary via-brand-primary/90 to-brand-accent p-6 text-white overflow-hidden">
                 <!-- Background Pattern -->
