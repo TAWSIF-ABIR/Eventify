@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
 
-    
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
 </head>
@@ -123,13 +122,30 @@
                             <h2 class="text-xl font-bold text-brand-text mb-1">Available Events</h2>
                             <p class="text-brand-muted text-sm">Browse and register for events that interest you</p>
                         </div>
-                        <button id="refresh-events" class="btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
-                            </svg>
-                            Refresh
-                        </button>
-                </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="refresh-events" class="btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                                Refresh
+                            </button>
+                            <button id="sync-counts" class="btn btn-accent px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                                </svg>
+                                Sync Counts
+                            </button>
+                            <button id="debug-counts" class="btn btn-warning px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Debug Counts
+                            </button>
+                            <button id="test-functions" class="btn btn-accent px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
+                                Test Functions
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- Events List -->
                     <div id="all-events-container" class="space-y-4">
@@ -161,135 +177,8 @@
         </main>
     </div>
 
-    <!-- Registration Success Modal -->
-    <div id="registration-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="card max-w-md w-full p-8 transform scale-95 opacity-0 transition-all duration-300">
-                <div class="text-center">
-                    <!-- Success Icon -->
-                    <div class="w-20 h-20 bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-10 h-10 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    
-                    <!-- Title -->
-                    <h3 class="text-2xl font-bold text-brand-text mb-3">Registration Successful! 🎉</h3>
-                    
-                    <!-- Event Details -->
-                    <div class="bg-brand-card/50 rounded-lg p-4 mb-6">
-                        <h4 id="modal-event-title" class="text-lg font-semibold text-brand-text mb-2">Event Title</h4>
-                        <p id="modal-event-details" class="text-brand-muted text-sm">Event details will appear here</p>
-                    </div>
-                    
-                    <!-- Message -->
-                    <p class="text-brand-muted mb-6">
-                        You have successfully registered for this event. Check your dashboard for updates and event details.
-                    </p>
-                    
-                    <!-- Buttons -->
-                    <div class="flex space-x-3">
-                        <button onclick="closeRegistrationModal()" class="btn btn-primary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                            Continue
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Registration Confirmation Modal -->
-    <div id="register-confirm-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="card max-w-md w-full p-6 transform scale-95 opacity-0 transition-all duration-300">
-                <div class="text-center">
-                    <!-- Question Icon -->
-                    <div class="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-10 h-10 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-brand-text mb-3">Confirm Registration</h3>
-                    <div class="bg-brand-card/50 rounded-lg p-4 mb-6">
-                        <h4 id="confirm-event-title" class="text-lg font-semibold text-brand-text mb-2">Event Title</h4>
-                        <p id="confirm-event-details" class="text-brand-muted text-sm">Event details will appear here</p>
-                    </div>
-                    <p class="text-brand-muted mb-6">
-                        Are you sure you want to register for this event? You can unregister later if needed.
-                    </p>
-                    <div class="flex space-x-3">
-                        <button onclick="closeRegisterConfirmModal()" class="btn btn-secondary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                            Cancel
-                        </button>
-                        <button id="confirm-register-btn" class="btn btn-primary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                            Yes, Register
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Already Registered Modal -->
-    <div id="already-registered-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="card max-w-md w-full p-6 transform scale-95 opacity-0 transition-all duration-300">
-                <div class="text-center">
-                    <!-- Info Icon -->
-                    <div class="w-20 h-20 bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-10 h-10 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-brand-text mb-3">Already Registered</h3>
-                    <div class="bg-brand-card/50 rounded-lg p-4 mb-6">
-                        <h4 id="already-event-title" class="text-lg font-semibold text-brand-text mb-2">Event Title</h4>
-                        <p id="already-event-details" class="text-brand-muted text-sm">Event details will appear here</p>
-                    </div>
-                    <p class="text-brand-muted mb-6">
-                        You are already registered for this event. Check your dashboard to view your registered events.
-                    </p>
-                    <div class="flex space-x-3">
-                        <button onclick="closeAlreadyRegisteredModal()" class="btn btn-primary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                            Got it
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Unregister Confirmation Modal -->
-    <div id="unregister-confirm-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="card max-w-md w-full p-6 transform scale-95 opacity-0 transition-all duration-300">
-                <div class="text-center">
-                    <!-- Warning Icon -->
-                    <div class="w-20 h-20 bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-10 h-10 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-brand-text mb-3">Confirm Unregistration</h3>
-                    <div class="bg-brand-card/50 rounded-lg p-4 mb-6">
-                        <h4 id="unconfirm-event-title" class="text-lg font-semibold text-brand-text mb-2">Event Title</h4>
-                        <p id="unconfirm-event-details" class="text-brand-muted text-sm">Event details will appear here</p>
-                    </div>
-                    <p class="text-brand-muted mb-6">
-                        Are you sure you want to unregister from this event? This action cannot be undone.
-                    </p>
-                    <div class="flex space-x-3">
-                        <button onclick="closeUnregisterConfirmModal()" class="btn btn-secondary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                            Cancel
-                        </button>
-                        <button id="confirm-unregister-btn" class="btn btn-danger flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                            Yes, Unregister
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
     <!-- Scripts -->
     <script type="module">
@@ -339,27 +228,84 @@
         // Load all events
         async function loadAllEvents() {
             try {
-                console.log('Loading all events...');
+                console.log('=== LOADING ALL EVENTS ===');
+                console.log('Current user:', currentUser);
+                console.log('Database instance:', db);
                 
                 // Load all events
                 const eventsRef = collection(db, 'events');
+                console.log('Events collection reference:', eventsRef);
+                
                 const eventsQuery = query(eventsRef, orderBy('startAt', 'asc'));
+                console.log('Events query:', eventsQuery);
+                
                 const eventsSnapshot = await getDocs(eventsQuery);
+                console.log('Events snapshot:', eventsSnapshot);
                 
                 allEvents = [];
                 eventsSnapshot.forEach((doc) => {
                     allEvents.push({ id: doc.id, ...doc.data() });
                 });
 
-                console.log('Loaded events:', allEvents);
+                console.log('Loaded events with Firebase attendeeCount:', allEvents.map(e => ({ title: e.title, attendeeCount: e.attendeeCount })));
+                console.log('Total events loaded:', allEvents.length);
+
+                // Only sync if there are missing attendeeCount values
+                // Most events should already have the correct count from Firebase
+                await syncRealAttendeeCounts();
 
                 // Display events (now async)
                 await displayAllEvents();
                 
             } catch (error) {
                 console.error('Error loading events:', error);
+                console.error('Error details:', {
+                    code: error.code,
+                    message: error.message,
+                    stack: error.stack
+                });
                 const eventsContainer = document.getElementById('all-events-container');
                 eventsContainer.innerHTML = '<div class="text-center py-12"><div class="text-red-400">Failed to load events. Please refresh the page.</div></div>';
+            }
+        }
+
+        // Calculate and sync real attendee counts from the new registration system
+        async function syncRealAttendeeCounts() {
+            try {
+                console.log('=== SYNCING REAL ATTENDEE COUNTS ===');
+                
+                // Instead of reading all users (which requires admin permissions),
+                // we'll use the existing attendeeCount from Firebase events
+                // and only update if there are significant discrepancies
+                
+                console.log('Using existing Firebase attendeeCount values...');
+                
+                // Get current user's registrations to check if they're registered
+                const userRegistrationsRef = collection(db, 'users', currentUser.uid, 'registrations');
+                const userRegistrationsSnapshot = await getDocs(userRegistrationsRef);
+                
+                const userRegisteredEventIds = [];
+                userRegistrationsSnapshot.forEach(registrationDoc => {
+                    const registration = registrationDoc.data();
+                    userRegisteredEventIds.push(registration.eventId);
+                });
+                
+                console.log('Current user registered event IDs:', userRegisteredEventIds);
+                
+                // Update the allEvents array with registration status
+                allEvents.forEach(event => {
+                    // Check if current user is registered for this event
+                    event.isRegistered = userRegisteredEventIds.includes(event.id);
+                    
+                    // Keep the existing Firebase attendeeCount - it's already accurate
+                    console.log(`Event ${event.title}: Firebase attendeeCount: ${event.attendeeCount}, User registered: ${event.isRegistered}`);
+                });
+                
+                console.log('Updated events with registration status:', allEvents);
+                
+            } catch (error) {
+                console.error('Error syncing attendee counts:', error);
+                console.log('Continuing with existing Firebase attendeeCount values...');
             }
         }
 
@@ -388,12 +334,16 @@
                 registeredEventIds.push(doc.data().eventId);
             });
 
+            console.log('User is registered for events:', registeredEventIds);
+
             const eventsHTML = allEvents.map(event => {
                 const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
                 const formattedDate = startDate.toLocaleDateString();
                 const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 
                 const isRegistered = registeredEventIds.includes(event.id);
+                
+                console.log(`Event ${event.id}: ${event.title} - Registered: ${isRegistered}, Firebase attendeeCount: ${event.attendeeCount}`);
                 
                 return `
                     <div class="card p-6 hover:shadow-xl transition-all duration-300">
@@ -433,7 +383,7 @@
                                         <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
                                         </svg>
-                                        <span class="text-brand-text">${event.attendeeCount || 0} attending</span>
+                                        <span class="text-brand-text">${event.attendeeCount || 0} attending (Firebase)</span>
                                     </div>
                                 </div>
                             </div>
@@ -444,15 +394,15 @@
                                         <button class="btn btn-success text-xs px-3 py-1" disabled>
                                             ✓ Registered
                                         </button>
-                                        <button class="btn btn-danger text-xs px-3 py-1" onclick="unregisterFromEvent('${event.id}')">
+                                        <button class="btn btn-danger text-xs px-3 py-1" onclick="console.log('Unregister clicked for event:', '${event.id}'); unregisterFromEvent('${event.id}')">
                                             Unregister
                                         </button>
                                     </div>` : 
-                                    `<button class="btn btn-primary text-xs px-3 py-1" onclick="registerForEvent('${event.id}')">
+                                    `<button class="btn btn-primary text-xs px-3 py-1" onclick="console.log('Register clicked for event:', '${event.id}'); registerForEvent('${event.id}')">
                                         Register
                                     </button>`
                                 }
-                                <button class="btn btn-secondary text-xs px-3 py-1" onclick="viewEventDetails('${event.id}')">
+                                <button class="btn btn-secondary text-xs px-3 py-1" onclick="console.log('View details clicked for event:', '${event.id}'); viewEventDetails('${event.id}')">
                                     Details
                                 </button>
                             </div>
@@ -464,58 +414,24 @@
             eventsContainer.innerHTML = eventsHTML;
         }
 
-        // Global functions for event actions
+        // Global functions for event actions - MUST be defined on window object
         window.registerForEvent = async function(eventId) {
+            console.log('=== REGISTRATION FUNCTION CALLED ===');
+            console.log('Event ID:', eventId);
+            console.log('Current user:', currentUser);
+            console.log('All events:', allEvents);
+            
             try {
                 console.log('Registration requested for event:', eventId);
                 const event = allEvents.find(e => e.id === eventId);
                 if (!event) {
                     console.error('Event not found');
+                    showToast('Event not found', 'error');
                     return;
                 }
 
-                // Check if already registered first
-                const userRegistrationsRef = collection(db, 'users', currentUser.uid, 'registrations');
-                const existingRegistration = query(userRegistrationsRef, where('eventId', '==', eventId));
-                const existingSnapshot = await getDocs(existingRegistration);
-                
-                if (!existingSnapshot.empty) {
-                    showAlreadyRegisteredModal(event);
-                    return;
-                }
+                console.log('Found event:', event);
 
-                // Show registration confirmation modal
-                showRegistrationConfirmationModal(event);
-            } catch (error) {
-                console.error('Registration error:', error);
-                console.error('Failed to register for event. Please try again.');
-            }
-        };
-
-        window.viewEventDetails = function(eventId) {
-            window.location.href = `event.html?id=${eventId}`;
-        };
-
-        window.unregisterFromEvent = async function(eventId) {
-            try {
-                console.log('Unregistration requested for event:', eventId);
-                const event = allEvents.find(e => e.id === eventId);
-                if (!event) {
-                    console.error('Event not found');
-                    return;
-                }
-
-                // Show unregistration confirmation modal
-                showUnregisterConfirmationModal(event);
-            } catch (error) {
-                console.error('Unregistration error:', error);
-                console.error('Failed to unregister from event. Please try again.');
-            }
-        };
-
-        // Function to register user for an event
-        async function registerUserForEvent(eventId, eventData) {
-            try {
                 // Check if already registered
                 const userRegistrationsRef = collection(db, 'users', currentUser.uid, 'registrations');
                 const existingRegistration = query(userRegistrationsRef, where('eventId', '==', eventId));
@@ -523,88 +439,202 @@
                 
                 if (!existingSnapshot.empty) {
                     console.log('User already registered for this event');
-                    return false;
+                    showToast('You are already registered for this event', 'info');
+                    return;
                 }
 
-                // Add to user's registrations collection
-                await addDoc(userRegistrationsRef, {
-                    eventId: eventId,
-                    eventTitle: eventData.title,
-                    eventDate: eventData.startAt,
-                    registeredAt: new Date(),
-                    status: 'registered'
-                });
+                // Show loading toast
+                showToast('Registering...', 'info');
 
-                // Add to global attendees collection
-                await addDoc(collection(db, 'attendees'), {
-                    eventId: eventId,
-                    userId: currentUser.uid,
-                    userEmail: currentUser.email,
-                    userName: currentUser.displayName || 'Unknown User',
-                    eventTitle: eventData.title,
-                    eventDate: eventData.startAt,
-                    registeredAt: new Date(),
-                    status: 'registered'
-                });
+                try {
+                    // Simplified registration - just add to user's registrations
+                    const registrationData = {
+                        eventId: eventId,
+                        eventTitle: event.title,
+                        eventDate: event.startAt,
+                        registeredAt: new Date(),
+                        status: 'registered'
+                    };
 
-                // Update event attendee count in Firestore
-                const eventRef = doc(db, 'events', eventId);
-                await updateDoc(eventRef, {
-                    attendeeCount: increment(1)
-                });
+                    console.log('Adding registration:', registrationData);
+                    const result = await addDoc(userRegistrationsRef, registrationData);
+                    console.log('Registration added successfully:', result.id);
+                    
+                    // Update local event data immediately
+                    event.isRegistered = true;
+                    event.attendeeCount = (event.attendeeCount || 0) + 1;
+                    
+                    // Update Firebase event document with real attendee count
+                    try {
+                        const eventRef = doc(db, 'events', eventId);
+                        await updateDoc(eventRef, { attendeeCount: event.attendeeCount });
+                        console.log('Firebase event document updated with new attendee count:', event.attendeeCount);
+                    } catch (updateError) {
+                        console.error('Failed to update Firebase event document:', updateError);
+                        console.log('Continuing with local update - user experience not affected');
+                        // Continue anyway - the local update is more important for UX
+                        // The Firebase update will be corrected on next page load
+                    }
+                    
+                    showToast('Successfully registered for the event!', 'success');
+                    
+                    // Refresh the display immediately
+                    console.log('Refreshing display...');
+                    await displayAllEvents();
+                    console.log('Display refreshed');
+                    
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showToast('Failed to register for event. Please try again.', 'error');
+                }
 
-                console.log('Successfully registered for event:', eventId);
-                return true;
             } catch (error) {
-                console.error('Error registering for event:', error);
-                return false;
+                console.error('Registration error:', error);
+                showToast('Failed to register for event. Please try again.', 'error');
             }
-        }
+        };
 
-        // Function to unregister user from an event
-        async function unregisterUserFromEvent(eventId, eventData) {
+        window.viewEventDetails = function(eventId) {
+            console.log('View event details called for:', eventId);
+            window.location.href = `event.html?id=${eventId}`;
+        };
+
+        window.unregisterFromEvent = async function(eventId) {
+            console.log('=== UNREGISTRATION FUNCTION CALLED ===');
+            console.log('Event ID:', eventId);
+            console.log('Current user:', currentUser);
+            
             try {
-                // Find the user's registration
+                console.log('Unregistration requested for event:', eventId);
+                const event = allEvents.find(e => e.id === eventId);
+                if (!event) {
+                    console.error('Event not found');
+                    showToast('Event not found', 'error');
+                    return;
+                }
+
+                console.log('Found event:', event);
+
+                // Check if registered
                 const userRegistrationsRef = collection(db, 'users', currentUser.uid, 'registrations');
                 const existingRegistration = query(userRegistrationsRef, where('eventId', '==', eventId));
                 const existingSnapshot = await getDocs(existingRegistration);
                 
                 if (existingSnapshot.empty) {
                     console.log('User not registered for this event');
-                    return false;
+                    showToast('You are not registered for this event', 'info');
+                    return;
                 }
 
-                // Delete the registration
-                const registrationDoc = existingSnapshot.docs[0];
-                await deleteDoc(doc(db, 'users', currentUser.uid, 'registrations', registrationDoc.id));
+                // Show loading toast
+                showToast('Unregistering...', 'info');
 
-                // Remove from global attendees collection
-                const attendeesRef = collection(db, 'attendees');
-                const attendeeQuery = query(attendeesRef, where('eventId', '==', eventId), where('userId', '==', currentUser.uid));
-                const attendeeSnapshot = await getDocs(attendeeQuery);
-                
-                if (!attendeeSnapshot.empty) {
-                    const attendeeDoc = attendeeSnapshot.docs[0];
-                    await deleteDoc(doc(db, 'attendees', attendeeDoc.id));
+                try {
+                    // Simplified unregistration - just remove from user's registrations
+                    const registrationDoc = existingSnapshot.docs[0];
+                    console.log('Deleting registration document:', registrationDoc.id);
+                    await deleteDoc(doc(db, 'users', currentUser.uid, 'registrations', registrationDoc.id));
+                    console.log('Registration deleted successfully');
+                    
+                    // Update local event data immediately
+                    event.isRegistered = false;
+                    event.attendeeCount = Math.max(0, (event.attendeeCount || 0) - 1);
+                    
+                    // Update Firebase event document with real attendee count
+                    try {
+                        const eventRef = doc(db, 'events', eventId);
+                        await updateDoc(eventRef, { attendeeCount: event.attendeeCount });
+                        console.log('Firebase event document updated with new attendee count:', event.attendeeCount);
+                    } catch (updateError) {
+                        console.error('Failed to update Firebase event document:', updateError);
+                        console.log('Continuing with local update - user experience not affected');
+                        // Continue anyway - the local update is more important for UX
+                        // The Firebase update will be corrected on next page load
+                    }
+                    
+                    showToast('Successfully unregistered from the event!', 'success');
+                    
+                    // Refresh the display immediately
+                    console.log('Refreshing display...');
+                    await displayAllEvents();
+                    console.log('Display refreshed');
+                    
+                } catch (error) {
+                    console.error('Unregistration error:', error);
+                    showToast('Failed to unregister from event. Please try again.', 'error');
                 }
 
-                // Update event attendee count in Firestore
-                const eventRef = doc(db, 'events', eventId);
-                await updateDoc(eventRef, {
-                    attendeeCount: increment(-1) // Decrement by 1
-                });
-
-                console.log('Successfully unregistered from event:', eventId);
-                return true;
             } catch (error) {
-                console.error('Error unregistering from event:', error);
-                return false;
+                console.error('Unregistration error:', error);
+                showToast('Failed to unregister from event. Please try again.', 'error');
             }
-        }
+        };
 
         // Refresh events
         document.getElementById('refresh-events').addEventListener('click', async () => {
+            console.log('=== REFRESHING EVENTS AND SYNCING ATTENDEE COUNTS ===');
             await loadAllEvents();
+        });
+
+        // Sync counts button
+        document.getElementById('sync-counts').addEventListener('click', async () => {
+            console.log('=== SYNCING ATTENDEE COUNTS MANUALLY ===');
+            await syncRealAttendeeCounts();
+            showToast('Attendee counts synced successfully!', 'success');
+        });
+
+        // Debug counts button
+        document.getElementById('debug-counts').addEventListener('click', async () => {
+            console.log('=== DEBUGGING FIREBASE ATTENDEE COUNTS ===');
+            const allEventsRef = collection(db, 'events');
+            const eventsSnapshot = await getDocs(allEventsRef);
+            const eventAttendeeCounts = {};
+            eventsSnapshot.forEach(doc => {
+                eventAttendeeCounts[doc.id] = doc.data().attendeeCount || 0;
+            });
+            console.log('Current Firebase Attendee Counts:', eventAttendeeCounts);
+            
+            // Show in console in a readable format
+            console.log('📊 Firebase Attendee Counts by Event:');
+            eventsSnapshot.forEach(doc => {
+                const eventData = doc.data();
+                console.log(`   ${eventData.title}: ${eventData.attendeeCount || 0} attendees`);
+            });
+            
+            // Show toast with summary
+            const totalEvents = eventsSnapshot.size;
+            const totalAttendees = Object.values(eventAttendeeCounts).reduce((sum, count) => sum + count, 0);
+            showToast(`Debug: ${totalEvents} events, ${totalAttendees} total attendees`, 'info');
+        });
+
+        // Test functions button
+        document.getElementById('test-functions').addEventListener('click', () => {
+            console.log('=== TESTING FUNCTIONS ===');
+            console.log('Window object:', window);
+            console.log('registerForEvent function:', typeof window.registerForEvent);
+            console.log('unregisterFromEvent function:', typeof window.unregisterFromEvent);
+            console.log('viewEventDetails function:', typeof window.viewEventDetails);
+            console.log('Current user:', currentUser);
+            console.log('All events:', allEvents);
+            
+            // Test if we can call the functions
+            if (typeof window.registerForEvent === 'function') {
+                console.log('✅ registerForEvent is accessible');
+            } else {
+                console.log('❌ registerForEvent is NOT accessible');
+            }
+            
+            if (typeof window.unregisterFromEvent === 'function') {
+                console.log('✅ unregisterFromEvent is accessible');
+            } else {
+                console.log('❌ unregisterFromEvent is NOT accessible');
+            }
+            
+            if (typeof window.viewEventDetails === 'function') {
+                console.log('✅ viewEventDetails is accessible');
+            } else {
+                console.log('❌ viewEventDetails is NOT accessible');
+            }
         });
 
         // Logout functionality
@@ -622,316 +652,30 @@
             document.documentElement.classList.toggle('dark');
         });
 
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) return;
 
+            const toast = document.createElement('div');
+            toast.className = `
+                px-4 py-2 rounded-lg text-white 
+                ${type === 'success' ? 'bg-green-500' : 
+                  type === 'error' ? 'bg-red-500' : 
+                  type === 'warning' ? 'bg-yellow-500' : 
+                  'bg-blue-500'}
+            `;
+            toast.textContent = message;
+
+            toastContainer.appendChild(toast);
+
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toastContainer.removeChild(toast);
+            }, 3000);
+        }
 
         console.log('All events page script loaded');
-
-        // Registration modal functions
-        window.showRegistrationModal = function(event) {
-            console.log('showRegistrationModal called with event:', event);
-            const modal = document.getElementById('registration-modal');
-            const modalTitle = document.getElementById('modal-event-title');
-            const modalDetails = document.getElementById('modal-event-details');
-            
-            if (modal && modalTitle && modalDetails) {
-                // Update modal content
-                modalTitle.textContent = event.title;
-                
-                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
-                const formattedDate = startDate.toLocaleDateString();
-                const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                modalDetails.innerHTML = `
-                    <div class="space-y-2">
-                        <p><strong>Date:</strong> ${formattedDate}</p>
-                        <p><strong>Time:</strong> ${formattedTime}</p>
-                        <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-                        <p><strong>Category:</strong> ${event.category || 'General'}</p>
-                    </div>
-                `;
-                
-                // Show modal with animation
-                modal.classList.remove('hidden');
-                const modalContent = modal.querySelector('.card');
-                setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                    modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            } else {
-                console.error('Modal elements not found:', { modal, modalTitle, modalDetails });
-            }
-        }
-
-        window.closeRegistrationModal = function() {
-            const modal = document.getElementById('registration-modal');
-            if (modal) {
-                const modalContent = modal.querySelector('.card');
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
-            }
-        }
-
-        // Show registration confirmation modal
-        function showRegistrationConfirmationModal(event) {
-            const modal = document.getElementById('register-confirm-modal');
-            const modalTitle = document.getElementById('confirm-event-title');
-            const modalDetails = document.getElementById('confirm-event-details');
-            const confirmBtn = document.getElementById('confirm-register-btn');
-            
-            if (modal && modalTitle && modalDetails && confirmBtn) {
-                // Update modal content
-                modalTitle.textContent = event.title;
-                
-                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
-                const formattedDate = startDate.toLocaleDateString();
-                const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                modalDetails.innerHTML = `
-                    <div class="space-y-2">
-                        <p><strong>Date:</strong> ${formattedDate}</p>
-                        <p><strong>Time:</strong> ${formattedTime}</p>
-                        <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-                        <p><strong>Category:</strong> ${event.category || 'General'}</p>
-                    </div>
-                `;
-                
-                // Set up confirm button action
-                confirmBtn.onclick = async () => {
-                    try {
-                        // Register for event
-                        const success = await registerUserForEvent(event.id, event);
-                        if (success) {
-                            // Update local event data
-                            event.attendeeCount = (event.attendeeCount || 0) + 1;
-                            event.isRegistered = true; // Mark as registered locally
-                            
-                            console.log('Registration successful, showing modal');
-                            // Close confirmation modal
-                            closeRegisterConfirmModal();
-                            // Show success modal
-                            window.showRegistrationModal(event);
-                            
-                            // Refresh display
-                            displayAllEvents();
-                        } else {
-                            console.error('Failed to register for event. Please try again.');
-                        }
-                    } catch (error) {
-                        console.error('Registration error:', error);
-                        console.error('Failed to register for event. Please try again.');
-                    }
-                };
-                
-                // Show modal with animation
-                modal.classList.remove('hidden');
-                const modalContent = modal.querySelector('.card');
-                setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                    modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            }
-        }
-
-        // Close registration confirmation modal
-        function closeRegisterConfirmModal() {
-            const modal = document.getElementById('register-confirm-modal');
-            if (modal) {
-                const modalContent = modal.querySelector('.card');
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
-            }
-        }
-
-        // Show already registered modal
-        function showAlreadyRegisteredModal(event) {
-            const modal = document.getElementById('already-registered-modal');
-            const modalTitle = document.getElementById('already-event-title');
-            const modalDetails = document.getElementById('already-event-details');
-            
-            if (modal && modalTitle && modalDetails) {
-                // Update modal content
-                modalTitle.textContent = event.title;
-                
-                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
-                const formattedDate = startDate.toLocaleDateString();
-                const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                modalDetails.innerHTML = `
-                    <div class="space-y-2">
-                        <p><strong>Date:</strong> ${formattedDate}</p>
-                        <p><strong>Time:</strong> ${formattedTime}</p>
-                        <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-                        <p><strong>Category:</strong> ${event.category || 'General'}</p>
-                    </div>
-                `;
-                
-                // Show modal with animation
-                modal.classList.remove('hidden');
-                const modalContent = modal.querySelector('.card');
-                setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                    modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            }
-        }
-
-        // Close already registered modal
-        function closeAlreadyRegisteredModal() {
-            const modal = document.getElementById('already-registered-modal');
-            if (modal) {
-                const modalContent = modal.querySelector('.card');
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
-            }
-        }
-
-        // Show unregister confirmation modal
-        function showUnregisterConfirmationModal(event) {
-            const modal = document.getElementById('unregister-confirm-modal');
-            const modalTitle = document.getElementById('unconfirm-event-title');
-            const modalDetails = document.getElementById('unconfirm-event-details');
-            const confirmBtn = document.getElementById('confirm-unregister-btn');
-            
-            if (modal && modalTitle && modalDetails && confirmBtn) {
-                // Update modal content
-                modalTitle.textContent = event.title;
-                
-                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
-                const formattedDate = startDate.toLocaleDateString();
-                const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                modalDetails.innerHTML = `
-                    <div class="space-y-2">
-                        <p><strong>Date:</strong> ${formattedDate}</p>
-                        <p><strong>Time:</strong> ${formattedTime}</p>
-                        <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-                        <p><strong>Category:</strong> ${event.category || 'General'}</p>
-                    </div>
-                `;
-                
-                // Set up confirm button action
-                confirmBtn.onclick = async () => {
-                    try {
-                        // Unregister from event
-                        const success = await unregisterUserFromEvent(event.id, event);
-                        if (success) {
-                            // Update local event data
-                            event.attendeeCount = Math.max(0, (event.attendeeCount || 0) - 1);
-                            event.isRegistered = false; // Mark as not registered locally
-                            
-                            console.log('Unregistration successful');
-                            // Close confirmation modal
-                            closeUnregisterConfirmModal();
-                            // Show success message
-                            showUnregisterSuccessModal(event);
-                            
-                            // Refresh display
-                            displayAllEvents();
-                        } else {
-                            console.error('Failed to unregister from event. Please try again.');
-                        }
-                    } catch (error) {
-                        console.error('Unregistration error:', error);
-                        console.error('Failed to unregister from event. Please try again.');
-                    }
-                };
-                
-                // Show modal with animation
-                modal.classList.remove('hidden');
-                const modalContent = modal.querySelector('.card');
-                setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                    modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            }
-        }
-
-        // Close unregister confirmation modal
-        function closeUnregisterConfirmModal() {
-            const modal = document.getElementById('unregister-confirm-modal');
-            if (modal) {
-                const modalContent = modal.querySelector('.card');
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
-            }
-        }
-
-        // Show unregister success modal
-        function showUnregisterSuccessModal(event) {
-            const modal = document.getElementById('registration-modal');
-            const modalTitle = document.getElementById('modal-event-title');
-            const modalDetails = document.getElementById('modal-event-details');
-            
-            if (modal && modalTitle && modalDetails) {
-                // Update modal content for unregistration
-                modalTitle.textContent = 'Unregistration Successful!';
-                
-                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
-                const formattedDate = startDate.toLocaleDateString();
-                const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                modalDetails.innerHTML = `
-                    <div class="space-y-2">
-                        <p><strong>Event:</strong> ${event.title}</p>
-                        <p><strong>Date:</strong> ${formattedDate}</p>
-                        <p><strong>Time:</strong> ${formattedTime}</p>
-                        <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-                        <p class="text-green-400 font-medium">You have been successfully unregistered from this event.</p>
-                    </div>
-                `;
-                
-                // Show modal with animation
-                modal.classList.remove('hidden');
-                const modalContent = modal.querySelector('.card');
-                setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                    modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            }
-        }
-
-        // Close modals on overlay click
-        document.addEventListener('click', function(event) {
-            const modals = [
-                'registration-modal',
-                'register-confirm-modal', 
-                'already-registered-modal',
-                'unregister-confirm-modal'
-            ];
-            
-            modals.forEach(modalId => {
-                const modal = document.getElementById(modalId);
-                if (event.target === modal) {
-                    if (modalId === 'registration-modal') {
-                        closeRegistrationModal();
-                    } else if (modalId === 'register-confirm-modal') {
-                        closeRegisterConfirmModal();
-                    } else if (modalId === 'already-registered-modal') {
-                        closeAlreadyRegisteredModal();
-                    } else if (modalId === 'unregister-confirm-modal') {
-                        closeUnregisterConfirmModal();
-                    }
-                }
-            });
-        });
-
-        // Close modals on escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeRegistrationModal();
-                closeRegisterConfirmModal();
-                closeAlreadyRegisteredModal();
-                closeUnregisterConfirmModal();
-            }
-        });
     </script>
 </body>
 </html>

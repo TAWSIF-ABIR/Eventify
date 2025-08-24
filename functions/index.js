@@ -19,6 +19,185 @@ const emailConfig = {
 // Create email transporter
 const transporter = nodemailer.createTransporter(emailConfig);
 
+// Email template for user registration confirmation
+function createUserRegistrationTemplate(userData) {
+  return {
+    subject: `Welcome to Eventify, ${userData.displayName}!`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome to Eventify</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+          .welcome-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #667eea; }
+          .welcome-box h3 { margin-top: 0; color: #667eea; }
+          .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+          .btn { display: inline-block; background: #667eea; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>🎉 Welcome to Eventify!</h1>
+            <p>Your account has been successfully created</p>
+          </div>
+          
+          <div class="content">
+            <h2>Hello ${userData.displayName},</h2>
+            <p>Welcome to Eventify! We're excited to have you join our community.</p>
+            
+            <div class="welcome-box">
+              <h3>Account Details</h3>
+              <p><strong>📧 Email:</strong> ${userData.email}</p>
+              <p><strong>👤 Role:</strong> ${userData.role}</p>
+              <p><strong>🆔 User ID:</strong> ${userData.uid}</p>
+              ${userData.studentId ? `<p><strong>🎓 Student ID:</strong> ${userData.studentId}</p>` : ''}
+              ${userData.session ? `<p><strong>📚 Session:</strong> ${userData.session}</p>` : ''}
+              <p><strong>📅 Account Created:</strong> ${new Date().toLocaleDateString()}</p>
+            </div>
+            
+            <p>You can now:</p>
+            <ul>
+              <li>Browse and register for events</li>
+              <li>Create your profile</li>
+              <li>Connect with other users</li>
+              <li>Manage your event registrations</li>
+            </ul>
+            
+            <a href="https://eventify-5e54d.web.app" class="btn">Get Started with Eventify</a>
+          </div>
+          
+          <div class="footer">
+            <p>This is an automated message from Eventify</p>
+            <p>© 2024 Eventify. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+Welcome to Eventify!
+
+Hello ${userData.displayName},
+
+Welcome to Eventify! We're excited to have you join our community.
+
+Account Details:
+- Email: ${userData.email}
+- Role: ${userData.role}
+- User ID: ${userData.uid}
+${userData.studentId ? `- Student ID: ${userData.studentId}` : ''}
+${userData.session ? `- Session: ${userData.session}` : ''}
+- Account Created: ${new Date().toLocaleDateString()}
+
+You can now:
+- Browse and register for events
+- Create your profile
+- Connect with other users
+- Manage your event registrations
+
+Get started at: https://eventify-5e54d.web.app
+
+Best regards,
+The Eventify Team
+    `
+  };
+}
+
+// Email template for user unregistration confirmation
+function createUserUnregistrationTemplate(userData) {
+  return {
+    subject: `Account Deletion Confirmation - Eventify`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Account Deletion Confirmation</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: #ff6b6b; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+          .info-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #ff6b6b; }
+          .info-box h3 { margin-top: 0; color: #ff6b6b; }
+          .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>👋 Goodbye from Eventify</h1>
+            <p>Your account has been successfully deleted</p>
+          </div>
+          
+          <div class="content">
+            <h2>Hello ${userData.displayName},</h2>
+            <p>We're sorry to see you go, but we've successfully processed your account deletion request.</p>
+            
+            <div class="info-box">
+              <h3>Account Deletion Details</h3>
+              <p><strong>📧 Email:</strong> ${userData.email}</p>
+              <p><strong>👤 Name:</strong> ${userData.displayName}</p>
+              <p><strong>📅 Deletion Date:</strong> ${new Date().toLocaleDateString()}</p>
+            </div>
+            
+            <p>What happens next:</p>
+            <ul>
+              <li>Your personal data has been permanently removed</li>
+              <li>All event registrations have been cancelled</li>
+              <li>Your profile information has been deleted</li>
+              <li>You will no longer receive notifications from Eventify</li>
+            </ul>
+            
+            <p>If you change your mind, you can always create a new account with the same email address.</p>
+            
+            <p>Thank you for being part of our community. We hope to see you again in the future!</p>
+          </div>
+          
+          <div class="footer">
+            <p>This is an automated message from Eventify</p>
+            <p>© 2024 Eventify. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+Account Deletion Confirmation - Eventify
+
+Hello ${userData.displayName},
+
+We're sorry to see you go, but we've successfully processed your account deletion request.
+
+Account Deletion Details:
+- Email: ${userData.email}
+- Name: ${userData.displayName}
+- Deletion Date: ${new Date().toLocaleDateString()}
+
+What happens next:
+- Your personal data has been permanently removed
+- All event registrations have been cancelled
+- Your profile information has been deleted
+- You will no longer receive notifications from Eventify
+
+If you change your mind, you can always create a new account with the same email address.
+
+Thank you for being part of our community. We hope to see you again in the future!
+
+Best regards,
+The Eventify Team
+    `
+  };
+}
+
 // Email template for event registration confirmation
 function createEmailTemplate(userData, eventData) {
   const startDate = new Date(eventData.startAt.seconds * 1000);
@@ -298,8 +477,76 @@ The Eventify Team
   };
 }
 
+// Cloud Function: Send user registration confirmation email
+exports.sendUserRegistrationEmail = functions.auth.user().onCreate(async (user) => {
+  try {
+    const userData = {
+      uid: user.uid,
+      displayName: user.displayName,
+      email: user.email,
+      role: 'user', // Default role
+      createdAt: user.metadata.createdAt,
+      studentId: null, // Placeholder, will be updated if available
+      session: null // Placeholder, will be updated if available
+    };
+
+    // Update user document with registration details
+    await admin.firestore().collection('users').doc(user.uid).set(userData, { merge: true });
+
+    const emailContent = createUserRegistrationTemplate(userData);
+
+    const mailOptions = {
+      from: `"Eventify" <${emailConfig.auth.user}>`,
+      to: userData.email,
+      subject: emailContent.subject,
+      html: emailContent.html,
+      text: emailContent.text
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('User registration email sent successfully:', result.messageId);
+
+    return result;
+  } catch (error) {
+    console.error('Error sending user registration email:', error);
+    return null;
+  }
+});
+
+// Cloud Function: Send user unregistration confirmation email
+exports.sendUserUnregistrationEmail = functions.auth.user().onDelete(async (user) => {
+  try {
+    const userData = {
+      uid: user.uid,
+      displayName: user.displayName,
+      email: user.email,
+      unregisteredAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    const emailContent = createUserUnregistrationTemplate(userData);
+
+    const mailOptions = {
+      from: `"Eventify" <${emailConfig.auth.user}>`,
+      to: userData.email,
+      subject: emailContent.subject,
+      html: emailContent.html,
+      text: emailContent.text
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('User unregistration email sent successfully:', result.messageId);
+
+    return result;
+  } catch (error) {
+    console.error('Error sending user unregistration email:', error);
+    return null;
+  }
+});
+
 // Export functions for testing
 module.exports = {
   sendEventRegistrationEmail: exports.sendEventRegistrationEmail,
-  sendEventReminderEmails: exports.sendEventReminderEmails
+  sendEventReminderEmails: exports.sendEventReminderEmails,
+  sendUserRegistrationEmail: exports.sendUserRegistrationEmail,
+  sendUserUnregistrationEmail: exports.sendUserUnregistrationEmail
 };

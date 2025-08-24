@@ -193,7 +193,7 @@ class AuthManager {
   // Route guard for student-only pages
   requireStudent() {
     if (!this.isAuthenticated()) {
-      window.location.href = '/login.html';
+      window.location.href = '/auth-new.html';
       return false;
     }
     if (!this.isStudent()) {
@@ -206,7 +206,7 @@ class AuthManager {
   // Route guard for admin-only pages
   requireAdmin() {
     if (!this.isAuthenticated()) {
-      window.location.href = '/login.html';
+      window.location.href = '/auth-new.html';
       return false;
     }
     if (!this.isAdmin()) {
@@ -219,7 +219,7 @@ class AuthManager {
   // Route guard for authenticated users
   requireAuth() {
     if (!this.isAuthenticated()) {
-      window.location.href = '/login.html';
+      window.location.href = '/auth-new.html';
       return false;
     }
     return true;

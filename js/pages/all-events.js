@@ -35,7 +35,7 @@ class AllEventsPage {
         try {
             this.currentUser = await authManager.getCurrentUser();
             if (!this.currentUser) {
-                window.location.href = 'login.html';
+                window.location.href = 'auth-new.html';
                 return;
             }
             
@@ -44,7 +44,7 @@ class AllEventsPage {
             
         } catch (error) {
             console.error('Auth check failed:', error);
-            window.location.href = 'login.html';
+            window.location.href = 'auth-new.html';
         }
     }
 

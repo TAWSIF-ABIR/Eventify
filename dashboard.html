@@ -3,225 +3,689 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Eventify</title>
+    <title>Student Dashboard - Eventify</title>
+    <meta name="description" content="Manage your event registrations and discover new opportunities on Eventify.">
+    
+    <!-- Tailwind CSS -->
     <link href="./styles/output.css" rel="stylesheet">
+    
+    <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
 </head>
-<body class="bg-brand-surface text-brand-text font-body min-h-screen flex">
+<body class="bg-brand-surface text-brand-text font-body min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-b from-brand-card to-brand-card/80 border-r border-white/10 flex-shrink-0 backdrop-blur-sm">
-        <!-- Logo Section -->
-        <div class="p-6 border-b border-white/10">
-            <a href="index.html" class="flex items-center space-x-3 group">
-                <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center glow-effect group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <div>
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-brand-card border-r border-white/10 flex-shrink-0">
+            <!-- Logo Section -->
+            <div class="p-6 border-b border-white/10">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center glow-effect">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
                     <span class="text-xl font-bold text-gradient">Eventify</span>
-                    <p class="text-xs text-brand-muted font-medium">Student Dashboard</p>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
 
-        <!-- Navigation Links -->
-        <nav class="p-6 space-y-2">
-            <a href="dashboard.html" class="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-brand-primary/20 to-brand-primary/10 text-brand-primary rounded-lg font-medium border border-brand-primary/20 shadow-lg hover:shadow-xl hover:shadow-brand-primary/20 transition-all duration-300 group">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
-                </svg>
-                <span class="text-sm">Dashboard</span>
-            </a>
-        </nav>
+            <!-- Navigation Links -->
+            <nav class="p-6 space-y-2">
+                <a href="dashboard.html" class="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-brand-primary/20 to-brand-primary/10 text-brand-primary rounded-lg font-medium border border-brand-primary/20 shadow-lg hover:shadow-xl hover:shadow-brand-primary/20 transition-all duration-300 group">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    </svg>
+                    <span class="text-sm">My Events</span>
+                </a>
+                
+                <a href="all-events.html" class="flex items-center space-x-3 px-3 py-2 text-brand-muted hover:text-brand-text hover:bg-white/5 rounded-lg transition-all duration-300 group hover:shadow-lg hover:shadow-brand-accent/20">
+                    <div class="w-4 h-4 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-3 h-3 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <span class="font-medium text-sm">All Events</span>
+                </a>
 
-        <!-- Profile Section -->
-        <div class="p-6 border-t border-white/10 mt-auto">
-            <div class="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 rounded-xl p-4 border border-white/10">
-                <div class="flex items-center space-x-3 mb-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center ring-2 ring-white/10" id="user-avatar">
+                <a href="#" onclick="showCertificatesSection()" class="flex items-center space-x-3 px-3 py-2 text-brand-muted hover:text-brand-text hover:bg-white/5 rounded-lg transition-all duration-300 group hover:shadow-lg hover:shadow-brand-success/20">
+                    <div class="w-4 h-4 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-md flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-3 h-3 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="font-medium text-sm">Certificates</span>
+                </a>
+            </nav>
+
+            <!-- Profile Section -->
+            <div class="p-6 border-t border-white/10">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center" id="user-avatar">
                         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                         </svg>
                     </div>
                     <div>
-                        <p class="font-semibold text-brand-text text-sm" id="user-name">Student</p>
-                        <p class="text-xs text-brand-muted" id="user-email">student@email.com</p>
+                        <p class="font-medium text-brand-text" id="user-name">Student</p>
+                        <p class="text-sm text-brand-muted" id="user-email">student@email.com</p>
                     </div>
                 </div>
                 
-                <button id="logout-btn" class="w-full flex items-center justify-center space-x-2 px-3 py-2 text-brand-danger hover:bg-brand-danger/10 rounded-lg transition-all duration-300 font-medium text-sm">
+                <button id="logout-btn" class="w-full flex items-center justify-center space-x-2 px-4 py-2 text-brand-danger hover:bg-brand-danger/10 rounded-xl transition-all">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-2.293 2.293z" clip-rule="evenodd"/>
                     </svg>
                     <span>Logout</span>
                 </button>
             </div>
-        </div>
-    </aside>
+        </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto bg-gradient-to-br from-brand-surface via-brand-surface to-brand-surface/95">
-        <!-- Top Bar -->
-        <div class="bg-gradient-to-r from-brand-card/80 to-brand-card/60 border-b border-white/10 px-6 py-4 backdrop-blur-sm">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-bold text-brand-text mb-1">Student Dashboard</h1>
-                    <p class="text-brand-muted">Welcome back, <span id="welcome-name" class="text-brand-primary font-semibold">Student</span>! 👋</p>
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <div class="bg-brand-card border-b border-white/10 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-brand-text">Student Dashboard</h1>
+                        <p class="text-brand-muted">Welcome back, <span id="welcome-name" class="text-brand-primary">Student</span>! 👋</p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <!-- Profile Info Icon -->
+                        <a href="profile.html" id="profile-info-btn" class="p-2 text-brand-muted hover:text-brand-text transition-colors rounded-xl hover:bg-white/5" title="Profile">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        
+                        <!-- Theme Toggle -->
+                        <button id="theme-toggle" class="p-2 text-brand-muted hover:text-brand-text transition-colors rounded-xl hover:bg-white/5">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 000 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                
-                <!-- Theme Toggle -->
-                <button id="theme-toggle" class="p-2 text-brand-muted hover:text-brand-text transition-all duration-300 rounded-xl hover:bg-white/5 hover:scale-105">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 000 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
             </div>
-        </div>
 
-        <!-- Dashboard Content -->
-        <div class="p-6 space-y-6 max-w-7xl mx-auto">
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div id="total-events-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
-                    <div class="w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
+            <!-- Dashboard Content -->
+            <div class="p-6">
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="card p-6 text-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-brand-primary/20 to-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-text mb-1" id="total-events">0</h3>
+                        <p class="text-brand-muted">Total Events</p>
                     </div>
-                    <h3 class="text-3xl font-bold text-brand-text mb-2" id="total-events">0</h3>
-                    <p class="text-brand-muted font-medium">Total Events</p>
-                    <div class="w-12 h-1 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full mx-auto mt-3"></div>
+
+                    <div class="card p-6 text-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-text mb-1" id="upcoming-events">0</h3>
+                        <p class="text-brand-muted">Upcoming</p>
+                    </div>
+
+                    <div class="card p-6 text-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-brand-warning/20 to-brand-warning/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-brand-warning" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-text mb-1" id="this-week">0</h3>
+                        <p class="text-brand-muted">This Week</p>
+                    </div>
+
+                    <div class="card p-6 text-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-text mb-1" id="completed-events">0</h3>
+                        <p class="text-brand-muted">Completed</p>
+                    </div>
                 </div>
 
-                <div id="upcoming-events-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
-                    <div class="w-16 h-16 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-8 h-8 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                        </svg>
+                <!-- Registered Events -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-brand-text mb-1">My Registered Events</h2>
+                            <p class="text-brand-muted text-sm">Events you've registered for</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="refresh-events" class="btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                                Refresh
+                            </button>
+                        </div>
                     </div>
-                    <h3 class="text-3xl font-bold text-brand-text mb-2" id="upcoming-events">0</h3>
-                    <p class="text-brand-muted font-medium">Upcoming Events</p>
-                    <div class="w-12 h-1 bg-gradient-to-r from-brand-success to-brand-success/60 rounded-full mx-auto mt-3"></div>
+
+                    <!-- Events List -->
+                    <div id="registered-events" class="space-y-4">
+                        <!-- Loading State -->
+                        <div id="events-loading" class="text-center py-12">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4">
+                                <svg class="w-8 h-8 text-brand-primary animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <p class="text-brand-muted">Loading your events...</p>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="events-empty" class="text-center py-12 hidden">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4">
+                                <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-brand-text mb-2">No Events Registered Yet</h3>
+                            <p class="text-brand-muted mb-6">Start exploring and registering for exciting university events.</p>
+                            <a href="all-events.html" class="btn btn-primary px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300 shadow-lg">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Browse Events
+                            </a>
+                        </div>
+
+                        <!-- Events will be loaded here -->
+                    </div>
+                </div>
                 </div>
 
-                <div id="completed-events-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
-                    <div class="w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                <!-- Certificates Section -->
+                <div id="certificates-section" class="space-y-4 hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-bold text-brand-text mb-1">My Certificates</h2>
+                            <p class="text-brand-muted text-sm">Download certificates for completed events</p>
+                        </div>
+                    </div>
+
+                    <!-- Certificates List -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- No certificates available -->
+                        <div class="col-span-full text-center py-12">
+                            <div class="w-16 h-16 bg-gradient-to-br from-brand-muted/20 to-brand-muted/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-brand-text mb-2">No Certificates Available</h3>
+                            <p class="text-brand-muted mb-6">You haven't completed any events yet. Register for events and attend them to earn certificates.</p>
+                        </div>
+                    </div>
+
+                    <!-- Certificate Generator Modal -->
+                    <div id="certificate-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                        <div class="card max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-bold text-brand-text">Certificate Generator</h3>
+                                <button onclick="hideCertificateModal()" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Certificate Preview -->
+                            <div id="certificate-preview" class="bg-gradient-to-br from-brand-primary/5 to-brand-accent/5 border-2 border-dashed border-brand-primary/30 rounded-2xl p-8 mb-6 text-center">
+                                <div class="max-w-2xl mx-auto">
+                                    <div class="mb-6">
+                                        <div class="w-20 h-20 bg-gradient-to-br from-brand-primary to-brand-accent rounded-3xl flex items-center justify-center mx-auto mb-4">
+                                            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <h1 class="text-3xl font-bold text-brand-primary mb-2">Certificate of Participation</h1>
+                                        <p class="text-brand-muted text-lg">This is to certify that</p>
+                                    </div>
+                                    
+                                    <div class="mb-6">
+                                        <h2 id="student-name" class="text-4xl font-bold text-brand-text mb-4">John Doe</h2>
+                                        <p class="text-brand-muted text-lg mb-2">has successfully participated in</p>
+                                        <h3 id="event-name" class="text-2xl font-semibold text-brand-accent mb-2">Academic Conference 2024</h3>
+                                        <p id="event-category" class="text-brand-muted">Computer Science Department</p>
+                                    </div>
+                                    
+                                    <div class="mb-6">
+                                        <p class="text-brand-muted text-lg mb-2">held on</p>
+                                        <p id="event-date" class="text-xl font-semibold text-brand-text">March 15, 2024</p>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-center space-x-8 mt-8">
+                                        <div class="text-center">
+                                            <div class="w-16 h-1 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full mb-2"></div>
+                                            <p class="text-sm text-brand-muted">Event Coordinator</p>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="w-16 h-1 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full mb-2"></div>
+                                            <p class="text-sm text-brand-muted">Department Head</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-8">
+                                        <p class="text-xs text-brand-muted">Certificate ID: CERT-2024-001</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex items-center justify-center space-x-4">
+                                <button onclick="downloadCertificate()" class="btn btn-primary px-8 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300 shadow-lg">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Download PDF
+                                </button>
+                                <button onclick="printCertificate()" class="btn btn-secondary px-8 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Modal -->
+                <div id="profile-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                    <div class="card max-w-md w-full p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-brand-text">Profile Information</h3>
+                            <button onclick="hideProfileModal()" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3 p-3 bg-white/5 rounded-lg">
+                                <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-brand-text" id="modal-user-name">Student</p>
+                                    <p class="text-sm text-brand-muted" id="modal-user-email">student@email.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="block text-sm font-medium text-brand-muted mb-1">Full Name</span>
+                                    <p class="text-brand-text" id="modal-profile-name">Loading...</p>
+                                </div>
+                                
+                                <div>
+                                    <span class="block text-sm font-medium text-brand-muted mb-1">Email</span>
+                                    <p class="text-brand-text" id="modal-profile-email">Loading...</p>
+                                </div>
+                                
+                                <div>
+                                    <span class="block text-sm font-medium text-brand-muted mb-1">Student ID</span>
+                                    <p class="text-brand-text" id="modal-profile-student-id">Loading...</p>
+                                </div>
+                                
+                                <div>
+                                    <span class="block text-sm font-medium text-brand-muted mb-1">Academic Session</span>
+                                    <p class="text-brand-text" id="modal-profile-session">Loading...</p>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-white/10">
+                                <button onclick="editProfile()" class="btn btn-primary w-full px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                    </svg>
+                                    Edit Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Profile Modal -->
+                <div id="edit-profile-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+                    <div class="card max-w-md w-full p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-brand-text">Edit Profile</h3>
+                            <button onclick="hideEditProfileModal()" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <form id="edit-profile-form" class="space-y-4">
+                            <div>
+                                <label for="edit-full-name" class="block text-sm font-medium text-brand-muted mb-2">Full Name</label>
+                                <input type="text" id="edit-full-name" class="w-full px-4 py-3 bg-brand-card border border-white/10 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary" placeholder="Enter your full name">
+                            </div>
+                            
+                            <div>
+                                <label for="edit-student-id" class="block text-sm font-medium text-brand-muted mb-2">Student ID</label>
+                                <input type="text" id="edit-student-id" class="w-full px-4 py-3 bg-brand-card border border-white/10 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary" placeholder="Enter your student ID">
+                            </div>
+                            
+                            <div>
+                                <label for="edit-session" class="block text-sm font-medium text-brand-muted mb-2">Academic Session</label>
+                                <select id="edit-session" class="w-full px-4 py-3 bg-brand-card border border-white/10 rounded-lg text-brand-text focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-brand-primary">
+                                    <option value="">Select session</option>
+                                    <option value="2024-2025">2024-2025</option>
+                                    <option value="2023-2024">2023-2024</option>
+                                    <option value="2022-2023">2022-2023</option>
+                                    <option value="2021-2022">2021-2022</option>
+                                </select>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-white/10 flex space-x-3">
+                                <button type="button" onclick="hideEditProfileModal()" class="flex-1 btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="flex-1 btn btn-primary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Registration Success Modal -->
+    <div id="registration-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card max-w-md w-full p-8 transform scale-95 opacity-0 transition-all duration-300">
+                <div class="text-center">
+                    <!-- Success Icon -->
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <h3 class="text-3xl font-bold text-brand-text mb-2" id="completed-events">0</h3>
-                    <p class="text-brand-muted font-medium">Completed Events</p>
-                    <div class="w-12 h-1 bg-gradient-to-r from-brand-accent to-brand-accent/60 rounded-full mx-auto mt-3"></div>
-                </div>
-
-                <div id="certificates-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd"/>
-                        </svg>
+                    
+                    <!-- Title -->
+                    <h3 class="text-2xl font-bold text-brand-text mb-3">Registration Successful! 🎉</h3>
+                    
+                    <!-- Event Details -->
+                    <div class="bg-brand-card/50 rounded-lg p-4 mb-6">
+                        <h4 id="modal-event-title" class="text-lg font-semibold text-brand-text mb-2">Event Title</h4>
+                        <p id="modal-event-details" class="text-brand-muted text-sm">Event details will appear here</p>
                     </div>
-                    <h3 class="text-3xl font-bold text-brand-text mb-2" id="certificates-count">0</h3>
-                    <p class="text-brand-muted font-medium">Certificates</p>
-                    <div class="w-12 h-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full mx-auto mt-3"></div>
-                </div>
-            </div>
-
-            <!-- Registered Events -->
-            <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl font-bold text-brand-text">My Registered Events</h2>
-                    <button id="refresh-events" class="btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm flex items-center space-x-2">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
-                        </svg>
-                        Refresh
-                    </button>
-                </div>
-
-                <!-- Loading State -->
-                <div id="events-loading" class="text-center py-12 hidden">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4">
-                        <svg class="w-8 h-8 text-brand-primary animate-spin" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
-                        </svg>
+                    
+                    <!-- Message -->
+                    <p class="text-brand-muted mb-6">
+                        You have successfully registered for this event. Check your dashboard for updates and event details.
+                    </p>
+                    
+                    <!-- Buttons -->
+                    <div class="flex space-x-3">
+                        <button onclick="closeRegistrationModal()" class="btn btn-primary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                            Continue
+                        </button>
                     </div>
-                    <p class="text-brand-muted">Loading your events...</p>
-                </div>
-
-                <!-- Empty State -->
-                <div id="events-empty" class="text-center py-12 hidden">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4">
-                        <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-brand-text mb-2">No Registered Events</h3>
-                    <p class="text-brand-muted mb-6">You haven't registered for any events yet.</p>
-                    <a href="events.html" class="btn btn-primary px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300 shadow-lg">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                        </svg>
-                        Browse Events
-                    </a>
-                </div>
-
-                <!-- Registered Events Grid -->
-                <div id="registered-events" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Events will be dynamically loaded here -->
-                </div>
-            </div>
-
-            <!-- Certificates Section -->
-            <div id="certificates-section" class="space-y-4 hidden">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl font-bold text-brand-text">My Certificates</h2>
-                </div>
-                
-                <!-- No Certificates Available -->
-                <div id="no-certificates" class="text-center py-12">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-2xl mb-4">
-                        <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-brand-text mb-2">No Certificates Yet</h3>
-                    <p class="text-brand-muted mb-6">You haven't completed any events to earn certificates.</p>
-                </div>
-
-                <!-- Certificates Grid -->
-                <div id="certificates-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Certificates will be dynamically loaded here -->
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Certificate Modal -->
-    <div id="certificate-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-brand-card rounded-2xl p-8 max-w-2xl w-full shadow-2xl">
-            <div class="text-center">
-                <div id="certificate-preview" class="bg-gradient-to-br from-brand-primary/5 to-brand-accent/5 border-2 border-dashed border-brand-primary/30 rounded-2xl p-8 mb-6">
-                    <!-- Certificate content will be dynamically generated here -->
-                </div>
-                <div class="flex justify-center space-x-4">
-                    <button id="download-certificate" class="btn btn-primary px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
-                        Download Certificate
-                    </button>
-                    <button id="close-certificate" class="btn btn-secondary px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
-                        Close
-                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Unregister Confirmation Modal -->
+    <div id="unregister-confirm-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card max-w-md w-full p-6 transform scale-95 opacity-0 transition-all duration-300">
+                <div class="text-center">
+                    <!-- Warning Icon -->
+                    <div class="w-20 h-20 bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-text mb-3">Confirm Unregistration</h3>
+                    <div class="bg-brand-card/50 rounded-lg p-4 mb-6">
+                        <h4 id="unconfirm-event-title" class="text-lg font-semibold text-brand-text mb-2">Event Title</h4>
+                        <p id="unconfirm-event-details" class="text-brand-muted text-sm">Event details will appear here</p>
+                    </div>
+                    <p class="text-brand-muted mb-6">
+                        Are you sure you want to unregister from this event? This action cannot be undone.
+                    </p>
+                    <div class="flex space-x-3">
+                        <button onclick="closeUnregisterConfirmModal()" class="btn btn-secondary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                            Cancel
+                        </button>
+                        <button id="confirm-unregister-btn" class="btn btn-danger flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                            Yes, Unregister
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced CSS for smooth animations -->
+    <style>
+        /* Smooth transitions for all interactive elements */
+        .card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Button animations */
+        .btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Modal animations */
+        .modal-enter {
+            animation: modalEnter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        .modal-exit {
+            animation: modalExit 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes modalEnter {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        @keyframes modalExit {
+            from {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+        }
+        
+        /* Toast notifications */
+        .toast-notification {
+            z-index: 9999;
+        }
+        
+        /* Event card animations */
+        .event-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Loading states */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Event loading animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Smooth button state transitions */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Enhanced loading states */
+        .loading-button {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: loadingShine 1.5s infinite;
+        }
+        
+        @keyframes loadingShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Event card enhancements */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Event card hover effects */
+        .event-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Status badge improvements */
+        .status-badge {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
+    </style>
+
     <!-- Scripts -->
-    <script type="module" src="js/pages/dashboard.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js';
+        import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
+        import { getFirestore, doc, getDoc, collection, query, where, onSnapshot, orderBy, limit, getDocs, deleteDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyASOYZU9OI454p5t9obtZP3mkA6ncawCBw",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.firebasestorage.app",
+            messagingSenderId: "1035518806464",
+            appId: "1:1035518806464:web:c5fb9df49c319cd639a025"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Initialize Firebase services
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Set auth persistence
+        setPersistence(auth, browserLocalPersistence);
+
+        // Make Firebase functions available globally
+        window.firebase = {
+            auth,
+            db,
+            onAuthStateChanged,
+            signOut,
+            doc,
+            getDoc,
+            collection,
+            query,
+            where,
+            onSnapshot,
+            orderBy,
+            limit,
+            getDocs,
+            deleteDoc,
+            updateDoc,
+            increment
+        };
+
+        console.log('Firebase initialized successfully from CDN');
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script type="module" src="./js/pages/dashboard.js"></script>
 </body>
 </html>

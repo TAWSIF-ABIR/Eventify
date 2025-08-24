@@ -1,0 +1,17 @@
+{
+  "name": "eventify-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for Eventify Firebase setup and maintenance",
+  "main": "init-firestore-schema.js",
+  "scripts": {
+    "init": "node init-firestore-schema.js",
+    "init:sample": "node init-firestore-schema.js --create-sample"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.11.0"
+  },
+  "devDependencies": {},
+  "keywords": ["firebase", "firestore", "eventify", "schema"],
+  "author": "Eventify Team",
+  "license": "MIT"
+}

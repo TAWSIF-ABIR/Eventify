@@ -46,7 +46,7 @@ class AdminDashboardPage {
                     }
                 } else {
                     // Redirect to login if not authenticated
-                    window.location.href = 'login.html';
+                    window.location.href = 'auth-new.html';
                 }
             });
         });

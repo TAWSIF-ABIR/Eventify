@@ -341,15 +341,17 @@
             <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
                 <div class="p-6 border-b border-white/10">
                     <div class="flex items-center justify-between">
-                <h3 class="text-2xl font-bold text-brand-text">Upcoming Events Details</h3>
-                <button onclick="adminDashboardPage.hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="upcoming-events-content" class="space-y-4">
-                <!-- Content will be loaded dynamically -->
+                        <h3 class="text-2xl font-bold text-brand-text">Upcoming Events Details</h3>
+                        <button onclick="adminDashboardPage.hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="upcoming-events-content" class="space-y-4">
+                        <!-- Content will be loaded dynamically -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -447,23 +449,33 @@
                 window.attendeeListeners.forEach(unsubscribe => unsubscribe());
             }
             
-            window.attendeeListeners = allEvents.map(event => {
-                const attendeesRef = collection(db, 'events', event.id, 'attendees');
-                return onSnapshot(attendeesRef, (snapshot) => {
-                    const attendeeCount = snapshot.size;
-                    
-                    // Update the event's attendee count in the local array
-                    const eventIndex = allEvents.findIndex(e => e.id === event.id);
-                    if (eventIndex !== -1) {
-                        allEvents[eventIndex].attendeeCount = attendeeCount;
+            window.attendeeListeners = [];
+            
+            // For the new registration system, we need to listen to all users' registrations
+            // This is more complex but gives us real-time updates
+            allEvents.forEach(event => {
+                // Listen to all users' registrations for this specific event
+                const allUsersRef = collection(db, 'users');
+                
+                // We'll use a different approach - listen to the event document for attendee count changes
+                // and also set up a listener for the event itself
+                const eventRef = doc(db, 'events', event.id);
+                const unsubscribe = onSnapshot(eventRef, (docSnapshot) => {
+                    if (docSnapshot.exists()) {
+                        const eventData = docSnapshot.data();
+                        const eventIndex = allEvents.findIndex(e => e.id === event.id);
+                        if (eventIndex !== -1) {
+                            allEvents[eventIndex].attendeeCount = eventData.attendeeCount || 0;
+                            // Trigger stats and display update
+                            updateStats();
+                            displayEvents();
+                        }
                     }
-                    
-                    // Trigger stats and display update
-                    updateStats();
-                    displayEvents();
-            }, (error) => {
-                    console.error(`Error listening to attendees for event ${event.id}:`, error);
+                }, (error) => {
+                    console.error(`Error listening to event ${event.id}:`, error);
                 });
+                
+                window.attendeeListeners.push(unsubscribe);
             });
         }
 
@@ -486,6 +498,9 @@
                 console.log('Loaded events:', allEvents);
                 console.log('Number of events loaded:', allEvents.length);
                 
+                // Calculate accurate attendee counts from the new registration system
+                await calculateAccurateAttendeeCounts();
+                
                 // Update stats
                 await updateStats();
                 displayEvents();
@@ -501,6 +516,47 @@
                 console.error('Error loading dashboard data:', error);
                 const eventsContainer = document.getElementById('admin-events');
                 eventsContainer.innerHTML = '<div class="text-center py-12"><div class="text-red-400">Failed to load events. Please refresh the page.</div></div>';
+            }
+        }
+
+        // Calculate accurate attendee counts from the new registration system
+        async function calculateAccurateAttendeeCounts() {
+            try {
+                console.log('Calculating accurate attendee counts...');
+                
+                // Get all users and their registrations
+                const allUsersRef = collection(db, 'users');
+                const allUsersSnapshot = await getDocs(allUsersRef);
+                
+                // Count registrations for each event
+                const eventAttendeeCounts = {};
+                
+                for (const userDoc of allUsersSnapshot.docs) {
+                    const userRegistrationsRef = collection(db, 'users', userDoc.id, 'registrations');
+                    const userRegistrationsSnapshot = await getDocs(userRegistrationsRef);
+                    
+                    userRegistrationsSnapshot.forEach(registrationDoc => {
+                        const registration = registrationDoc.data();
+                        const eventId = registration.eventId;
+                        
+                        if (!eventAttendeeCounts[eventId]) {
+                            eventAttendeeCounts[eventId] = 0;
+                        }
+                        eventAttendeeCounts[eventId]++;
+                    });
+                }
+                
+                console.log('Calculated attendee counts:', eventAttendeeCounts);
+                
+                // Update the allEvents array with accurate counts
+                allEvents.forEach(event => {
+                    event.attendeeCount = eventAttendeeCounts[event.id] || 0;
+                });
+                
+                console.log('Updated events with accurate attendee counts:', allEvents);
+                
+            } catch (error) {
+                console.error('Error calculating accurate attendee counts:', error);
             }
         }
 
@@ -711,6 +767,12 @@
                             </div>
                             
                             <div class="flex flex-col space-y-2 ml-4">
+                                <button class="btn btn-accent text-xs px-3 py-1" onclick="viewEventAttendees('${event.id}', '${event.title}')">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                                    </svg>
+                                    Attendees (${event.attendeeCount || 0})
+                                </button>
                                 <button class="btn btn-secondary text-xs px-3 py-1" onclick="editEvent('${event.id}')">
                                     Edit
                                 </button>
@@ -922,9 +984,43 @@
             }, 3000);
         }
 
-        // Refresh events
-        document.getElementById('refresh-events').addEventListener('click', () => {
-            loadDashboardData();
+        // Refresh events with enhanced animation
+        document.getElementById('refresh-events').addEventListener('click', async () => {
+            const refreshBtn = document.getElementById('refresh-events');
+            const originalText = refreshBtn.innerHTML;
+            
+            // Show loading state
+            refreshBtn.innerHTML = `
+                <svg class="w-4 h-4 mr-2 animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                </svg>
+                Refreshing...
+            `;
+            refreshBtn.disabled = true;
+            refreshBtn.classList.add('loading-button');
+            
+            try {
+                // Add rotation animation to the refresh icon
+                refreshBtn.style.transform = 'rotate(360deg)';
+                refreshBtn.style.transition = 'transform 0.5s ease-in-out';
+                
+                // Load data with animation
+                await loadDashboardData();
+                
+                // Show success toast
+                showToast('Events and attendee counts refreshed successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error refreshing events:', error);
+                showToast('Failed to refresh events. Please try again.', 'error');
+            } finally {
+                // Reset button state
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+                refreshBtn.classList.remove('loading-button');
+                refreshBtn.style.transform = '';
+                refreshBtn.style.transition = '';
+            }
         });
 
         // Refresh analytics
@@ -973,7 +1069,20 @@
             }
         };
 
-        // Show modal with animation
+        // Hide all attendees modal
+        window.hideAllAttendeesModal = function() {
+            const modal = document.getElementById('all-attendees-modal');
+            if (modal) {
+                const modalContent = modal.querySelector('.card');
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        };
+
+        // Show modal function
         function showModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
@@ -986,11 +1095,12 @@
             }
         }
 
-        // Hide modal with animation
+        // Hide modal function
         function hideModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
                 const modalContent = modal.querySelector('.card');
+                modalContent.classList.remove('scale-100', 'opacity-100');
                 modalContent.classList.add('scale-95', 'opacity-0');
                 setTimeout(() => {
                     modal.classList.add('hidden');
@@ -1176,6 +1286,127 @@
             }
         }
 
+        // Global functions for attendee management
+        window.viewEventAttendees = async function(eventId, eventTitle) {
+            try {
+                console.log('Viewing attendees for event:', eventId, eventTitle);
+                showEventAttendeesModal(eventId, eventTitle);
+            } catch (error) {
+                console.error('Error viewing event attendees:', error);
+                showToast('Failed to load event attendees', 'error');
+            }
+        };
+
+        // Show event attendees modal
+        async function showEventAttendeesModal(eventId, eventTitle) {
+            try {
+                console.log('Loading attendees for event:', eventId);
+                
+                // Get all users who have registrations for this event
+                const allUsersRef = collection(db, 'users');
+                const allUsersSnapshot = await getDocs(allUsersRef);
+                
+                const eventAttendees = [];
+                
+                // Check each user's registrations subcollection
+                for (const userDoc of allUsersSnapshot.docs) {
+                    const userRegistrationsRef = collection(db, 'users', userDoc.id, 'registrations');
+                    const eventRegistrationQuery = query(userRegistrationsRef, where('eventId', '==', eventId));
+                    const eventRegistrationSnapshot = await getDocs(eventRegistrationQuery);
+                    
+                    if (!eventRegistrationSnapshot.empty) {
+                        const registration = eventRegistrationSnapshot.docs[0].data();
+                        eventAttendees.push({
+                            userId: userDoc.id,
+                            userEmail: userDoc.data().email || 'No email',
+                            userName: userDoc.data().displayName || 'Unknown User',
+                            registeredAt: registration.registeredAt,
+                            status: registration.status || 'registered'
+                        });
+                    }
+                }
+                
+                console.log('Found attendees:', eventAttendees);
+                
+                // Create and show modal
+                showEventAttendeesModalContent(eventTitle, eventAttendees);
+                
+            } catch (error) {
+                console.error('Error loading event attendees:', error);
+                showToast('Failed to load event attendees', 'error');
+            }
+        }
+
+        // Show event attendees modal content
+        function showEventAttendeesModalContent(eventTitle, attendees) {
+            // Create modal backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            backdrop.id = 'event-attendees-backdrop';
+            
+            // Create modal content
+            const modal = document.createElement('div');
+            modal.className = 'card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300';
+            modal.innerHTML = `
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold text-brand-text">Event Attendees: ${eventTitle}</h3>
+                        <button onclick="closeEventAttendeesModal()" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-brand-muted text-sm mt-2">${attendees.length} registered attendees</p>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                    ${attendees.length === 0 ? 
+                        '<div class="text-center py-12"><p class="text-brand-muted">No attendees registered for this event yet.</p></div>' :
+                        attendees.map(attendee => `
+                            <div class="card p-4 mb-4 hover:shadow-lg transition-all duration-300">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="text-lg font-semibold text-brand-text">${attendee.userName}</h4>
+                                        <p class="text-brand-muted text-sm">${attendee.userEmail}</p>
+                                        <div class="flex items-center space-x-4 mt-2 text-sm">
+                                            <span class="text-brand-muted">Status: <span class="text-brand-text">${attendee.status}</span></span>
+                                            <span class="text-brand-muted">Registered: <span class="text-brand-text">${formatDate(attendee.registeredAt)}</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                                            Registered
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            `;
+            
+            backdrop.appendChild(modal);
+            document.body.appendChild(backdrop);
+            
+            // Show modal with animation
+            setTimeout(() => {
+                modal.classList.remove('scale-95', 'opacity-0');
+                modal.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Close event attendees modal
+        window.closeEventAttendeesModal = function() {
+            const backdrop = document.getElementById('event-attendees-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+        };
+
+
+
+
+
         console.log('Admin dashboard script loaded');
     </script>
 
@@ -1209,17 +1440,15 @@
             <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
                 <div class="p-6 border-b border-white/10">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-2xl font-bold text-brand-text">Upcoming Events</h3>
-                        <button onclick="hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </div>
-                </div>
-                <div class="p-6 overflow-y-auto max-h-[90vh]">
-                    <div id="upcoming-events-list" class="space-y-4">
-                        <!-- Upcoming events will be populated here -->
+                        <h3 class="text-2xl font-bold text-brand-text">Upcoming Events Details</h3>
+                        <button onclick="adminDashboardPage.hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="upcoming-events-content" class="space-y-4">
+                        <!-- Content will be loaded dynamically -->
                     </div>
                 </div>
             </div>

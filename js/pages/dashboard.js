@@ -1,6 +1,11 @@
-import { auth, db } from '../firebase-init.js';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { 
+// Use global Firebase instances from CDN
+const { auth, db } = window.firebase;
+import { toastManager } from '../toast.js';
+
+// Import Firebase functions from the global scope
+const { 
+    onAuthStateChanged, 
+    signOut,
     doc, 
     getDoc, 
     collection, 
@@ -9,33 +14,42 @@ import {
     onSnapshot, 
     orderBy, 
     limit,
-    getDocs
-} from 'firebase/firestore';
-import { ToastManager } from '../toast.js';
+    getDocs,
+    deleteDoc,
+    updateDoc,
+    increment
+} = window.firebase;
 
 class DashboardPage {
     constructor() {
         this.currentUser = null;
-        this.toast = new ToastManager();
+        this.toast = toastManager;
         this.events = [];
         this.init();
     }
 
     async init() {
+        console.log('=== DASHBOARD INITIALIZATION STARTED ===');
         try {
+            console.log('Setting up authentication state listener...');
             // Check authentication state
             onAuthStateChanged(auth, async (user) => {
+                console.log('Auth state changed:', user);
                 if (user) {
+                    console.log('✅ User authenticated:', user.uid);
                     this.currentUser = user;
                     await this.loadUserProfile();
                     this.setupEventListeners();
-                    this.loadUserEvents();
+                    console.log('Starting to load user events...');
+                    await this.loadUserEvents();
                 } else {
-                    window.location.href = 'login.html';
+                    console.log('❌ No user authenticated, redirecting to login');
+                    window.location.href = 'auth-new.html';
                 }
             });
+            console.log('Auth state listener set up successfully');
         } catch (error) {
-            console.error('Dashboard initialization error:', error);
+            console.error('❌ Dashboard initialization error:', error);
             this.toast.error('Failed to initialize dashboard');
         }
     }
@@ -85,50 +99,109 @@ class DashboardPage {
     }
 
     async loadUserEvents() {
+        console.log('=== LOADING USER EVENTS ===');
         const eventsContainer = document.getElementById('registered-events');
         const loadingElement = document.getElementById('events-loading');
         const emptyElement = document.getElementById('events-empty');
+        
+        console.log('Container elements found:', {
+            eventsContainer: !!eventsContainer,
+            loadingElement: !!loadingElement,
+            emptyElement: !!emptyElement
+        });
         
         if (loadingElement) loadingElement.classList.remove('hidden');
         if (emptyElement) emptyElement.classList.add('hidden');
 
         try {
-            const registrationsRef = collection(db, 'users', this.currentUser.uid, 'registrations');
-            const q = query(registrationsRef, orderBy('registeredAt', 'desc'));
+            console.log('Current user:', this.currentUser);
+            console.log('User UID:', this.currentUser?.uid);
             
+            if (!this.currentUser?.uid) {
+                console.error('No current user UID found');
+                this.toast.error('User not authenticated');
+                return;
+            }
+
+            console.log('Querying user registrations...');
+            const registrationsRef = collection(db, 'users', this.currentUser.uid, 'registrations');
+            console.log('Registrations collection ref:', registrationsRef);
+            
+            const q = query(registrationsRef, orderBy('registeredAt', 'desc'));
+            console.log('Query created:', q);
+            
+            console.log('Executing query...');
             const snapshot = await getDocs(q);
+            console.log('Query result:', snapshot);
+            console.log('Number of registrations found:', snapshot.size);
             
             if (snapshot.empty) {
+                console.log('No registrations found, showing empty state');
                 if (loadingElement) loadingElement.classList.add('hidden');
                 if (emptyElement) emptyElement.classList.remove('hidden');
                 return;
             }
 
-            const eventPromises = snapshot.docs.map(async (regDoc) => {
+            console.log('Processing registrations...');
+            const eventPromises = snapshot.docs.map(async (regDoc, index) => {
                 const eventId = regDoc.data().eventId;
+                console.log(`Registration ${index + 1}:`, regDoc.data());
+                console.log(`Event ID: ${eventId}`);
+                
                 const eventRef = doc(db, 'events', eventId);
+                console.log(`Event ref for ${eventId}:`, eventRef);
+                
                 const eventSnap = await getDoc(eventRef);
+                console.log(`Event snapshot for ${eventId}:`, eventSnap);
                 
                 if (eventSnap.exists()) {
+                    const eventData = eventSnap.data();
+                    console.log(`Event data for ${eventId}:`, eventData);
                     return { 
                         id: eventId, 
                         registeredAt: regDoc.data().registeredAt,
-                        ...eventSnap.data() 
+                        ...eventData 
                     };
+                } else {
+                    console.log(`Event ${eventId} not found in events collection`);
+                    return null;
                 }
-                return null;
             });
 
+            console.log('Waiting for all event promises to resolve...');
             this.events = (await Promise.all(eventPromises)).filter(event => event !== null);
+            console.log('Final events array:', this.events);
+            console.log('Number of valid events:', this.events.length);
             
             this.renderEvents();
             this.updateStats();
             
             if (loadingElement) loadingElement.classList.add('hidden');
+            console.log('=== EVENTS LOADING COMPLETE ===');
         } catch (error) {
-            console.error('Error loading events:', error);
-            this.toast.error('Failed to load events');
+            console.error('❌ Error loading events:', error);
+            console.error('Error details:', {
+                code: error.code,
+                message: error.message,
+                stack: error.stack
+            });
+            
+            this.toast.error(`Failed to load events: ${error.message}`);
+            
             if (loadingElement) loadingElement.classList.add('hidden');
+            
+            // Show error state
+            if (eventsContainer) {
+                eventsContainer.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-red-400 mb-4">Failed to load events</div>
+                        <div class="text-sm text-brand-muted mb-4">Error: ${error.message}</div>
+                        <button onclick="window.dashboardPage.loadUserEvents()" class="btn btn-primary px-4 py-2 rounded-lg">
+                            Retry Loading
+                        </button>
+                    </div>
+                `;
+            }
         }
     }
 
@@ -157,26 +230,43 @@ class DashboardPage {
 
     createEventElement(event) {
         const eventDiv = document.createElement('div');
-        eventDiv.className = 'card p-6 hover:scale-105 transition-all duration-300';
+        eventDiv.className = 'card event-card p-6 hover:scale-105 transition-all duration-300';
         eventDiv.setAttribute('data-event-id', event.id);
         
         const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
         const status = this.getEventStatus(event.startAt);
         
+        // Format venue information
+        const location = event.location || 'TBD';
+        const room = event.room || '';
+        const venue = room ? `${location} - ${room}` : location;
+        
+        // Format attending count
+        const attendeeCount = event.attendeeCount || 0;
+        
+        // Format date and time
+        const dateDisplay = startDate.toLocaleDateString();
+        const timeDisplay = startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
         eventDiv.innerHTML = `
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
                     <h3 class="text-lg font-semibold text-brand-text mb-2">${event.title || 'Event'}</h3>
-                    <p class="text-brand-muted text-sm mb-1">${event.category || 'Category'}</p>
-                    <p class="text-brand-muted text-sm">Date: ${startDate.toLocaleDateString()}</p>
+                    <div class="space-y-1 text-sm text-brand-muted">
+                        <p>${event.category || 'Category'}</p>
+                        <p>${dateDisplay}</p>
+                        <p>${timeDisplay}</p>
+                        <p>📍 ${venue}</p>
+                        <p>👥 ${attendeeCount} attending (Firebase)</p>
+                    </div>
                 </div>
-                <span class="px-3 py-1 rounded-full text-xs font-medium ${this.getStatusClasses(status)}">
+                <span class="px-3 py-1 rounded-full text-xs font-medium status-badge ${this.getStatusClasses(status)} ml-4">
                     ${status}
                 </span>
             </div>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between pt-4 border-t border-white/10">
                 <span class="text-sm text-brand-muted">Registered: ${event.registeredAt ? new Date(event.registeredAt.seconds * 1000).toLocaleDateString() : 'Recently'}</span>
-                <button onclick="window.unregisterFromEvent('${event.id}')" class="btn btn-danger px-3 py-1 text-sm rounded-lg hover:scale-105 transition-transform duration-300">
+                <button onclick="window.dashboardPage.unregisterFromEvent('${event.id}')" class="btn btn-danger px-3 py-1 text-sm rounded-lg hover:scale-105 transition-transform duration-300">
                     Unregister
                 </button>
             </div>
@@ -211,15 +301,15 @@ class DashboardPage {
         const statsElements = {
             totalEvents: document.getElementById('total-events'),
             upcomingEvents: document.getElementById('upcoming-events'),
-            completedEvents: document.getElementById('completed-events'),
-            certificatesCount: document.getElementById('certificates-count')
+            thisWeek: document.getElementById('this-week'),
+            completedEvents: document.getElementById('completed-events')
         };
 
         const stats = {
             totalEvents: this.events.length,
             upcomingEvents: this.events.filter(e => this.getEventStatus(e.startAt) === 'Upcoming').length,
-            completedEvents: this.events.filter(e => this.getEventStatus(e.startAt) === 'Completed').length,
-            certificatesCount: this.events.filter(e => this.getEventStatus(e.startAt) === 'Completed').length
+            thisWeek: this.events.filter(e => this.getEventStatus(e.startAt) === 'This Week').length,
+            completedEvents: this.events.filter(e => this.getEventStatus(e.startAt) === 'Completed').length
         };
 
         Object.entries(statsElements).forEach(([key, element]) => {
@@ -254,7 +344,7 @@ class DashboardPage {
     async handleLogout() {
         try {
             await signOut(auth);
-            window.location.href = 'login.html';
+            window.location.href = 'auth-new.html';
         } catch (error) {
             console.error('Logout error:', error);
             this.toast.error('Logout failed');
@@ -266,43 +356,120 @@ class DashboardPage {
         html.classList.toggle('dark');
         localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
     }
+
+    // Add missing functions for HTML onclick handlers
+    async unregisterFromEvent(eventId) {
+        try {
+            const event = this.events.find(e => e.id === eventId);
+            if (!event) {
+                this.toast.error('Event not found');
+                return;
+            }
+
+            // Remove from user's registrations
+            const userRegistrationsRef = collection(db, 'users', this.currentUser.uid, 'registrations');
+            const existingRegistration = query(userRegistrationsRef, where('eventId', '==', eventId));
+            const existingSnapshot = await getDocs(existingRegistration);
+            
+            if (existingSnapshot.empty) {
+                this.toast.info('You are not registered for this event');
+                return;
+            }
+
+            // Delete registration
+            const registrationDoc = existingSnapshot.docs[0];
+            await deleteDoc(registrationDoc.ref);
+
+            // Update event attendee count
+            try {
+                const eventRef = doc(db, 'events', eventId);
+                await updateDoc(eventRef, {
+                    attendeeCount: increment(-1)
+                });
+            } catch (error) {
+                console.error('Failed to update event attendee count:', error);
+            }
+
+            // Remove from local events array
+            this.events = this.events.filter(e => e.id !== eventId);
+            
+            // Refresh display
+            this.renderEvents();
+            this.updateStats();
+            
+            this.toast.success('Successfully unregistered from event');
+        } catch (error) {
+            console.error('Error unregistering from event:', error);
+            this.toast.error('Failed to unregister from event');
+        }
+    }
+
+    // Add other missing functions
+    showCertificatesSection() {
+        const certificatesSection = document.getElementById('certificates-section');
+        const registeredEvents = document.getElementById('registered-events');
+        
+        if (certificatesSection) certificatesSection.classList.remove('hidden');
+        if (registeredEvents) registeredEvents.classList.add('hidden');
+    }
+
+    hideCertificateModal() {
+        const modal = document.getElementById('certificate-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    showProfileModal() {
+        const modal = document.getElementById('profile-modal');
+        if (modal) modal.classList.remove('hidden');
+    }
+
+    hideProfileModal() {
+        const modal = document.getElementById('profile-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    editProfile() {
+        const modal = document.getElementById('edit-profile-modal');
+        if (modal) modal.classList.remove('hidden');
+    }
+
+    hideEditProfileModal() {
+        const modal = document.getElementById('edit-profile-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    closeRegistrationModal() {
+        const modal = document.getElementById('registration-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    closeUnregisterConfirmModal() {
+        const modal = document.getElementById('unregister-confirm-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
+    downloadCertificate() {
+        this.toast.info('Certificate download functionality will be implemented!');
+    }
+
+    printCertificate() {
+        window.print();
+    }
 }
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.dashboardPage = new DashboardPage();
+    
+    // Make functions globally available for onclick handlers
+    window.showCertificatesSection = () => window.dashboardPage.showCertificatesSection();
+    window.hideCertificateModal = () => window.dashboardPage.hideCertificateModal();
+    window.showProfileModal = () => window.dashboardPage.showProfileModal();
+    window.hideProfileModal = () => window.dashboardPage.hideProfileModal();
+    window.editProfile = () => window.dashboardPage.editProfile();
+    window.hideEditProfileModal = () => window.dashboardPage.hideEditProfileModal();
+    window.closeRegistrationModal = () => window.dashboardPage.closeRegistrationModal();
+    window.closeUnregisterConfirmModal = () => window.dashboardPage.closeUnregisterConfirmModal();
+    window.downloadCertificate = () => window.dashboardPage.downloadCertificate();
+    window.printCertificate = () => window.dashboardPage.printCertificate();
 });
-
-// Global function for unregistering from events
-window.unregisterFromEvent = async function(eventId) {
-    if (window.dashboardPage) {
-        try {
-            const { db } = await import('../firebase-init.js');
-            const { deleteDoc, doc, updateDoc, increment } = await import('firebase/firestore');
-            
-            const currentUser = window.dashboardPage.currentUser;
-            
-            // Remove from user's registrations
-            const userRegRef = doc(db, 'users', currentUser.uid, 'registrations', eventId);
-            await deleteDoc(userRegRef);
-            
-            // Remove from event's attendees
-            const eventAttendeeRef = doc(db, 'events', eventId, 'attendees', currentUser.uid);
-            await deleteDoc(eventAttendeeRef);
-            
-            // Decrement attendee count
-            const eventRef = doc(db, 'events', eventId);
-            await updateDoc(eventRef, {
-                attendeeCount: increment(-1)
-            });
-            
-            // Reload events
-            window.dashboardPage.loadUserEvents();
-            
-            window.dashboardPage.toast.success('Successfully unregistered from event');
-        } catch (error) {
-            console.error('Error unregistering:', error);
-            window.dashboardPage.toast.error('Failed to unregister from event');
-        }
-    }
-};
