@@ -32,7 +32,7 @@ class DatabaseManager {
     try {
       const eventDoc = {
         ...eventData,
-        imageUrl: null, // No image upload without storage
+        imageUrl: eventData.imageUrl || null, // Support base64 images
         attendeeCount: 0, // Explicitly set to 0
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
