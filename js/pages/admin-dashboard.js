@@ -1,5 +1,5 @@
 import { authManager } from '../auth.js';
-import { getAdminEvents, deleteEvent } from '../db.js';
+import { getAdminEvents, deleteEvent, updateEvent, createEvent } from '../db.js';
 import { success, error, confirm } from '../toast.js';
 
 class AdminDashboardPage {
@@ -192,7 +192,7 @@ class AdminDashboardPage {
 
             <div class="flex items-center justify-between pt-4 border-t border-white/10">
                 <div class="flex space-x-2">
-                    <button class="btn btn-primary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm flex items-center space-x-2">
+                    <button class="btn btn-primary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm flex items-center space-x-2" onclick="adminDashboardPage.viewEventDetails('${event.id}')">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
@@ -205,6 +205,13 @@ class AdminDashboardPage {
                         </svg>
                         <span>Edit</span>
                     </button>
+                    <button class="btn btn-success px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm flex items-center space-x-2" onclick="adminDashboardPage.duplicateEvent('${event.id}')">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
+                            <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+                        </svg>
+                        <span>Duplicate</span>
+                    </button>
                     <button class="btn btn-danger px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm flex items-center space-x-2" onclick="adminDashboardPage.deleteEvent('${event.id}')">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -212,8 +219,17 @@ class AdminDashboardPage {
                         <span>Delete</span>
                     </button>
                 </div>
-                <div class="text-xs text-brand-muted bg-white/5 px-2 py-1 rounded">
-                    ID: ${event.id.substring(0, 8)}
+                <div class="flex items-center space-x-2">
+                    <select class="text-xs bg-white/5 px-2 py-1 rounded border border-white/10 text-brand-text" onchange="adminDashboardPage.updateEventStatus('${event.id}', this.value)">
+                        <option value="draft" ${event.status === 'draft' ? 'selected' : ''}>Draft</option>
+                        <option value="upcoming" ${event.status === 'upcoming' ? 'selected' : ''}>Upcoming</option>
+                        <option value="ongoing" ${event.status === 'ongoing' ? 'selected' : ''}>Ongoing</option>
+                        <option value="completed" ${event.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        <option value="cancelled" ${event.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                    <div class="text-xs text-brand-muted bg-white/5 px-2 py-1 rounded">
+                        ID: ${event.id.substring(0, 8)}
+                    </div>
                 </div>
             </div>
         `;
@@ -222,24 +238,27 @@ class AdminDashboardPage {
     }
 
     updateStatistics() {
-        const totalEvents = this.adminEvents.length;
-        const upcomingEvents = this.adminEvents.filter(event => {
+        this.totalEvents = this.adminEvents.length;
+        this.upcomingEvents = this.adminEvents.filter(event => {
             const eventDate = new Date(event.startAt.seconds * 1000);
             return eventDate > new Date();
         }).length;
         
-        const totalAttendees = this.adminEvents.reduce((total, event) => {
+        this.totalAttendees = this.adminEvents.reduce((total, event) => {
             return total + (event.attendeeCount || 0);
         }, 0);
 
-        // Update stats
+        // Get unique event categories
+        this.eventCategories = [...new Set(this.adminEvents.map(event => event.category).filter(Boolean))];
+
+        // Update stats display
         const totalEventsEl = document.getElementById('total-events');
         const upcomingEventsEl = document.getElementById('upcoming-events');
         const totalAttendeesEl = document.getElementById('total-attendees');
 
-        if (totalEventsEl) totalEventsEl.textContent = totalEvents;
-        if (upcomingEventsEl) upcomingEventsEl.textContent = upcomingEvents;
-        if (totalAttendeesEl) totalAttendeesEl.textContent = totalAttendees;
+        if (totalEventsEl) totalEventsEl.textContent = this.totalEvents;
+        if (upcomingEventsEl) upcomingEventsEl.textContent = this.upcomingEvents;
+        if (totalAttendeesEl) totalAttendeesEl.textContent = this.totalAttendees;
     }
 
     updateUserInfo() {
@@ -262,14 +281,118 @@ class AdminDashboardPage {
     }
 
     editEvent(eventId) {
-        // Redirect to edit event page
-        window.location.href = `edit-event.html?id=${eventId}`;
+        try {
+            const event = this.adminEvents.find(e => e.id === eventId);
+            if (!event) {
+                error('Event not found');
+                return;
+            }
+
+            // Store event data in localStorage for edit page
+            localStorage.setItem('editEventData', JSON.stringify(event));
+            
+            // Redirect to edit event page
+            window.location.href = `edit-event.html?id=${eventId}`;
+        } catch (err) {
+            console.error('Error preparing event for edit:', err);
+            error('Failed to prepare event for editing');
+        }
     }
 
-    async deleteEvent(eventId, eventTitle) {
+    // Method to handle event status updates
+    async updateEventStatus(eventId, newStatus) {
         try {
+            const event = this.adminEvents.find(e => e.id === eventId);
+            if (!event) {
+                error('Event not found');
+                return;
+            }
+
+            // Update event status in database
+            const result = await updateEvent(eventId, { status: newStatus });
+            if (result.success) {
+                success(`Event status updated to ${newStatus}`);
+                // Reload events
+                await this.loadAdminEvents();
+                this.updateStatistics();
+            } else {
+                error(result.error || 'Failed to update event status');
+            }
+        } catch (err) {
+            console.error('Error updating event status:', err);
+            error('Failed to update event status');
+        }
+    }
+
+    // Method to duplicate an event
+    async duplicateEvent(eventId) {
+        try {
+            const event = this.adminEvents.find(e => e.id === eventId);
+            if (!event) {
+                error('Event not found');
+                return;
+            }
+
+            // Create a copy of the event with modified data
+            const duplicatedEvent = {
+                ...event,
+                title: `${event.title} (Copy)`,
+                startAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
+                status: 'draft',
+                attendeeCount: 0,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+
+            // Remove the id field so a new one is generated
+            delete duplicatedEvent.id;
+
+            // Create the duplicated event
+            const result = await createEvent(duplicatedEvent);
+            if (result.success) {
+                success('Event duplicated successfully');
+                // Reload events
+                await this.loadAdminEvents();
+                this.updateStatistics();
+            } else {
+                error(result.error || 'Failed to duplicate event');
+            }
+        } catch (err) {
+            console.error('Error duplicating event:', err);
+            error('Failed to duplicate event');
+        }
+    }
+
+    // Method to view event details
+    viewEventDetails(eventId) {
+        try {
+            const event = this.adminEvents.find(e => e.id === eventId);
+            if (!event) {
+                error('Event not found');
+                return;
+            }
+
+            // Store event data in localStorage for details page
+            localStorage.setItem('viewEventData', JSON.stringify(event));
+            
+            // Redirect to event details page
+            window.location.href = `event-details.html?id=${eventId}`;
+        } catch (err) {
+            console.error('Error preparing event for viewing:', err);
+            error('Failed to prepare event for viewing');
+        }
+    }
+
+    async deleteEvent(eventId) {
+        try {
+            const event = this.adminEvents.find(e => e.id === eventId);
+            if (!event) {
+                error('Event not found');
+                return;
+            }
+
             // Show confirmation dialog
-            const confirmed = await confirm(`Are you sure you want to delete "${eventTitle}"? This action cannot be undone.`);
+            const confirmed = await confirm(`Are you sure you want to delete "${event.title}"? This action cannot be undone.`);
             
             if (!confirmed) return;
 
@@ -302,8 +425,43 @@ class AdminDashboardPage {
             refreshBtn.addEventListener('click', () => this.refreshEvents());
         }
 
+        // Statistics card click listeners
+        this.setupStatisticsListeners();
+
         // Theme toggle
         this.setupThemeToggle();
+    }
+
+    setupStatisticsListeners() {
+        // Total Events click listener
+        const totalEventsCard = document.getElementById('total-events-card');
+        if (totalEventsCard) {
+            totalEventsCard.addEventListener('click', () => this.showTotalEventsDetails());
+        }
+
+        // Upcoming Events click listener
+        const upcomingEventsCard = document.getElementById('upcoming-events-card');
+        if (upcomingEventsCard) {
+            upcomingEventsCard.addEventListener('click', () => this.showUpcomingEventsDetails());
+        }
+
+        // Total Attendees click listener
+        const totalAttendeesCard = document.getElementById('total-attendees-card');
+        if (totalAttendeesCard) {
+            totalAttendeesCard.addEventListener('click', () => this.showTotalAttendeesDetails());
+        }
+
+        // Analytics click listener
+        const analyticsCard = document.getElementById('analytics-card');
+        if (analyticsCard) {
+            analyticsCard.addEventListener('click', () => this.showAnalyticsDetails());
+        }
+
+        // Rooms click listener
+        const roomsCard = document.getElementById('rooms-card');
+        if (roomsCard) {
+            roomsCard.addEventListener('click', () => this.showRoomsDetails());
+        }
     }
 
     setupThemeToggle() {
@@ -496,17 +654,9 @@ class AdminDashboardPage {
                 <div class="bg-gradient-to-r from-brand-success/5 to-brand-warning/5 p-6 rounded-xl border border-white/10">
                     <h5 class="text-lg font-semibold text-brand-text mb-3">Upcoming Highlights</h5>
                     <div class="space-y-3">
-                        <div class="flex items-center space-x-3 p-3 bg-white/5 rounded-lg">
-                            <div class="w-3 h-3 bg-brand-success rounded-full"></div>
-                            <span class="text-brand-muted">Academic Conference - March 15</span>
-                        </div>
-                        <div class="flex items-center space-x-3 p-3 bg-white/5 rounded-lg">
-                            <div class="w-3 h-3 bg-brand-warning rounded-full"></div>
-                            <span class="text-brand-muted">Workshop Series - March 20-25</span>
-                        </div>
-                        <div class="flex items-center space-x-3 p-3 bg-white/5 rounded-lg">
-                            <div class="w-3 h-3 bg-brand-accent rounded-full"></div>
-                            <span class="text-brand-muted">Social Mixer - March 30</span>
+                        <div class="text-center py-4">
+                            <p class="text-brand-muted">No upcoming events scheduled</p>
+                            <p class="text-sm text-brand-muted mt-1">Create events to see highlights here</p>
                         </div>
                     </div>
                 </div>
@@ -578,17 +728,9 @@ class AdminDashboardPage {
                 <div class="bg-gradient-to-r from-brand-accent/5 to-brand-primary/5 p-6 rounded-xl border border-white/10">
                     <h5 class="text-lg font-semibold text-brand-text mb-3">Attendance Trends</h5>
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-brand-muted">Most Popular Event</span>
-                            <span class="font-semibold text-brand-text">Academic Conference</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-brand-muted">Peak Registration Time</span>
-                            <span class="font-semibold text-brand-text">2 weeks before</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-brand-muted">Student Engagement</span>
-                            <span class="font-semibold text-brand-text">85%</span>
+                        <div class="text-center py-4">
+                            <p class="text-brand-muted">No attendance data available</p>
+                            <p class="text-sm text-brand-muted mt-1">Create events and track registrations to see trends</p>
                         </div>
                     </div>
                 </div>
@@ -792,6 +934,90 @@ class AdminDashboardPage {
                 </div>
             </div>
         `;
+    }
+
+    // Bulk operations methods
+    async bulkDeleteEvents(eventIds) {
+        try {
+            if (!eventIds || eventIds.length === 0) {
+                error('No events selected for deletion');
+                return;
+            }
+
+            const confirmed = await confirm(`Are you sure you want to delete ${eventIds.length} events? This action cannot be undone.`);
+            if (!confirmed) return;
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const eventId of eventIds) {
+                try {
+                    const result = await deleteEvent(eventId);
+                    if (result.success) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                    }
+                } catch (err) {
+                    errorCount++;
+                }
+            }
+
+            if (successCount > 0) {
+                success(`Successfully deleted ${successCount} events`);
+                if (errorCount > 0) {
+                    error(`Failed to delete ${errorCount} events`);
+                }
+                // Reload events
+                await this.loadAdminEvents();
+                this.updateStatistics();
+            } else {
+                error('Failed to delete any events');
+            }
+        } catch (err) {
+            console.error('Error in bulk delete:', err);
+            error('Bulk delete operation failed');
+        }
+    }
+
+    async bulkUpdateEventStatus(eventIds, newStatus) {
+        try {
+            if (!eventIds || eventIds.length === 0) {
+                error('No events selected for status update');
+                return;
+            }
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const eventId of eventIds) {
+                try {
+                    const result = await updateEvent(eventId, { status: newStatus });
+                    if (result.success) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                    }
+                } catch (err) {
+                    errorCount++;
+                }
+            }
+
+            if (successCount > 0) {
+                success(`Successfully updated status for ${successCount} events to ${newStatus}`);
+                if (errorCount > 0) {
+                    error(`Failed to update ${errorCount} events`);
+                }
+                // Reload events
+                await this.loadAdminEvents();
+                this.updateStatistics();
+            } else {
+                error('Failed to update any events');
+            }
+        } catch (err) {
+            console.error('Error in bulk status update:', err);
+            error('Bulk status update operation failed');
+        }
     }
 }
 

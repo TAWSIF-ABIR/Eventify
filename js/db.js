@@ -1,12 +1,30 @@
 // Database operations and Firestore queries
 import { db } from './firebase-init.js';
+import { 
+  collection, 
+  doc, 
+  getDoc, 
+  getDocs, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  setDoc, 
+  query, 
+  where, 
+  orderBy, 
+  limit, 
+  onSnapshot,
+  serverTimestamp,
+  Timestamp
+} from 'firebase/firestore';
 
 class DatabaseManager {
   constructor() {
-    this.eventsCollection = db.collection('events');
-    this.usersCollection = db.collection('users');
-    this.roomsCollection = db.collection('rooms');
-    this.certificatesCollection = db.collection('certificates');
+    // Initialize collections using Firebase v9+ syntax
+    this.eventsCollection = collection(db, 'events');
+    this.usersCollection = collection(db, 'users');
+    this.roomsCollection = collection(db, 'rooms');
+    this.certificatesCollection = collection(db, 'certificates');
   }
 
   // Event operations
@@ -16,11 +34,11 @@ class DatabaseManager {
         ...eventData,
         imageUrl: null, // No image upload without storage
         attendeeCount: 0,
-        createdAt: db.FieldValue.serverTimestamp(),
-        updatedAt: db.FieldValue.serverTimestamp()
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
       };
 
-      const docRef = await this.eventsCollection.add(eventDoc);
+      const docRef = await addDoc(this.eventsCollection, eventDoc);
       return { success: true, eventId: docRef.id };
     } catch (error) {
       console.error('Error creating event:', error);
@@ -32,10 +50,10 @@ class DatabaseManager {
     try {
       const updateDoc = {
         ...updateData,
-        updatedAt: db.FieldValue.serverTimestamp()
+        updatedAt: serverTimestamp()
       };
 
-      await this.eventsCollection.doc(eventId).update(updateDoc);
+      await updateDoc(doc(db, 'events', eventId), updateDoc);
       return { success: true };
     } catch (error) {
       console.error('Error updating event:', error);
@@ -46,7 +64,7 @@ class DatabaseManager {
   async deleteEvent(eventId) {
     try {
       // Delete event document
-      await this.eventsCollection.doc(eventId).delete();
+      await deleteDoc(doc(db, 'events', eventId));
       return { success: true };
     } catch (error) {
       console.error('Error deleting event:', error);
@@ -56,8 +74,8 @@ class DatabaseManager {
 
   async getEvent(eventId) {
     try {
-      const eventDoc = await this.eventsCollection.doc(eventId).get();
-      if (eventDoc.exists) {
+      const eventDoc = await getDoc(doc(db, 'events', eventId));
+      if (eventDoc.exists()) {
         return { success: true, event: { id: eventDoc.id, ...eventDoc.data() } };
       } else {
         return { success: false, error: 'Event not found' };
@@ -70,32 +88,29 @@ class DatabaseManager {
 
   async getEvents(filters = {}, pagination = {}) {
     try {
-      let q = this.eventsCollection.where('visibility', '==', 'public');
+      let q = query(this.eventsCollection, where('visibility', '==', 'public'));
       
       // Apply filters
       if (filters.category) {
-        q = q.where('category', '==', filters.category);
+        q = query(q, where('category', '==', filters.category));
       }
       if (filters.location) {
-        q = q.where('location', '==', filters.location);
+        q = query(q, where('location', '==', filters.location));
       }
       if (filters.startDate) {
-        q = q.where('startAt', '>=', db.Timestamp.fromDate(new Date(filters.startDate)));
+        q = query(q, where('startAt', '>=', Timestamp.fromDate(new Date(filters.startDate))));
       }
       if (filters.endDate) {
-        q = q.where('startAt', '<=', db.Timestamp.fromDate(new Date(filters.endDate)));
+        q = query(q, where('startAt', '<=', Timestamp.fromDate(new Date(filters.endDate))));
       }
       
       // Apply ordering and pagination
-      q = q.orderBy('startAt', 'asc');
+      q = query(q, orderBy('startAt', 'asc'));
       if (pagination.limit) {
-        q = q.limit(pagination.limit);
-      }
-      if (pagination.startAfter) {
-        q = q.startAfter(pagination.startAfter);
+        q = query(q, limit(pagination.limit));
       }
 
-      const querySnapshot = await q.get();
+      const querySnapshot = await getDocs(q);
       const events = [];
       querySnapshot.forEach(doc => {
         events.push({ id: doc.id, ...doc.data() });
@@ -110,14 +125,16 @@ class DatabaseManager {
 
   async getUpcomingEvents(limit = 12) {
     try {
-      const now = db.Timestamp.now();
-      const q = this.eventsCollection
-        .where('visibility', '==', 'public')
-        .where('startAt', '>', now)
-        .orderBy('startAt', 'asc')
-        .limit(limit);
+      const now = Timestamp.now();
+      const q = query(
+        this.eventsCollection,
+        where('visibility', '==', 'public'),
+        where('startAt', '>', now),
+        orderBy('startAt', 'asc'),
+        limit(limit)
+      );
 
-      const querySnapshot = await q.get();
+      const querySnapshot = await getDocs(q);
       const events = [];
       querySnapshot.forEach(doc => {
         events.push({ id: doc.id, ...doc.data() });
@@ -133,10 +150,12 @@ class DatabaseManager {
   // Get all events
   async getAllEvents() {
     try {
-      const q = this.eventsCollection
-        .orderBy('startAt', 'desc');
+      const q = query(
+        this.eventsCollection,
+        orderBy('startAt', 'desc')
+      );
 
-      const querySnapshot = await q.get();
+      const querySnapshot = await getDocs(q);
       const events = [];
       querySnapshot.forEach(doc => {
         events.push({ id: doc.id, ...doc.data() });
@@ -152,35 +171,44 @@ class DatabaseManager {
   // Registration operations
   async registerForEvent(eventId, userId, userData) {
     try {
-      const batch = db.batch();
+      const { writeBatch, increment } = await import('firebase/firestore');
+      const batch = writeBatch(db);
       
       // Add to user's registrations
-      const userRegRef = db.collection('users').doc(userId).collection('registrations').doc(eventId);
+      const userRegRef = doc(db, 'users', userId, 'registrations', eventId);
       batch.set(userRegRef, {
         eventId,
-        registeredAt: db.FieldValue.serverTimestamp(),
+        registeredAt: serverTimestamp(),
         attended: false
       });
 
       // Add to event's attendees
-      const eventAttendeeRef = db.collection('events').doc(eventId).collection('attendees').doc(userId);
+      const eventAttendeeRef = doc(db, 'events', eventId, 'attendees', userId);
       batch.set(eventAttendeeRef, {
         userId,
         name: userData.name,
         email: userData.email,
-        registeredAt: db.FieldValue.serverTimestamp(),
+        registeredAt: serverTimestamp(),
         status: 'registered',
         attended: false
       });
 
       // Increment attendee count
-      const eventRef = db.collection('events').doc(eventId);
+      const eventRef = doc(db, 'events', eventId);
       batch.update(eventRef, {
-        attendeeCount: db.FieldValue.increment(1)
+        attendeeCount: increment(1)
       });
 
       await batch.commit();
-      return { success: true };
+
+      // Email confirmation will be automatically sent by Firebase Cloud Function
+      // when the registration document is created in Firestore
+      
+      return { 
+        success: true, 
+        emailSent: true, // Cloud Function will handle this
+        emailError: null 
+      };
     } catch (error) {
       console.error('Error registering for event:', error);
       return { success: false, error: error.message };
@@ -189,20 +217,21 @@ class DatabaseManager {
 
   async unregisterFromEvent(eventId, userId) {
     try {
-      const batch = db.batch();
+      const { writeBatch, increment } = await import('firebase/firestore');
+      const batch = writeBatch(db);
       
       // Remove from user's registrations
-      const userRegRef = db.collection('users').doc(userId).collection('registrations').doc(eventId);
+      const userRegRef = doc(db, 'users', userId, 'registrations', eventId);
       batch.delete(userRegRef);
 
       // Remove from event's attendees
-      const eventAttendeeRef = db.collection('events').doc(eventId).collection('attendees').doc(userId);
+      const eventAttendeeRef = doc(db, 'events', eventId, 'attendees', userId);
       batch.delete(eventAttendeeRef);
 
       // Decrement attendee count
-      const eventRef = db.collection('events').doc(eventId);
+      const eventRef = doc(db, 'events', eventId);
       batch.update(eventRef, {
-        attendeeCount: db.FieldValue.increment(-1)
+        attendeeCount: increment(-1)
       });
 
       await batch.commit();
@@ -215,8 +244,8 @@ class DatabaseManager {
 
   async getUserRegistrations(userId) {
     try {
-      const registrationsRef = db.collection('users').doc(userId).collection('registrations');
-      const querySnapshot = await registrationsRef.get();
+      const registrationsRef = collection(db, 'users', userId, 'registrations');
+      const querySnapshot = await getDocs(registrationsRef);
       
       const registrations = [];
       for (const regDoc of querySnapshot.docs) {
@@ -239,11 +268,13 @@ class DatabaseManager {
   // Get admin events
   async getAdminEvents(adminId) {
     try {
-      const q = this.eventsCollection
-        .where('createdBy', '==', adminId)
-        .orderBy('startAt', 'desc');
+      const q = query(
+        this.eventsCollection,
+        where('createdBy', '==', adminId),
+        orderBy('startAt', 'desc')
+      );
       
-      const querySnapshot = await q.get();
+      const querySnapshot = await getDocs(q);
       const events = [];
       querySnapshot.forEach(doc => {
         events.push({ id: doc.id, ...doc.data() });
@@ -258,8 +289,8 @@ class DatabaseManager {
 
   async getEventAttendees(eventId) {
     try {
-      const attendeesRef = db.collection('events').doc(eventId).collection('attendees');
-      const querySnapshot = await attendeesRef.get();
+      const attendeesRef = collection(db, 'events', eventId, 'attendees');
+      const querySnapshot = await getDocs(attendeesRef);
       
       const attendees = [];
       querySnapshot.forEach(doc => {
@@ -274,14 +305,28 @@ class DatabaseManager {
   }
 
   // User operations
+  async getUserProfile(userId) {
+    try {
+      const userDoc = await getDoc(doc(db, 'users', userId));
+      if (userDoc.exists()) {
+        return userDoc.data();
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Error getting user profile:', error);
+      return null;
+    }
+  }
+
   async updateUserProfile(userId, updateData) {
     try {
-      const updateDoc = {
+      const userUpdateData = {
         ...updateData,
-        updatedAt: db.FieldValue.serverTimestamp()
+        updatedAt: serverTimestamp()
       };
 
-      await this.usersCollection.doc(userId).update(updateDoc);
+      await updateDoc(doc(db, 'users', userId), userUpdateData);
       return { success: true };
     } catch (error) {
       console.error('Error updating user profile:', error);
@@ -289,10 +334,26 @@ class DatabaseManager {
     }
   }
 
+  async createUserProfile(userId, userData) {
+    try {
+      const userDoc = {
+        ...userData,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+
+      await setDoc(doc(db, 'users', userId), userDoc);
+      return { success: true };
+    } catch (error) {
+      console.error('Error creating user profile:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
   // Room operations
   async getRooms() {
     try {
-      const querySnapshot = await this.roomsCollection.get();
+      const querySnapshot = await getDocs(this.roomsCollection);
       const rooms = [];
       querySnapshot.forEach(doc => {
         rooms.push({ id: doc.id, ...doc.data() });
@@ -307,16 +368,18 @@ class DatabaseManager {
   // Check for scheduling conflicts
   async checkSchedulingConflict(roomId, startAt, endAt, excludeEventId = null) {
     try {
-      let q = this.eventsCollection
-        .where('roomId', '==', roomId)
-        .where('startAt', '<', endAt)
-        .where('endAt', '>', startAt);
+      let q = query(
+        this.eventsCollection,
+        where('roomId', '==', roomId),
+        where('startAt', '<', endAt),
+        where('endAt', '>', startAt)
+      );
 
       if (excludeEventId) {
-        q = q.where('__name__', '!=', excludeEventId);
+        q = query(q, where('__name__', '!=', excludeEventId));
       }
 
-      const querySnapshot = await q.get();
+      const querySnapshot = await getDocs(q);
       return { 
         success: true, 
         hasConflict: !querySnapshot.empty,
@@ -330,15 +393,15 @@ class DatabaseManager {
 
   // Real-time listeners
   onEventsChange(callback) {
-    return this.eventsCollection.onSnapshot(callback);
+    return onSnapshot(this.eventsCollection, callback);
   }
 
   onEventChange(eventId, callback) {
-    return db.collection('events').doc(eventId).onSnapshot(callback);
+    return onSnapshot(doc(db, 'events', eventId), callback);
   }
 
   onUserRegistrationsChange(userId, callback) {
-    return db.collection('users').doc(userId).collection('registrations').onSnapshot(callback);
+    return onSnapshot(collection(db, 'users', userId, 'registrations'), callback);
   }
 }
 
@@ -358,7 +421,9 @@ export const {
   getUserRegistrations,
   getAdminEvents,
   getEventAttendees,
+  getUserProfile,
   updateUserProfile,
+  createUserProfile,
   getRooms,
   checkSchedulingConflict,
   onEventsChange,

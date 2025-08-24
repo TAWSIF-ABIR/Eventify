@@ -9,8 +9,10 @@ class AuthManager {
     
     // Listen for auth state changes
     auth.onAuthStateChanged(async (user) => {
+      console.log('Auth state changed:', user ? 'User logged in' : 'User logged out');
       if (user) {
         this.currentUser = user;
+        console.log('Current user set:', user.uid, user.email);
         await this.loadUserRole();
         this.notifyAuthStateChange();
       } else {
@@ -122,7 +124,33 @@ class AuthManager {
   }
 
   // Get current user data
-  getCurrentUser() {
+  async getCurrentUser() {
+    console.log('getCurrentUser called, current user:', this.currentUser);
+    
+    // If we don't have a current user yet, wait for auth state to be determined
+    if (!this.currentUser) {
+      console.log('No current user, waiting for auth state...');
+      return new Promise((resolve, reject) => {
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds max wait
+        
+        const checkUser = () => {
+          attempts++;
+          if (this.currentUser) {
+            console.log('User found after waiting:', this.currentUser);
+            resolve(this.currentUser);
+          } else if (attempts >= maxAttempts) {
+            console.log('Timeout waiting for auth state');
+            reject(new Error('Authentication timeout'));
+          } else {
+            // Check again in 100ms
+            setTimeout(checkUser, 100);
+          }
+        };
+        checkUser();
+      });
+    }
+    
     return this.currentUser;
   }
 
@@ -138,8 +166,9 @@ class AuthManager {
         return null;
       }
       
-      const userDoc = await db.collection('users').doc(this.currentUser.uid).get();
-      if (userDoc.exists) {
+      const { doc, getDoc } = await import('firebase/firestore');
+      const userDoc = await getDoc(doc(db, 'users', this.currentUser.uid));
+      if (userDoc.exists()) {
         return userDoc.data();
       }
       return null;

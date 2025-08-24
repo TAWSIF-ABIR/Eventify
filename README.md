@@ -42,6 +42,90 @@ Backend & Services
 - Firebase Hosting for the website
 - Firebase Security Rules for database protection
 
+## Email Confirmation Setup
+
+Eventify now includes automatic email confirmations when users register for events. This feature uses **Firebase Cloud Functions** with Nodemailer for reliable, serverless email delivery.
+
+### Setting Up Firebase Cloud Functions
+
+1. **Install Firebase CLI** (if not already installed)
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. **Login to Firebase**
+   ```bash
+   firebase login
+   ```
+
+3. **Initialize Functions in your project**
+   ```bash
+   firebase init functions
+   ```
+   - Choose JavaScript
+   - Use ESLint: Yes
+   - Install dependencies: Yes
+
+4. **Configure Email Service**
+   - **For Gmail**: Enable 2FA and generate an App Password
+   - **For Outlook**: Use your email and password
+   - **For other services**: Check their SMTP settings
+
+5. **Set Firebase Configuration**
+   ```bash
+   firebase functions:config:set email.user="your-email@gmail.com"
+   firebase functions:config:set email.password="your-app-password"
+   ```
+
+6. **Deploy Functions**
+   ```bash
+   firebase deploy --only functions
+   ```
+
+### How It Works
+
+- **Automatic Trigger**: When a user registers for an event, a document is created in `users/{userId}/registrations/{eventId}`
+- **Cloud Function**: The `sendEventRegistrationEmail` function automatically triggers
+- **Email Delivery**: Professional HTML and text emails are sent via Nodemailer
+- **Status Tracking**: Email delivery status is recorded in the registration document
+
+### Email Features
+
+- **Professional Design**: Beautiful HTML emails with Eventify branding
+- **Complete Information**: Event details, user info, and registration confirmation
+- **Automatic Sending**: No manual intervention required
+- **Error Handling**: Failed emails are logged with error details
+- **Reminder System**: Optional hourly reminders for upcoming events
+
+### Email Template
+
+The system automatically generates emails with:
+- User's name and email
+- Event title, date, time, and location
+- Event category and description
+- Registration date
+- Professional styling and branding
+- Call-to-action button to visit Eventify
+
+### Troubleshooting
+
+- **Functions not deploying**: Check Node.js version (requires 18+)
+- **Email not sending**: Verify email credentials in Firebase config
+- **Authentication errors**: For Gmail, ensure 2FA is enabled and App Password is used
+- **Function logs**: Check Firebase Console > Functions > Logs
+
+### Monitoring
+
+- **Firebase Console**: Monitor function execution and logs
+- **Email Status**: Check registration documents for email delivery status
+- **Error Tracking**: Failed emails are logged with timestamps and error messages
+
+### Cost Considerations
+
+- **Free Tier**: 125K function invocations/month
+- **Email Service**: Gmail/Outlook free tiers available
+- **Scaling**: Pay-per-use pricing for high volume
+
 How to Get Started
 
 What You Need
@@ -86,6 +170,9 @@ eventify/
   - auth.js            - User login/logout
   - db.js              - Database operations
   - pages/             - Page-specific code
+  - functions/          - Firebase Cloud Functions
+    - index.js          - Email confirmation functions
+    - package.json      - Function dependencies
 - styles/                 - CSS files
   - tailwind.css       - Tailwind source
   - output.css         - Final CSS

@@ -12,17 +12,30 @@ class ProfilePage {
 
     async init() {
         try {
+            console.log('ProfilePage initialization started...');
+            
             // Check authentication
             await this.checkAuth();
             
             // Setup UI
             this.setupUI();
             
+            // Test database connection
+            console.log('Testing database connection...');
+            try {
+                const testResult = await dbManager.getUserProfile(this.currentUser.uid);
+                console.log('Database test result:', testResult);
+            } catch (dbError) {
+                console.error('Database connection test failed:', dbError);
+            }
+            
             // Load user profile
             await this.loadUserProfile();
             
             // Setup event listeners
             this.setupEventListeners();
+            
+            console.log('ProfilePage initialization completed successfully');
             
         } catch (error) {
             console.error('Error initializing ProfilePage:', error);
@@ -32,18 +45,24 @@ class ProfilePage {
 
     async checkAuth() {
         try {
+            console.log('Checking authentication...');
             this.currentUser = await authManager.getCurrentUser();
+            console.log('Current user from authManager:', this.currentUser);
+            
             if (!this.currentUser) {
-                window.location.href = 'login.html';
+                console.log('No current user, redirecting to auth-new.html');
+                window.location.href = 'auth-new.html';
                 return;
             }
             
             // Update user info in sidebar
             this.updateUserInfo();
             
+            console.log('Authentication successful for user:', this.currentUser.uid);
+            
         } catch (error) {
             console.error('Auth check failed:', error);
-            window.location.href = 'login.html';
+            window.location.href = 'auth-new.html';
         }
     }
 
@@ -73,14 +92,59 @@ class ProfilePage {
 
     async loadUserProfile() {
         try {
+            console.log('Loading user profile for UID:', this.currentUser.uid);
+            
+            // Test dbManager connection
+            console.log('Testing dbManager connection...');
+            console.log('dbManager object:', dbManager);
+            
             // Get user profile from database
             this.userProfile = await dbManager.getUserProfile(this.currentUser.uid);
+            console.log('Profile data received:', this.userProfile);
+            
+            // If no profile exists, create a basic one with current user data
+            if (!this.userProfile) {
+                console.log('No user profile found, creating basic profile...');
+                this.userProfile = {
+                    uid: this.currentUser.uid,
+                    displayName: this.currentUser.displayName || this.currentUser.email.split('@')[0],
+                    email: this.currentUser.email,
+                    role: 'student',
+                    studentId: '',
+                    session: '',
+                    department: '',
+                    phone: '',
+                    bio: '',
+                    profileComplete: false
+                };
+                
+                // Save the basic profile to database
+                try {
+                    const result = await dbManager.createUserProfile(this.currentUser.uid, this.userProfile);
+                    console.log('Basic profile creation result:', result);
+                    if (result.success) {
+                        console.log('Basic profile created successfully');
+                    } else {
+                        console.error('Failed to create basic profile:', result.error);
+                    }
+                } catch (createError) {
+                    console.error('Failed to create basic profile:', createError);
+                }
+            } else {
+                console.log('Existing profile found, using it:', this.userProfile);
+            }
             
             // Populate form fields
+            console.log('About to populate form fields...');
             this.populateProfileForm();
+            console.log('Form fields populated');
             
             // Update profile header
+            console.log('About to update profile header...');
             this.updateProfileHeader();
+            console.log('Profile header updated');
+            
+            console.log('User profile loaded successfully:', this.userProfile);
             
         } catch (error) {
             console.error('Error loading user profile:', error);
@@ -89,9 +153,14 @@ class ProfilePage {
     }
 
     populateProfileForm() {
-        if (!this.userProfile) return;
+        if (!this.userProfile) {
+            console.log('No user profile to populate form with');
+            return;
+        }
 
-        // Populate form fields
+        console.log('Starting to populate form fields...');
+        
+        // Populate form fields with all user data
         const fullName = document.getElementById('full-name');
         const studentId = document.getElementById('student-id');
         const email = document.getElementById('email');
@@ -100,19 +169,53 @@ class ProfilePage {
         const phone = document.getElementById('phone');
         const bio = document.getElementById('bio');
         
-        if (fullName) fullName.value = this.userProfile.displayName || '';
-        if (studentId) studentId.value = this.userProfile.studentId || '';
-        if (email) email.value = this.currentUser.email || '';
-        if (session) session.value = this.userProfile.session || '';
-        if (department) department.value = this.userProfile.department || '';
-        if (phone) phone.value = this.userProfile.phone || '';
-        if (bio) bio.value = this.userProfile.bio || '';
+        console.log('Form elements found:', {
+            fullName: !!fullName,
+            studentId: !!studentId,
+            email: !!email,
+            session: !!session,
+            department: !!department,
+            phone: !!phone,
+            bio: !!bio
+        });
+        
+        if (fullName) {
+            fullName.value = this.userProfile.displayName || '';
+            console.log('Set fullName to:', fullName.value);
+        }
+        if (studentId) {
+            studentId.value = this.userProfile.studentId || '';
+            console.log('Set studentId to:', studentId.value);
+        }
+        if (email) {
+            email.value = this.currentUser.email || '';
+            console.log('Set email to:', email.value);
+        }
+        if (session) {
+            session.value = this.userProfile.session || '';
+            console.log('Set session to:', session.value);
+        }
+        if (department) {
+            department.value = this.userProfile.department || '';
+            console.log('Set department to:', department.value);
+        }
+        if (phone) {
+            phone.value = this.userProfile.phone || '';
+            console.log('Set phone to:', phone.value);
+        }
+        if (bio) {
+            bio.value = this.userProfile.bio || '';
+            console.log('Set bio to:', bio.value);
+        }
+        
+        // Log the data being populated for debugging
+        console.log('Form populated successfully with profile data:', this.userProfile);
     }
 
     updateProfileHeader() {
         if (!this.userProfile) return;
 
-        // Update profile header display
+        // Update profile header display with all user information
         const profileDisplayName = document.getElementById('profile-display-name');
         const profileDisplayEmail = document.getElementById('profile-display-email');
         const profileDisplayRole = document.getElementById('profile-display-role');
@@ -128,17 +231,30 @@ class ProfilePage {
         if (profileDisplayRole) {
             profileDisplayRole.textContent = this.userProfile.role || 'Student';
         }
+        
+        // Log the profile header update for debugging
+        console.log('Updated profile header with:', {
+            displayName: this.userProfile.displayName,
+            email: this.currentUser.email,
+            role: this.userProfile.role
+        });
     }
 
     async saveProfile() {
         try {
+            console.log('Save profile function called');
+            
             // Get form values
             const formData = this.getFormData();
+            console.log('Form data collected:', formData);
             
             // Validate form
             if (!this.validateForm(formData)) {
+                console.log('Form validation failed');
                 return;
             }
+            
+            console.log('Form validation passed, proceeding to save...');
             
             // Show loading state
             const saveBtn = document.getElementById('save-profile-btn');
@@ -152,8 +268,14 @@ class ProfilePage {
                 `;
             }
             
+            console.log('Saving profile data:', formData);
+            
             // Update user profile in database
-            await dbManager.updateUserProfile(this.currentUser.uid, formData);
+            const result = await dbManager.updateUserProfile(this.currentUser.uid, formData);
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to update profile');
+            }
             
             // Update local user object
             this.userProfile = { ...this.userProfile, ...formData };
@@ -164,8 +286,13 @@ class ProfilePage {
             // Update sidebar user info
             this.updateUserInfo();
             
+            // Update profile completion status
+            this.showProfileCompletionStatus();
+            
             // Show success message
             toast.success('Profile updated successfully!');
+            
+            console.log('Profile saved successfully:', this.userProfile);
             
         } catch (error) {
             console.error('Error saving profile:', error);
@@ -186,14 +313,31 @@ class ProfilePage {
     }
 
     getFormData() {
+        const fullName = document.getElementById('full-name');
+        const studentId = document.getElementById('student-id');
+        const session = document.getElementById('session');
+        const department = document.getElementById('department');
+        const phone = document.getElementById('phone');
+        const bio = document.getElementById('bio');
+        
+        console.log('Form elements found:', {
+            fullName: fullName ? fullName.value : 'NOT FOUND',
+            studentId: studentId ? studentId.value : 'NOT FOUND',
+            session: session ? session.value : 'NOT FOUND',
+            department: department ? department.value : 'NOT FOUND',
+            phone: phone ? phone.value : 'NOT FOUND',
+            bio: bio ? bio.value : 'NOT FOUND'
+        });
+        
         return {
-            displayName: document.getElementById('full-name').value.trim(),
-            studentId: document.getElementById('student-id').value.trim(),
-            session: document.getElementById('session').value,
-            department: document.getElementById('department').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            bio: document.getElementById('bio').value.trim(),
-            role: 'student'
+            displayName: fullName ? fullName.value.trim() : '',
+            studentId: studentId ? studentId.value.trim() : '',
+            session: session ? session.value : '',
+            department: department ? department.value.trim() : '',
+            phone: phone ? phone.value.trim() : '',
+            bio: bio ? bio.value.trim() : '',
+            role: 'student',
+            updatedAt: new Date()
         };
     }
 
@@ -213,14 +357,24 @@ class ProfilePage {
             return false;
         }
         
+        // Additional validation for phone number format
+        if (formData.phone && !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/\s/g, ''))) {
+            toast.error('Please enter a valid phone number');
+            return false;
+        }
+        
         return true;
     }
 
     setupEventListeners() {
         // Save profile button
         const saveBtn = document.getElementById('save-profile-btn');
+        console.log('Save button found:', !!saveBtn);
         if (saveBtn) {
-            saveBtn.addEventListener('click', () => this.saveProfile());
+            saveBtn.addEventListener('click', () => {
+                console.log('Save button clicked!');
+                this.saveProfile();
+            });
         }
         
         // Logout button
@@ -237,11 +391,45 @@ class ProfilePage {
         
         // Form submission
         const profileForm = document.getElementById('profile-form');
+        console.log('Profile form found:', !!profileForm);
         if (profileForm) {
             profileForm.addEventListener('submit', (e) => {
+                console.log('Form submitted!');
                 e.preventDefault();
                 this.saveProfile();
             });
+        }
+        
+        // Add profile completion indicator
+        this.showProfileCompletionStatus();
+    }
+    
+    showProfileCompletionStatus() {
+        if (!this.userProfile) return;
+        
+        const requiredFields = ['displayName', 'studentId', 'session', 'phone'];
+        const completedFields = requiredFields.filter(field => this.userProfile[field] && this.userProfile[field].trim() !== '');
+        const completionPercentage = Math.round((completedFields.length / requiredFields.length) * 100);
+        
+        // Show completion status in the UI
+        const profileHeader = document.querySelector('.card.p-8.mb-8');
+        if (profileHeader && completionPercentage < 100) {
+            const existingStatus = profileHeader.querySelector('.profile-completion-status');
+            if (!existingStatus) {
+                const statusDiv = document.createElement('div');
+                statusDiv.className = 'profile-completion-status mt-4 p-3 bg-brand-warning/10 border border-brand-warning/20 rounded-lg';
+                statusDiv.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-brand-warning" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-brand-warning">
+                            Profile ${completionPercentage}% complete. Please fill in all required fields.
+                        </span>
+                    </div>
+                `;
+                profileHeader.appendChild(statusDiv);
+            }
         }
     }
 

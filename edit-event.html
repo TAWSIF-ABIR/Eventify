@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#6366f1',
+                        'brand-secondary': '#8b5cf6',
+                        'brand-accent': '#06b6d4',
+                        'brand-success': '#10b981',
+                        'brand-warning': '#f59e0b',
+                        'brand-danger': '#ef4444',
+                        'brand-dark': '#0f172a',
+                        'brand-card': '#1e293b',
+                        'brand-text': '#f8fafc',
+                        'brand-muted': '#94a3b8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+        }
+        
+        .form-input {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-select {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-textarea {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+        
+        .form-textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .loading {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-brand-dark via-brand-card to-brand-dark min-h-screen text-brand-text">
+    <!-- Header -->
+    <header class="bg-brand-card/50 backdrop-blur-sm border-b border-white/10">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="btn btn-secondary px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        Back to Dashboard
+                    </button>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent">
+                        Edit Event
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="user-info" class="text-brand-muted"></span>
+                    <button onclick="logout()" class="btn btn-danger px-4 py-2 rounded-lg hover:scale-105 transition-transform duration-300">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Loading State -->
+            <div id="loading-state" class="text-center py-12">
+                <div class="loading w-16 h-16 border-4 border-brand-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p class="text-brand-muted">Loading event data...</p>
+            </div>
+
+            <!-- Edit Form -->
+            <div id="edit-form" class="hidden fade-in">
+                <div class="card rounded-xl p-8 mb-8">
+                    <h2 class="text-xl font-semibold mb-6 text-center">Edit Event Details</h2>
+                    
+                    <form id="event-form" class="space-y-6">
+                        <!-- Basic Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="title" class="block text-sm font-medium text-brand-muted mb-2">Event Title *</label>
+                                <input type="text" id="title" name="title" class="form-input w-full px-4 py-3 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none" placeholder="Enter event title" required autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="category" class="block text-sm font-medium text-brand-muted mb-2">Category *</label>
+                                <select id="category" name="category" class="form-select w-full px-4 py-3 rounded-lg text-brand-text focus:outline-none" required>
+                                    <option value="">Select category</option>
+                                    <option value="academic">Academic</option>
+                                    <option value="cultural">Cultural</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="technical">Technical</option>
+                                    <option value="social">Social</option>
+                                    <option value="workshop">Workshop</option>
+                                    <option value="seminar">Seminar</option>
+                                    <option value="conference">Conference</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="start-date" class="block text-sm font-medium text-brand-muted mb-2">Start Date & Time *</label>
+                                <input type="datetime-local" id="start-date" name="start-date" class="form-input w-full px-4 py-3 rounded-lg text-brand-text focus:outline-none" required>
+                            </div>
+                            <div>
+                                <label for="end-date" class="block text-sm font-medium text-brand-muted mb-2">End Date & Time *</label>
+                                <input type="datetime-local" id="end-date" name="end-date" class="form-input w-full px-4 py-3 rounded-lg text-brand-text focus:outline-none" required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="location" class="block text-sm font-medium text-brand-muted mb-2">Location *</label>
+                                <input type="text" id="location" name="location" class="form-input w-full px-4 py-3 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none" placeholder="Enter event location" required autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="max-attendees" class="block text-sm font-medium text-brand-muted mb-2">Max Attendees</label>
+                                <input type="number" id="max-attendees" name="max-attendees" class="form-input w-full px-4 py-3 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none" placeholder="Enter max attendees" min="1" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="visibility" class="block text-sm font-medium text-brand-muted mb-2">Visibility *</label>
+                                <select id="visibility" name="visibility" class="form-select w-full px-4 py-3 rounded-lg text-brand-text focus:outline-none" required>
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                    <option value="invite-only">Invite Only</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-brand-muted mb-2">Status *</label>
+                                <select id="status" name="status" class="form-select w-full px-4 py-3 rounded-lg text-brand-text focus:outline-none" required>
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                    <option value="cancelled">Cancelled</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-brand-muted mb-2">Description *</label>
+                            <textarea id="description" name="description" rows="4" class="form-textarea w-full px-4 py-3 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none" placeholder="Enter event description" required autocomplete="off"></textarea>
+                        </div>
+
+                        <!-- Additional Details -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="organizer" class="block text-sm font-medium text-brand-muted mb-2">Organizer</label>
+                                <input type="text" id="organizer" name="organizer" class="form-input w-full px-4 py-3 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none" placeholder="Enter organizer name" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="contact-email" class="block text-sm font-medium text-brand-muted mb-2">Contact Email</label>
+                                <input type="email" id="contact-email" name="contact-email" class="form-input w-full px-4 py-3 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none" placeholder="Enter contact email" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <!-- Tags -->
+                        <div>
+                            <label for="tags" class="block text-sm font-medium text-brand-muted mb-2">Tags (comma separated)</label>
+                            <input type="text" id="tags" name="tags" class="form-input w-full px-4 py-3 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none" placeholder="Enter tags separated by commas" autocomplete="off">
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                            <button type="submit" class="btn btn-primary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                <svg class="w-5 h-5 mr-2 inline" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Update Event
+                            </button>
+                            <button type="button" onclick="goBack()" class="btn btn-secondary flex-1 px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                Cancel
+                            </button>
+                            <button type="button" onclick="deleteEvent()" class="btn btn-danger px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                <svg class="w-5 h-5 mr-2 inline" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                Delete Event
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, updateDoc, deleteDoc, serverTimestamp, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyASOYZU9OI454p5t9obtZP3mkA6ncawCBw",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.firebasestorage.app",
+            messagingSenderId: "1035518806464",
+            appId: "1:1035518806464:web:c5fb9df49b319cd639a025",
+            measurementId: "G-0ZC704LYMG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentEvent = null;
+        let currentUser = null;
+        
+        console.log('Edit event page script loaded');
+        console.log('Current localStorage editEventData:', localStorage.getItem('editEventData'));
+
+        // Check authentication
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('user-info').textContent = user.email;
+                
+                // Simple check: if user can access this page, they're admin
+                // Just load the event data directly
+                loadEventData();
+            } else {
+                window.location.href = 'auth-new.html';
+            }
+        });
+
+        // Load event data from localStorage
+        function loadEventData() {
+            try {
+                console.log('Loading event data...');
+                
+                const eventData = localStorage.getItem('editEventData');
+                console.log('Event data from localStorage:', eventData);
+                
+                if (!eventData) {
+                    console.error('No event data found in localStorage');
+                    showToast('No event data found. Please go back and try again.', 'error');
+                    setTimeout(() => goBack(), 2000);
+                    return;
+                }
+
+                currentEvent = JSON.parse(eventData);
+                console.log('Parsed event data:', currentEvent);
+                
+                populateForm(currentEvent);
+                
+                // Hide loading, show form
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('edit-form').classList.remove('hidden');
+                
+                console.log('Event form loaded successfully');
+                
+            } catch (error) {
+                console.error('Error loading event data:', error);
+                showToast('Failed to load event data: ' + error.message, 'error');
+                setTimeout(() => goBack(), 2000);
+            }
+        }
+
+        // Populate form with event data
+        function populateForm(event) {
+            document.getElementById('title').value = event.title || '';
+            document.getElementById('category').value = event.category || '';
+            document.getElementById('start-date').value = formatDateTimeForInput(event.startAt) || '';
+            document.getElementById('end-date').value = formatDateTimeForInput(event.endAt) || '';
+            document.getElementById('location').value = event.location || '';
+            document.getElementById('max-attendees').value = event.maxAttendees || '';
+            document.getElementById('visibility').value = event.visibility || 'public';
+            document.getElementById('status').value = event.status || 'draft';
+            document.getElementById('description').value = event.description || '';
+            document.getElementById('organizer').value = event.organizer || '';
+            document.getElementById('contact-email').value = event.contactEmail || '';
+            document.getElementById('tags').value = event.tags ? event.tags.join(', ') : '';
+        }
+
+        // Format Firestore timestamp for datetime-local input
+        function formatDateTimeForInput(timestamp) {
+            if (!timestamp) return '';
+            
+            let date;
+            if (timestamp.toDate) {
+                date = timestamp.toDate();
+            } else if (timestamp.seconds) {
+                date = new Date(timestamp.seconds * 1000);
+            } else {
+                date = new Date(timestamp);
+            }
+            
+            return date.toISOString().slice(0, 16);
+        }
+
+        // Handle form submission
+        document.getElementById('event-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentEvent || !currentUser) {
+                showToast('Event data or user not found.', 'error');
+                return;
+            }
+
+            try {
+                // Show loading state
+                const submitBtn = document.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = `
+                    <svg class="w-5 h-5 mr-2 inline animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                    </svg>
+                    Updating...
+                `;
+                submitBtn.disabled = true;
+
+                // Get form data
+                const formData = getFormData();
+                
+                // Update event in Firestore
+                const eventRef = doc(db, 'events', currentEvent.id);
+                await updateDoc(eventRef, {
+                    ...formData,
+                    updatedAt: serverTimestamp(),
+                    updatedBy: currentUser.uid
+                });
+
+                showToast('Event updated successfully!', 'success');
+                
+                // Clear localStorage
+                localStorage.removeItem('editEventData');
+                
+                // Redirect back to dashboard
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error updating event:', error);
+                showToast('Failed to update event. Please try again.', 'error');
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Get form data
+        function getFormData() {
+            const tags = document.getElementById('tags').value
+                .split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag.length > 0);
+
+            return {
+                title: document.getElementById('title').value.trim(),
+                category: document.getElementById('category').value,
+                startAt: new Date(document.getElementById('start-date').value),
+                endAt: new Date(document.getElementById('end-date').value),
+                location: document.getElementById('location').value.trim(),
+                maxAttendees: parseInt(document.getElementById('max-attendees').value) || null,
+                visibility: document.getElementById('visibility').value,
+                status: document.getElementById('status').value,
+                description: document.getElementById('description').value.trim(),
+                organizer: document.getElementById('organizer').value.trim() || null,
+                contactEmail: document.getElementById('contact-email').value.trim() || null,
+                tags: tags.length > 0 ? tags : null
+            };
+        }
+
+        // Delete event
+        window.deleteEvent = async function() {
+            if (!currentEvent || !currentUser) {
+                showToast('Event data or user not found.', 'error');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to delete "${currentEvent.title}"? This action cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                // Delete from Firestore
+                const eventRef = doc(db, 'events', currentEvent.id);
+                await deleteDoc(eventRef);
+
+                showToast('Event deleted successfully!', 'success');
+                
+                // Clear localStorage
+                localStorage.removeItem('editEventData');
+                
+                // Redirect back to dashboard
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Error deleting event:', error);
+                showToast('Failed to delete event. Please try again.', 'error');
+            }
+        };
+
+        // Go back to dashboard
+        window.goBack = function() {
+            localStorage.removeItem('editEventData');
+            window.location.href = 'admin-dashboard.html';
+        };
+
+        // Logout
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'auth-new.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                showToast('Failed to sign out.', 'error');
+            }
+        };
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `px-6 py-3 rounded-lg font-medium transform translate-x-full transition-all duration-300 mb-4 ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                type === 'warning' ? 'bg-yellow-500 text-white' :
+                'bg-blue-500 text-white'
+            }`;
+            toast.textContent = message;
+            
+            const container = document.getElementById('toast-container');
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

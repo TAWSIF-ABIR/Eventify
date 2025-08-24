@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendees Overview - Eventify</title>
+    <meta name="description" content="View all registered attendees across all events on Eventify.">
+    
+    <!-- Tailwind CSS -->
+    <link href="./styles/output.css" rel="stylesheet">
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
+</head>
+<body class="bg-brand-surface text-brand-text font-body min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-brand-card/80 to-brand-card/60 border-b border-white/10 px-6 py-4 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="admin-dashboard.html" class="flex items-center space-x-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center glow-effect group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-xl font-bold text-gradient">Eventify</span>
+                            <p class="text-xs text-brand-muted font-medium">Admin Panel</p>
+                        </div>
+                    </a>
+                    <div class="h-8 w-px bg-white/10"></div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-brand-text">Attendees Overview</h1>
+                        <p class="text-brand-muted">View all registered attendees across all events</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <button id="back-to-dashboard" class="btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        Back to Dashboard
+                    </button>
+                    <button id="refresh-attendees" class="btn btn-primary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-6">
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="card p-6 text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-bold text-brand-text mb-2" id="total-attendees">0</h3>
+                <p class="text-brand-muted font-medium">Total Attendees</p>
+            </div>
+            
+            <div class="card p-6 text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-bold text-brand-text mb-2" id="total-events">0</h3>
+                <p class="text-brand-muted font-medium">Events with Attendees</p>
+            </div>
+            
+            <div class="card p-6 text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-bold text-brand-text mb-2" id="recent-registrations">0</h3>
+                <p class="text-brand-muted font-medium">Recent Registrations</p>
+            </div>
+        </div>
+
+        <!-- Events with Attendees -->
+        <div class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-brand-text mb-1">Events with Attendees</h2>
+                    <p class="text-brand-muted text-sm">Click on any event to view detailed attendee information</p>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <input type="text" id="search-events" placeholder="Search events..." class="pl-10 pr-4 py-2 bg-brand-card/50 border border-white/10 rounded-lg text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-transparent">
+                        <svg class="w-5 h-5 text-brand-muted absolute left-3 top-2.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <select id="sort-events" class="px-4 py-2 bg-brand-card/50 border border-white/10 rounded-lg text-brand-text focus:outline-none focus:ring-2 focus:ring-brand-primary/50 focus:border-transparent">
+                        <option value="attendeeCount">Sort by Attendee Count</option>
+                        <option value="eventTitle">Sort by Event Title</option>
+                        <option value="eventDate">Sort by Event Date</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="events-loading" class="text-center py-12">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-primary/20 rounded-2xl mb-4">
+                    <svg class="w-8 h-8 text-brand-accent animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <p class="text-brand-muted">Loading events and attendees...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div id="events-empty" class="text-center py-12 hidden">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-primary/20 rounded-2xl mb-4">
+                    <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-brand-text mb-2">No Events with Attendees</h3>
+                <p class="text-brand-muted mb-6">No one has registered for events yet. Events will appear here once attendees register.</p>
+            </div>
+
+            <!-- Events will be loaded here -->
+            <div id="events-list" class="space-y-4">
+                <!-- Events will be populated here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, getDocs, query, orderBy, where, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyASOYZU9OI454p5t9obtZP3mkA6ncawCBw",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.firebasestorage.app",
+            messagingSenderId: "1035518806464",
+            appId: "1:1035518806464:web:c5fb9df49b319cd639a025",
+            measurementId: "G-0ZC704LYMG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let allEvents = [];
+        let allAttendees = [];
+        let eventsWithAttendees = [];
+
+        // Check authentication and admin role
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'auth-new.html';
+                return;
+            }
+
+            // Check if user is admin
+            try {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (!userDoc.exists() || userDoc.data().role !== 'admin') {
+                    window.location.href = 'auth-new.html';
+                    return;
+                }
+            } catch (error) {
+                console.error('Error checking admin role:', error);
+                window.location.href = 'auth-new.html';
+                return;
+            }
+
+            // Load events and attendees data
+            loadEventsAndAttendees();
+        });
+
+        // Load events and attendees data
+        async function loadEventsAndAttendees() {
+            try {
+                // Load events
+                await loadEvents();
+                
+                // Load attendees
+                await loadAttendees();
+                
+                // Process and display data
+                processEventsWithAttendees();
+                
+                // Hide loading
+                document.getElementById('events-loading').classList.add('hidden');
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Failed to load events and attendees data');
+            }
+        }
+
+        // Load events
+        async function loadEvents() {
+            try {
+                const eventsRef = collection(db, 'events');
+                const eventsQuery = query(eventsRef, orderBy('createdAt', 'desc'));
+                const eventsSnapshot = await getDocs(eventsQuery);
+                
+                allEvents = [];
+                eventsSnapshot.forEach((doc) => {
+                    allEvents.push({ id: doc.id, ...doc.data() });
+                });
+                
+            } catch (error) {
+                console.error('Error loading events:', error);
+                throw error;
+            }
+        }
+
+        // Load attendees
+        async function loadAttendees() {
+            try {
+                const attendeesRef = collection(db, 'attendees');
+                const attendeesSnapshot = await getDocs(attendeesRef);
+                
+                allAttendees = [];
+                attendeesSnapshot.forEach((doc) => {
+                    allAttendees.push({ id: doc.id, ...doc.data() });
+                });
+                
+            } catch (error) {
+                console.error('Error loading attendees:', error);
+                throw error;
+            }
+        }
+
+        // Process events with attendees
+        function processEventsWithAttendees() {
+            // Group attendees by event
+            const attendeesByEvent = {};
+            allAttendees.forEach((attendee) => {
+                if (!attendeesByEvent[attendee.eventId]) {
+                    attendeesByEvent[attendee.eventId] = [];
+                }
+                attendeesByEvent[attendee.eventId].push(attendee);
+            });
+
+            // Filter events that have attendees
+            eventsWithAttendees = allEvents.filter(event => 
+                attendeesByEvent[event.id] && attendeesByEvent[event.id].length > 0
+            ).map(event => ({
+                ...event,
+                attendeeCount: attendeesByEvent[event.id].length,
+                attendees: attendeesByEvent[event.id]
+            }));
+
+            // Update statistics
+            updateStatistics();
+            
+            // Display events
+            displayEvents(eventsWithAttendees);
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalAttendees = allAttendees.length;
+            const totalEventsWithAttendees = eventsWithAttendees.length;
+            
+            // Count recent registrations (last 7 days)
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            const recentRegistrations = allAttendees.filter(attendee => {
+                const registrationDate = new Date(attendee.registeredAt.seconds * 1000);
+                return registrationDate > oneWeekAgo;
+            }).length;
+
+            document.getElementById('total-attendees').textContent = totalAttendees;
+            document.getElementById('total-events').textContent = totalEventsWithAttendees;
+            document.getElementById('recent-registrations').textContent = recentRegistrations;
+        }
+
+        // Display events
+        function displayEvents(events) {
+            const eventsContainer = document.getElementById('events-list');
+            const eventsEmpty = document.getElementById('events-empty');
+
+            if (events.length === 0) {
+                eventsEmpty.classList.remove('hidden');
+                return;
+            }
+
+            eventsEmpty.classList.add('hidden');
+
+            const eventsHTML = events.map(event => {
+                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
+                const formattedDate = startDate.toLocaleDateString();
+                
+                return `
+                    <div class="card p-6 hover:shadow-xl transition-all duration-300 cursor-pointer group" onclick="viewEventAttendees('${event.id}')">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-semibold text-brand-text group-hover:text-brand-primary transition-colors duration-300">${event.title}</h3>
+                                <p class="text-sm text-brand-muted">${event.category || 'General'} • ${event.location || 'TBD'}</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="bg-brand-primary/20 text-brand-primary px-3 py-2 rounded-full text-sm font-medium">
+                                    ${event.attendeeCount} attendee${event.attendeeCount > 1 ? 's' : ''}
+                                </span>
+                                <div class="w-8 h-8 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-4 h-4 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <p class="text-sm text-brand-muted font-medium">Recent Registrations:</p>
+                            ${event.attendees.slice(0, 3).map(attendee => `
+                                <div class="flex items-center justify-between bg-brand-surface/50 p-3 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-brand-text text-sm">${attendee.userName || 'Unknown User'}</p>
+                                            <p class="text-xs text-brand-muted">${attendee.userEmail}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs text-brand-accent">
+                                            ${new Date(attendee.registeredAt.seconds * 1000).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            ${event.attendees.length > 3 ? `
+                                <div class="text-center pt-2">
+                                    <p class="text-sm text-brand-muted">
+                                        +${event.attendees.length - 3} more attendees
+                                    </p>
+                                    <p class="text-xs text-brand-accent mt-1">Click to view all</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            eventsContainer.innerHTML = eventsHTML;
+        }
+
+        // Search events
+        document.getElementById('search-events').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (!searchTerm) {
+                displayEvents(eventsWithAttendees);
+            } else {
+                const filteredEvents = eventsWithAttendees.filter(event => 
+                    event.title.toLowerCase().includes(searchTerm) ||
+                    event.category?.toLowerCase().includes(searchTerm) ||
+                    event.location?.toLowerCase().includes(searchTerm)
+                );
+                displayEvents(filteredEvents);
+            }
+        });
+
+        // Sort events
+        document.getElementById('sort-events').addEventListener('change', (e) => {
+            const sortBy = e.target.value;
+            
+            let sortedEvents = [...eventsWithAttendees];
+            
+            switch (sortBy) {
+                case 'attendeeCount':
+                    sortedEvents.sort((a, b) => b.attendeeCount - a.attendeeCount);
+                    break;
+                case 'eventTitle':
+                    sortedEvents.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case 'eventDate':
+                    sortedEvents.sort((a, b) => {
+                        if (!a.startAt || !b.startAt) return 0;
+                        return a.startAt.seconds - b.startAt.seconds;
+                    });
+                    break;
+            }
+            
+            displayEvents(sortedEvents);
+        });
+
+        // Refresh attendees
+        document.getElementById('refresh-attendees').addEventListener('click', () => {
+            document.getElementById('events-loading').classList.remove('hidden');
+            loadEventsAndAttendees();
+        });
+
+        // Back to dashboard
+        document.getElementById('back-to-dashboard').addEventListener('click', () => {
+            window.location.href = 'admin-dashboard.html';
+        });
+
+        // Global function to view event attendees
+        window.viewEventAttendees = function(eventId) {
+            try {
+                console.log('Viewing attendees for event:', eventId);
+                // Redirect to attendees page with event ID
+                window.location.href = `attendees.html?eventId=${eventId}`;
+            } catch (error) {
+                console.error('Error redirecting to attendees page:', error);
+            }
+        };
+
+        // Show error message
+        function showError(message) {
+            const eventsContainer = document.getElementById('events-list');
+            const eventsLoading = document.getElementById('events-loading');
+            
+            eventsLoading.classList.add('hidden');
+            
+            eventsContainer.innerHTML = `
+                <div class="text-center py-12">
+                    <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <p class="text-red-400 text-lg font-semibold mb-2">Error</p>
+                    <p class="text-brand-muted">${message}</p>
+                </div>
+            `;
+        }
+
+        console.log('Attendees overview page script loaded');
+    </script>
+</body>
+</html>

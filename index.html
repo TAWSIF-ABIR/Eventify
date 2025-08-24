@@ -12,6 +12,8 @@
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+
+    
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
 </head>
@@ -39,7 +41,7 @@
                     <!-- Guest Navigation -->
                     <div data-auth="guest" class="flex items-center space-x-4">
                         <a href="auth-new.html" class="btn btn-ghost">Login</a>
-                        <a href="auth-new.html" class="btn btn-primary">Sign Up</a>
+                        <a href="auth-new.html#signup" class="btn btn-primary">Sign Up</a>
                     </div>
 
                     <!-- Authenticated Navigation -->
@@ -99,7 +101,7 @@
                     <!-- Guest Mobile Navigation -->
                     <div data-auth="guest" class="flex flex-col space-y-2">
                         <a href="auth-new.html" class="btn btn-ghost w-full justify-center">Login</a>
-                        <a href="auth-new.html" class="btn btn-primary w-full justify-center">Sign Up</a>
+                        <a href="auth-new.html#signup" class="btn btn-primary w-full justify-center">Sign Up</a>
                     </div>
 
                     <!-- Authenticated Mobile Navigation -->
@@ -202,7 +204,16 @@
 
                 <!-- Events Grid -->
                 <div id="events-grid" class="grid-responsive">
-                    <!-- Events will be loaded here -->
+                    <!-- Loading State -->
+                    <div class="col-span-full text-center py-12">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4 animate-pulse">
+                            <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-brand-text mb-2">Loading Events...</h3>
+                        <p class="text-brand-muted">Please wait while we fetch the latest events</p>
+                    </div>
                 </div>
 
                 <!-- View All Button -->
@@ -241,7 +252,7 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                        <a href="auth-new.html" class="btn btn-primary text-lg px-12 py-5 glow-effect hover:scale-105 transition-transform duration-300">
+                        <a href="auth-new.html#signup" class="btn btn-primary text-lg px-12 py-5 glow-effect hover:scale-105 transition-transform duration-300">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
                             </svg>
@@ -249,7 +260,7 @@
                         </a>
                         <a href="auth-new.html" class="btn btn-ghost text-lg px-12 py-5 hover:scale-105 transition-transform duration-300">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="false"/>
                             </svg>
                             Sign In
                         </a>
@@ -324,6 +335,8 @@
                 if (loginBtn) loginBtn.href = 'dashboard.html';
                 if (signupBtn) signupBtn.textContent = 'Go to Dashboard';
                 if (loginBtn) loginBtn.textContent = 'View Profile';
+                
+
             } else {
                 // User is signed out
                 guestElements.forEach(el => el.classList.remove('hidden'));
@@ -336,12 +349,31 @@
         // Load featured events
         async function loadFeaturedEvents() {
             try {
-                const eventsRef = collection(db, 'events');
-                const eventsQuery = query(eventsRef, orderBy('startAt', 'asc'), limit(6));
-                const eventsSnapshot = await getDocs(eventsQuery);
+                console.log('Loading featured events...');
                 
+                // Clear loading state
                 const eventsGrid = document.getElementById('events-grid');
-                if (!eventsGrid) return;
+                if (!eventsGrid) {
+                    console.error('Events grid element not found');
+                    return;
+                }
+                
+                const eventsRef = collection(db, 'events');
+                
+                // First try to get events without ordering to see if collection exists
+                let eventsSnapshot;
+                try {
+                    const eventsQuery = query(eventsRef, orderBy('startAt', 'asc'), limit(6));
+                    eventsSnapshot = await getDocs(eventsQuery);
+                    console.log('Events loaded with ordering:', eventsSnapshot.size);
+                } catch (orderError) {
+                    console.log('Ordering failed, trying without order:', orderError);
+                    // If ordering fails, try without it
+                    eventsSnapshot = await getDocs(eventsRef);
+                    console.log('Events loaded without ordering:', eventsSnapshot.size);
+                }
+                
+
 
                 if (eventsSnapshot.empty) {
                     eventsGrid.innerHTML = `
@@ -352,15 +384,37 @@
                                 </svg>
                             </div>
                             <h3 class="text-lg font-semibold text-brand-text mb-2">No Events Yet</h3>
-                            <p class="text-brand-muted">Check back soon for exciting university events!</p>
+                            <p class="text-brand-muted mb-6">Be the first to create an exciting university event!</p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="auth-new.html" class="btn btn-primary px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                    Create Account
+                                </a>
+                                <a href="create-event.html" class="btn btn-ghost px-6 py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                    Create Event
+                                </a>
+                            </div>
                         </div>
                     `;
                     return;
                 }
 
+                console.log('Processing events:', eventsSnapshot.docs.length);
                 const eventsHTML = eventsSnapshot.docs.map(doc => {
                     const event = doc.data();
-                    const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
+                    console.log('Event data:', event);
+                    
+                    // Handle different date formats
+                    let startDate;
+                    if (event.startAt && event.startAt.seconds) {
+                        startDate = new Date(event.startAt.seconds * 1000);
+                    } else if (event.startAt && event.startAt.toDate) {
+                        startDate = event.startAt.toDate();
+                    } else if (event.startAt) {
+                        startDate = new Date(event.startAt);
+                    } else {
+                        startDate = new Date();
+                    }
+                    
                     const formattedDate = startDate.toLocaleDateString();
                     const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     
@@ -368,7 +422,7 @@
                         <div class="card p-6 hover:shadow-xl transition-all duration-300 group cursor-pointer" onclick="window.location.href='event.html?id=${doc.id}'">
                             <div class="flex items-start justify-between mb-4">
                                 <div class="flex-1">
-                                    <h3 class="text-xl font-semibold text-brand-text mb-2 group-hover:text-brand-primary transition-colors">${event.title}</h3>
+                                    <h3 class="text-xl font-semibold text-brand-text mb-2 group-hover:text-brand-primary transition-colors">${event.title || 'Untitled Event'}</h3>
                                     <p class="text-brand-muted text-sm mb-4 line-clamp-2">${event.description || 'No description available'}</p>
                                     
                                     <div class="grid grid-cols-2 gap-3 text-sm">
@@ -406,6 +460,7 @@
                 }).join('');
 
                 eventsGrid.innerHTML = eventsHTML;
+                console.log('Events displayed successfully');
                 
             } catch (error) {
                 console.error('Error loading featured events:', error);
@@ -413,7 +468,19 @@
                 if (eventsGrid) {
                     eventsGrid.innerHTML = `
                         <div class="col-span-full text-center py-12">
-                            <div class="text-red-400">Failed to load events. Please refresh the page.</div>
+                            <div class="text-red-400 mb-4">Failed to load events. Please refresh the page.</div>
+                            <div class="text-sm text-brand-muted">Error: ${error.message}</div>
+                            <button onclick="loadFeaturedEvents()" class="btn btn-secondary mt-4 px-6 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                                Try Again
+                            </button>
+                            <div class="mt-4 text-xs text-brand-muted">
+                                <p>This might be due to:</p>
+                                <ul class="list-disc list-inside mt-2 space-y-1">
+                                    <li>No events in the database yet</li>
+                                    <li>Network connectivity issues</li>
+                                    <li>Database temporarily unavailable</li>
+                                </ul>
+                            </div>
                         </div>
                     `;
                 }
@@ -444,6 +511,7 @@
 
         // Load events when page loads
         document.addEventListener('DOMContentLoaded', () => {
+            // Load events for everyone (public access)
             loadFeaturedEvents();
         });
 

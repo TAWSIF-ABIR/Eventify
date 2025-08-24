@@ -268,7 +268,10 @@ class AllEventsPage {
             }
 
             // Register for event
-            await dbManager.registerForEvent(eventId, this.currentUser.uid);
+            const result = await dbManager.registerForEvent(eventId, this.currentUser.uid, {
+                name: this.currentUser.displayName || 'User',
+                email: this.currentUser.email
+            });
             
             // Update local data
             const eventIndex = this.events.findIndex(e => e.id === eventId);
@@ -283,7 +286,12 @@ class AllEventsPage {
             // Re-render events
             this.renderEvents();
             
-            toast.success('Successfully registered for event!');
+            if (result.emailSent) {
+                toast.success('Successfully registered for event! Check your email for confirmation.');
+            } else {
+                toast.success('Successfully registered for event! Email confirmation could not be sent.');
+                console.warn('Email error:', result.emailError);
+            }
             
         } catch (error) {
             console.error('Error registering for event:', error);

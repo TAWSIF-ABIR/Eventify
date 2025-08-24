@@ -19,9 +19,9 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Users can read all events
+    // Events are publicly readable (for homepage and browsing)
     match /events/{eventId} {
-      allow read: if request.auth != null;
+      allow read: if true;  // Anyone can read events
       allow write: if request.auth != null && 
         (resource == null || resource.data.createdBy == request.auth.uid);
     }
@@ -36,6 +36,18 @@ service cloud.firestore {
     match /events/{eventId}/attendance/{attendanceId} {
       allow read, write: if request.auth != null && 
         request.auth.uid == attendanceId;
+    }
+    
+    // Attendees collection - FIXED: users can write their own registrations
+    match /attendees/{attendeeId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      // Admins can do everything
+      allow write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     
     // Rooms - readable by all authenticated users, writable by admins
