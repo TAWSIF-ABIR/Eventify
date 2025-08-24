@@ -14,6 +14,10 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="./assets/img/logo.svg">
+    
+    <!-- html2canvas and jsPDF for certificate PDF generation -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-brand-surface text-brand-text font-body min-h-screen">
     <!-- Sidebar -->
@@ -249,43 +253,75 @@
                             </div>
                             
                             <!-- Certificate Preview -->
-                            <div id="certificate-preview" class="bg-gradient-to-br from-brand-primary/5 to-brand-accent/5 border-2 border-dashed border-brand-primary/30 rounded-2xl p-8 mb-6 text-center">
-                                <div class="max-w-2xl mx-auto">
-                                    <div class="mb-6">
-                                        <div class="w-20 h-20 bg-gradient-to-br from-brand-primary to-brand-accent rounded-3xl flex items-center justify-center mx-auto mb-4">
-                                            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                            </svg>
+                            <div id="certificate-preview" class="relative bg-white border-4 border-blue-600 p-16 mb-6 text-center shadow-2xl">
+                                <div class="max-w-4xl mx-auto relative">
+                                    <!-- Logo Section -->
+                                    <div class="absolute top-4 left-4 w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    
+                                    <!-- Decorative Corner Elements -->
+                                    <div class="absolute -top-2 -left-2 w-24 h-24 border-l-4 border-t-4 border-blue-600 rounded-tl-xl"></div>
+                                    <div class="absolute -top-2 -right-2 w-24 h-24 border-r-4 border-t-4 border-blue-600 rounded-tr-xl"></div>
+                                    <div class="absolute -bottom-2 -left-2 w-24 h-24 border-l-4 border-b-4 border-blue-600 rounded-bl-xl"></div>
+                                    <div class="absolute -bottom-2 -right-2 w-24 h-24 border-r-4 border-b-4 border-blue-600 rounded-br-xl"></div>
+                                    
+                                    <!-- Title Section -->
+                                    <div class="mb-12">
+                                        <h1 class="text-5xl font-['Trajan_Pro'] font-bold text-blue-800 tracking-wider mb-4 uppercase">Certificate</h1>
+                                        <div class="w-full h-0.5 bg-blue-600 mb-2"></div>
+                                        <div class="w-full h-0.5 bg-blue-600"></div>
+                                    </div>
+                                    
+                                    <!-- Presentation Text -->
+                                    <div class="mb-10">
+                                        <p class="text-2xl font-['Trajan_Pro'] text-blue-700 tracking-wide">THIS CERTIFICATE IS PRESENTED TO</p>
+                                    </div>
+                                    
+                                    <!-- Student Name -->
+                                    <div class="mb-10">
+                                        <h2 id="student-name" class="text-6xl font-['Trajan_Pro'] font-bold text-blue-900 mb-4 tracking-wider">John Doe</h2>
+                                        <div class="w-64 h-0.5 bg-blue-600 mx-auto"></div>
+                                    </div>
+                                    
+                                    <!-- Student ID -->
+                                    <div class="mb-10">
+                                        <p id="student-id" class="text-xl font-['Trajan_Pro'] text-blue-800 tracking-wide">Student ID: N/A</p>
+                                    </div>
+                                    
+                                    <!-- Event Details -->
+                                    <div class="mb-10">
+                                        <p class="text-xl font-['Trajan_Pro'] text-blue-700 mb-3">has successfully participated in</p>
+                                        <h3 id="event-name" class="text-3xl font-['Trajan_Pro'] font-bold text-blue-900 mb-4 tracking-wider">Academic Conference 2024</h3>
+                                        <p id="event-category" class="text-lg font-['Trajan_Pro'] text-blue-800">Computer Science Department</p>
+                                    </div>
+                                    
+                                    <!-- Event Date -->
+                                    <div class="mb-10">
+                                        <p class="text-xl font-['Trajan_Pro'] text-blue-700 mb-2">held on</p>
+                                        <p id="event-date" class="text-2xl font-['Trajan_Pro'] font-bold text-blue-900">March 15, 2024</p>
+                                    </div>
+                                    
+                                    <!-- Signatures Section -->
+                                    <div class="flex justify-between items-end mt-20">
+                                        <div class="text-left">
+                                            <p id="event-date-bottom" class="text-xl font-['Trajan_Pro'] text-blue-900">March 15, 2024</p>
+                                            <div class="w-32 h-0.5 bg-blue-600 mb-2"></div>
+                                            <p class="text-base font-['Trajan_Pro'] text-blue-800 uppercase tracking-wide">Date</p>
                                         </div>
-                                        <h1 class="text-3xl font-bold text-brand-primary mb-2">Certificate of Participation</h1>
-                                        <p class="text-brand-muted text-lg">This is to certify that</p>
-                                    </div>
-                                    
-                                    <div class="mb-6">
-                                        <h2 id="student-name" class="text-4xl font-bold text-brand-text mb-4">John Doe</h2>
-                                        <p class="text-brand-muted text-lg mb-2">has successfully participated in</p>
-                                        <h3 id="event-name" class="text-2xl font-semibold text-brand-accent mb-2">Academic Conference 2024</h3>
-                                        <p id="event-category" class="text-brand-muted">Computer Science Department</p>
-                                    </div>
-                                    
-                                    <div class="mb-6">
-                                        <p class="text-brand-muted text-lg mb-2">held on</p>
-                                        <p id="event-date" class="text-xl font-semibold text-brand-text">March 15, 2024</p>
-                                    </div>
-                                    
-                                    <div class="flex items-center justify-center space-x-8 mt-8">
-                                        <div class="text-center">
-                                            <div class="w-16 h-1 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full mb-2"></div>
-                                            <p class="text-sm text-brand-muted">Event Coordinator</p>
-                                        </div>
-                                        <div class="text-center">
-                                            <div class="w-16 h-1 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full mb-2"></div>
-                                            <p class="text-sm text-brand-muted">Department Head</p>
+                                        
+                                        <div class="text-right">
+                                            <p class="text-xl font-['Trajan_Pro'] text-blue-900">Event Coordinator</p>
+                                            <div class="w-40 h-0.5 bg-blue-600 mb-2"></div>
+                                            <p class="text-base font-['Trajan_Pro'] text-blue-800 uppercase tracking-wide">Signature</p>
                                         </div>
                                     </div>
                                     
-                                    <div class="mt-8">
-                                        <p class="text-xs text-brand-muted">Certificate ID: CERT-2024-001</p>
+                                    <!-- Certificate ID -->
+                                    <div class="mt-16 text-center">
+                                        <p class="text-sm font-['Trajan_Pro'] text-blue-700 tracking-wide">Certificate ID: CERT-2024-001</p>
                                     </div>
                                 </div>
                             </div>
@@ -641,29 +677,60 @@
         let allEvents = [];
 
         // Check authentication
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = 'auth-new.html';
                 return;
             }
             
-            currentUser = user;
-            
-            // Update user info
-            const userName = document.getElementById('user-name');
-            const userEmail = document.getElementById('user-email');
-            const welcomeName = document.getElementById('welcome-name');
-            const modalUserName = document.getElementById('modal-user-name');
-            const modalUserEmail = document.getElementById('modal-user-email');
-            
-            if (userName) userName.textContent = user.displayName || 'Student';
-            if (userEmail) userEmail.textContent = user.email;
-            if (welcomeName) welcomeName.textContent = user.displayName || 'Student';
-            if (modalUserName) modalUserName.textContent = user.displayName || 'Student';
-            if (modalUserEmail) modalUserEmail.textContent = user.email;
-            
-            // Load dashboard data
-            loadDashboardData();
+            try {
+                // First set basic user data
+                currentUser = user;
+                
+                // Fetch additional user profile data from Firestore
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    // Merge Firestore data with Firebase Auth data
+                    currentUser = {
+                        ...user,
+                        displayName: userData.displayName || user.displayName || 'Student',
+                        studentId: userData.studentId || 'N/A',
+                        session: userData.session || 'N/A',
+                        department: userData.department || '',
+                        phone: userData.phone || '',
+                        bio: userData.bio || '',
+                        profileComplete: userData.profileComplete || false
+                    };
+                    console.log('Loaded user profile data:', currentUser);
+                } else {
+                    console.log('No user profile found in Firestore, using basic auth data');
+                }
+                
+                // Update user info in UI
+                const userName = document.getElementById('user-name');
+                const userEmail = document.getElementById('user-email');
+                const welcomeName = document.getElementById('welcome-name');
+                const modalUserName = document.getElementById('modal-user-name');
+                const modalUserEmail = document.getElementById('modal-user-email');
+                
+                if (userName) userName.textContent = currentUser.displayName;
+                if (userEmail) userEmail.textContent = currentUser.email;
+                if (welcomeName) welcomeName.textContent = currentUser.displayName;
+                if (modalUserName) modalUserName.textContent = currentUser.displayName;
+                if (modalUserEmail) modalUserEmail.textContent = currentUser.email;
+                
+                // Load dashboard data
+                loadDashboardData();
+                
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+                // Fallback to basic user data
+                currentUser = user;
+                loadDashboardData();
+            }
         });
 
         // Load dashboard data
@@ -1014,9 +1081,15 @@
 
                 // Update event attendee count in Firestore
                 const eventRef = doc(db, 'events', eventId);
-                await updateDoc(eventRef, {
-                    attendeeCount: increment(-1) // Decrement by 1
-                });
+                // This update may be blocked by Firestore rules for non-admins.
+                // Attempt it, but don't fail unregistration if permission is denied.
+                try {
+                    await updateDoc(eventRef, {
+                        attendeeCount: increment(-1) // Decrement by 1
+                    });
+                } catch (permErr) {
+                    console.warn('Skipping attendeeCount update due to permissions:', permErr?.code || permErr);
+                }
 
                 // Verify the update was successful
                 const updatedEventDoc = await getDoc(eventRef);
@@ -1213,25 +1286,203 @@
         };
 
         // Certificate functions
-        window.showCertificatesSection = function() {
+        window.showCertificatesSection = async function() {
             document.getElementById('certificates-section').classList.remove('hidden');
             document.getElementById('registered-events').classList.add('hidden');
+            // Ensure we have the latest profile data (name, studentId) before listing certificates
+            if (window.currentUser?.uid) {
+                await ensureCurrentUserProfile();
+            }
+            await buildCertificatesList();
         };
 
         window.hideCertificateModal = function() {
             document.getElementById('certificate-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
         };
 
-        window.generateCertificate = function(eventName, studentName, date, category) {
-            document.getElementById('certificate-modal').classList.remove('hidden');
+        // Ensure currentUser has profile fields from Firestore (displayName, studentId, session)
+        async function ensureCurrentUserProfile() {
+            try {
+                if (!window.currentUser?.uid) return;
+                const userRef = doc(db, 'users', window.currentUser.uid);
+                const snap = await getDoc(userRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    // Merge fields into currentUser used by the dashboard
+                    if (data.displayName) window.currentUser.displayName = data.displayName;
+                    if (data.studentId) window.currentUser.studentId = data.studentId;
+                    if (data.session) window.currentUser.session = data.session;
+                    if (data.certificateProfile) {
+                        window.currentUser.certificateProfile = data.certificateProfile;
+                        // Backfill top-level fields from certificateProfile if missing
+                        if (!window.currentUser.displayName && data.certificateProfile.name) {
+                            window.currentUser.displayName = data.certificateProfile.name;
+                        }
+                        if (!window.currentUser.studentId && data.certificateProfile.studentId) {
+                            window.currentUser.studentId = data.certificateProfile.studentId;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn('ensureCurrentUserProfile failed:', e);
+            }
+        }
+
+        function formatEventDate(d) {
+            try {
+                const dt = d?.seconds ? new Date(d.seconds * 1000) : new Date(d);
+                return dt.toLocaleDateString();
+            } catch (_) { return 'N/A'; }
+        }
+
+        async function buildCertificatesList() {
+            const container = document.querySelector('#certificates-section .grid');
+            if (!container) return;
+
+            // Show a lightweight loading state
+            container.innerHTML = '<div class="col-span-full text-center py-8 text-brand-muted">Loading certificates...</div>';
+
+            try {
+                if (!currentUser) {
+                    container.innerHTML = '<div class="col-span-full text-center py-12">Please log in to view certificates.</div>';
+                    return;
+                }
+
+                // Get user's registered event IDs
+                const userRegistrationsRef = collection(db, 'users', currentUser.uid, 'registrations');
+                const registrationsSnapshot = await getDocs(userRegistrationsRef);
+                const registeredEventIds = [];
+                registrationsSnapshot.forEach(docSnap => registeredEventIds.push(docSnap.data().eventId));
+
+                // Completed = event start time in the past
+                const now = new Date();
+                const completedEvents = allEvents
+                    .filter(ev => registeredEventIds.includes(ev.id))
+                    .filter(ev => {
+                        const start = ev.startAt?.seconds ? new Date(ev.startAt.seconds * 1000) : null;
+                        return start && start < now; 
+                    });
+
+                if (completedEvents.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full text-center py-12">
+                            <div class="w-16 h-16 bg-gradient-to-br from-brand-muted/20 to-brand-muted/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-brand-text mb-2">No Certificates Available</h3>
+                            <p class="text-brand-muted mb-6">You haven't completed any events yet.</p>
+                        </div>`;
+                    return;
+                }
+
+                // Render cards
+                container.innerHTML = completedEvents.map(ev => {
+                    const dateStr = formatEventDate(ev.startAt);
+                    return `
+                        <div class="card p-5 flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-lg font-semibold text-brand-text">${ev.title || 'Untitled Event'}</h4>
+                                <p class="text-brand-muted text-sm">${ev.category || 'General'} • ${dateStr}</p>
+                            </div>
+                            <div class="mt-4 flex items-center gap-2">
+                                <button class="btn btn-primary px-4 py-2 rounded-lg text-sm" onclick="downloadCertificateForEvent('${ev.id}')">
+                                    Download Certificate
+                                </button>
+                            </div>
+                        </div>`;
+                }).join('');
+            } catch (err) {
+                console.error('Error building certificates list:', err);
+                container.innerHTML = '<div class="col-span-full text-center py-12 text-red-400">Failed to load certificates.</div>';
+            }
+        }
+
+        // Populate the certificate preview with Firebase user data
+        window.generateCertificate = function(eventName, studentName, studentId, date, category) {
+            const modal = document.getElementById('certificate-modal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
             document.getElementById('student-name').textContent = studentName;
+            document.getElementById('student-id').textContent = `Student ID: ${studentId}`;
             document.getElementById('event-name').textContent = eventName;
-            document.getElementById('event-category').textContent = category;
+            document.getElementById('event-category').textContent = category || 'General';
             document.getElementById('event-date').textContent = date;
         };
 
-        window.downloadCertificate = function() {
-            alert('Certificate download functionality will be implemented!');
+        // Export the current preview to PDF
+        window.downloadCertificate = async function() {
+            try {
+                const { jsPDF } = window.jspdf || {};
+                if (!window.html2canvas || !jsPDF) {
+                    showToast?.('PDF libraries not loaded', 'error');
+                    return;
+                }
+                const preview = document.getElementById('certificate-preview');
+                const canvas = await html2canvas(preview, { scale: 2, backgroundColor: null });
+                const imgData = canvas.toDataURL('image/png');
+
+                const pdf = new jsPDF('landscape', 'pt', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+
+                // Fit the image to page while keeping aspect ratio
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+                const w = imgWidth * ratio;
+                const h = imgHeight * ratio;
+                const x = (pageWidth - w) / 2;
+                const y = (pageHeight - h) / 2;
+
+                pdf.addImage(imgData, 'PNG', x, y, w, h);
+
+                const studentText = document.getElementById('student-name').textContent || 'Student';
+                const studentIdText = document.getElementById('student-id').textContent || 'Student ID: N/A';
+                const eventText = document.getElementById('event-name').textContent || 'Event';
+                const safeName = studentText.replace(/[^a-z0-9\-\_\(\) ]/gi, '_');
+                const safeEvent = eventText.replace(/[^a-z0-9\-\_\(\) ]/gi, '_');
+                const safeStudentId = studentIdText.replace(/[^a-z0-9\-\_\(\) ]/gi, '_');
+                pdf.save(`${safeEvent} - ${safeName} - ${safeStudentId}.pdf`);
+            } catch (err) {
+                console.error('Certificate PDF generation failed:', err);
+                showToast?.('Failed to generate certificate PDF', 'error');
+            }
+        };
+
+        // Direct download for a given event (no modal needed)
+        window.downloadCertificateForEvent = async function(eventId) {
+            try {
+                const ev = allEvents.find(e => e.id === eventId);
+                if (!ev) return showToast?.('Event not found', 'error');
+                
+                // Use Firebase user data: displayName and studentId
+                const studentName = currentUser?.displayName || 'Student';
+                const studentId = currentUser?.studentId || 'N/A';
+                const dateStr = formatEventDate(ev.startAt);
+                
+                // Debug logging
+                console.log('Certificate generation data:', {
+                    eventTitle: ev.title,
+                    studentName: studentName,
+                    studentId: studentId,
+                    currentUser: currentUser
+                });
+                
+                // Populate preview off-screen, then export
+                generateCertificate(ev.title || 'Untitled Event', studentName, studentId, dateStr, ev.category || 'General');
+                // Defer to allow layout
+                setTimeout(() => {
+                    downloadCertificate()
+                        .then(() => hideCertificateModal())
+                        .catch(() => hideCertificateModal());
+                }, 100);
+            } catch (err) {
+                console.error('downloadCertificateForEvent error:', err);
+                showToast?.('Failed to prepare certificate', 'error');
+            }
         };
 
         window.printCertificate = function() {
@@ -1498,9 +1749,10 @@
             window.dashboardPage.showCertificatesSection();
         }
 
-        function generateCertificate(eventName, studentName, eventDate, eventCategory) {
-            // Update certificate preview
+        function generateCertificate(eventName, studentName, studentId, eventDate, eventCategory) {
+            // Update certificate preview with Firebase user data
             document.getElementById('student-name').textContent = studentName;
+            document.getElementById('student-id').textContent = `Student ID: ${studentId}`;
             document.getElementById('event-name').textContent = eventName;
             document.getElementById('event-category').textContent = eventCategory;
             document.getElementById('event-date').textContent = eventDate;
@@ -1520,8 +1772,9 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('landscape', 'mm', 'a4');
                 
-                // Get certificate data
+                // Get certificate data including Firebase user data
                 const studentName = document.getElementById('student-name').textContent;
+                const studentId = document.getElementById('student-id').textContent;
                 const eventName = document.getElementById('event-name').textContent;
                 const eventCategory = document.getElementById('event-category').textContent;
                 const eventDate = document.getElementById('event-date').textContent;
@@ -1564,6 +1817,12 @@
                 doc.setFontSize(24);
                 doc.setFont('helvetica', 'bold');
                 doc.text(studentName, 148.5, 125, { align: 'center' });
+                
+                // Student ID
+                doc.setTextColor(75, 85, 99);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'normal');
+                doc.text(studentId, 148.5, 140, { align: 'center' });
                 
                 // Event details
                 doc.setTextColor(75, 85, 99);
@@ -1611,8 +1870,8 @@
                 doc.setFont('helvetica', 'bold');
                 doc.text('EVENTIFY', 148.5, 105, { align: 'center', angle: 45 });
                 
-                // Download the PDF
-                const fileName = `Certificate_${eventName.replace(/\s+/g, '_')}_${studentName.replace(/\s+/g, '_')}.pdf`;
+                // Download the PDF with student ID
+                const fileName = `Certificate_${eventName.replace(/\s+/g, '_')}_${studentName.replace(/\s+/g, '_')}_${studentId.replace(/[^a-z0-9\-\_\(\) ]/gi, '_')}.pdf`;
                 doc.save(fileName);
                 
                 // Show success message
@@ -1869,9 +2128,10 @@
                 
                 // Set up confirm button action with loading state
                 confirmBtn.onclick = async () => {
+                    // Capture original button content in outer scope so it's available in finally
+                    let originalText = confirmBtn.innerHTML;
                     try {
                         // Show loading state
-                        const originalText = confirmBtn.innerHTML;
                         confirmBtn.innerHTML = `
                             <svg class="w-4 h-4 mr-2 animate-spin" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
@@ -1880,8 +2140,11 @@
                         `;
                         confirmBtn.disabled = true;
                         
+                        console.debug('Unregister confirm clicked for event:', { id: event.id, title: event.title });
+                        
                         // Unregister from event
                         const success = await unregisterUserForEvent(event.id, event);
+                        console.debug('Unregister result:', success);
                         if (success) {
                             // Update local event data immediately for responsive UI
                             event.attendeeCount = Math.max(0, (event.attendeeCount || 0) - 1);

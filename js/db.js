@@ -326,7 +326,8 @@ class DatabaseManager {
         updatedAt: serverTimestamp()
       };
 
-      await updateDoc(doc(db, 'users', userId), userUpdateData);
+      // Use setDoc with merge to create the document if it does not exist
+      await setDoc(doc(db, 'users', userId), userUpdateData, { merge: true });
       return { success: true };
     } catch (error) {
       console.error('Error updating user profile:', error);

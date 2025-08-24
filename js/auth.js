@@ -26,11 +26,17 @@ class AuthManager {
   // Sign up new user
   async signUp(email, password, name, role, studentId = null, session = null) {
     try {
-      const { createUserWithEmailAndPassword } = await import('firebase/auth');
+      const { createUserWithEmailAndPassword, updateProfile } = await import('firebase/auth');
       const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
       
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      // Ensure Auth profile has displayName set
+      try {
+        await updateProfile(user, { displayName: name });
+      } catch (profileErr) {
+        console.warn('Failed to set auth displayName at signup:', profileErr);
+      }
       
       // Create user document in Firestore
       const userData = {
@@ -40,6 +46,13 @@ class AuthManager {
         role,
         studentId: studentId || null,
         session: session || null,
+        // New nested profile for certificates
+        certificateProfile: {
+          name: name || null,
+          studentId: studentId || null,
+          session: session || null,
+          department: null
+        },
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
         avatarUrl: null

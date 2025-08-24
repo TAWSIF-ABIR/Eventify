@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, setLogLevel } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 
 // Your web app's Firebase configuration
@@ -25,5 +25,8 @@ export const analytics = getAnalytics(app);
 
 // Set auth persistence
 setPersistence(auth, browserLocalPersistence);
+
+// Enable verbose Firestore logging for debugging
+setLogLevel('debug');
 
 console.log('Firebase initialized successfully');

@@ -270,15 +270,44 @@ class ProfilePage {
             
             console.log('Saving profile data:', formData);
             
-            // Update user profile in database
-            const result = await dbManager.updateUserProfile(this.currentUser.uid, formData);
+            // Build certificateProfile from form fields
+            const certificateProfile = {
+                name: formData.displayName || null,
+                studentId: formData.studentId || null,
+                session: formData.session || null,
+                department: formData.department || null
+            };
+
+            // Update user profile in database (merge keeps other fields)
+            const result = await dbManager.updateUserProfile(this.currentUser.uid, {
+                ...formData,
+                certificateProfile
+            });
             
             if (!result.success) {
                 throw new Error(result.error || 'Failed to update profile');
             }
             
+            // Also update Firebase Auth displayName so it's used across the app
+            try {
+                const { updateProfile } = await import('firebase/auth');
+                await updateProfile(this.currentUser, { displayName: formData.displayName });
+                // refresh local auth user reference
+                this.currentUser.displayName = formData.displayName;
+            } catch (authUpdateErr) {
+                console.warn('Failed to update auth displayName:', authUpdateErr);
+            }
+
             // Update local user object
-            this.userProfile = { ...this.userProfile, ...formData };
+            this.userProfile = { ...this.userProfile, ...formData, certificateProfile };
+            // Mirror onto currentUser used globally
+            try {
+                window.currentUser = window.currentUser || {};
+                window.currentUser.displayName = formData.displayName;
+                window.currentUser.studentId = formData.studentId;
+                window.currentUser.session = formData.session;
+                window.currentUser.certificateProfile = certificateProfile;
+            } catch (_) {}
             
             // Update profile header
             this.updateProfileHeader();

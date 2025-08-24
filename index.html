@@ -36,7 +36,7 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-brand-text hover:text-brand-primary transition-colors font-medium">Home</a>
                     <a href="events.html" class="text-brand-muted hover:text-brand-text transition-colors">Events</a>
-                    <a href="faq.html" class="text-brand-muted hover:text-brand-text transition-colors">FAQ</a>
+                    <a href="#ai-faq-chat" class="text-brand-muted hover:text-brand-text transition-colors">AI FAQ Chat</a>
                     
                     <!-- Guest Navigation -->
                     <div data-auth="guest" class="flex items-center space-x-4">
@@ -96,7 +96,7 @@
                 <div class="flex flex-col space-y-4 pt-4">
                     <a href="index.html" class="text-brand-text hover:text-brand-primary transition-colors font-medium">Home</a>
                     <a href="events.html" class="text-brand-muted hover:text-brand-text transition-colors">Events</a>
-                    <a href="faq.html" class="text-brand-muted hover:text-brand-text transition-colors">FAQ</a>
+                    <a href="#ai-faq-chat" class="text-brand-muted hover:text-brand-text transition-colors">AI FAQ Chat</a>
                     
                     <!-- Guest Mobile Navigation -->
                     <div data-auth="guest" class="flex flex-col space-y-2">
@@ -122,12 +122,6 @@
         <!-- Hero Section -->
         <section class="section-padding relative overflow-hidden">
             <div class="hero-gradient absolute inset-0"></div>
-            <!-- Enhanced floating elements -->
-            <div class="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-brand-primary/20 to-transparent rounded-full filter blur-2xl animate-float"></div>
-            <div class="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-brand-accent/20 to-transparent rounded-full filter blur-2xl animate-float-slow"></div>
-            <div class="absolute top-1/2 left-10 w-24 h-24 bg-gradient-to-br from-transparent to-brand-primary/20 rounded-full filter blur-xl animate-pulse-slow"></div>
-            <div class="absolute top-1/3 right-16 w-20 h-20 bg-gradient-to-br from-brand-accent/20 to-transparent rounded-full filter blur-xl animate-pulse"></div>
-            
             <div class="container-custom relative z-10">
                 <div class="text-center max-w-5xl mx-auto animate-fade-in">
                     <h1 class="heading-large mb-8">
@@ -138,25 +132,23 @@
                         Connect with your campus community through exciting events, workshops, and activities organized by university clubs.
                     </p>
 
-                                         <!-- Enhanced Search Bar -->
-                     <div class="max-w-2xl mx-auto mb-12">
-                         <div class="relative group">
-                             <input 
-                                 type="text" 
-                                 placeholder="Search events, clubs, or categories..." 
-                                 class="w-full px-6 py-4 pl-14 text-lg bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-300 group-hover:bg-white/15 group-hover:border-white/30"
-                                 id="hero-search"
-                             >
-                             <svg class="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-brand-muted group-hover:text-brand-primary transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
-                             </svg>
-                             <button class="absolute right-3 top-1/2 transform -translate-y-1/2 btn btn-primary px-6 py-2 hover:scale-105 transition-transform duration-300" id="hero-search-btn">
-                                 Search
-                             </button>
-                             <!-- Search bar glow effect -->
-                             <div class="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-accent/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
-                         </div>
-                     </div>
+                    <!-- Search Bar -->
+                    <div class="max-w-2xl mx-auto mb-12">
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                placeholder="Search events, clubs, or categories..." 
+                                class="w-full px-6 py-4 pl-14 text-lg bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
+                                id="hero-search"
+                            >
+                            <svg class="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                            </svg>
+                            <button class="absolute right-3 top-1/2 transform -translate-y-1/2 btn btn-primary px-6 py-2" id="hero-search-btn">
+                                Search
+                            </button>
+                        </div>
+                    </div>
 
                     <div class="flex justify-center mb-16">
                         <a href="events.html" class="btn btn-primary text-lg px-10 py-5 glow-effect">
@@ -167,85 +159,51 @@
                         </a>
                     </div>
 
-                                         <!-- Enhanced Stats -->
-                     <div class="grid grid-cols-3 gap-8 max-w-md mx-auto text-center mb-16">
-                         <div class="animate-fade-in group">
-                             <div class="relative">
-                                 <div class="text-3xl font-bold text-brand-primary mb-1 group-hover:scale-110 transition-transform duration-300" id="total-events-stat">500+</div>
-                                 <div class="absolute inset-0 bg-brand-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                             </div>
-                             <div class="text-sm text-brand-muted">Events</div>
-                         </div>
-                         <div class="animate-fade-in group" style="animation-delay: 0.1s">
-                             <div class="relative">
-                                 <div class="text-3xl font-bold text-brand-accent mb-1 group-hover:scale-110 transition-transform duration-300" id="total-clubs-stat">50+</div>
-                                 <div class="absolute inset-0 bg-brand-accent/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                             </div>
-                             <div class="text-sm text-brand-muted">Clubs</div>
-                         </div>
-                         <div class="animate-fade-in group" style="animation-delay: 0.2s">
-                             <div class="relative">
-                                 <div class="text-3xl font-bold text-brand-success mb-1 group-hover:scale-110 transition-transform duration-300" id="total-students-stat">2000+</div>
-                                 <div class="absolute inset-0 bg-brand-success/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                             </div>
-                             <div class="text-sm text-brand-muted">Students</div>
-                         </div>
-                     </div>
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-8 max-w-md mx-auto text-center mb-16">
+                        <div class="animate-fade-in">
+                            <div class="text-3xl font-bold text-brand-primary mb-1" id="total-events-stat">500+</div>
+                            <div class="text-sm text-brand-muted">Events</div>
+                        </div>
+                        <div class="animate-fade-in" style="animation-delay: 0.1s">
+                            <div class="text-3xl font-bold text-brand-accent mb-1" id="total-clubs-stat">50+</div>
+                            <div class="text-sm text-brand-muted">Clubs</div>
+                        </div>
+                        <div class="animate-fade-in" style="animation-delay: 0.2s">
+                            <div class="text-3xl font-bold text-brand-success mb-1" id="total-students-stat">2000+</div>
+                            <div class="text-sm text-brand-muted">Students</div>
+                        </div>
+                    </div>
 
-                                         <!-- Decorative Elements -->
-                     <div class="relative">
-                         <div class="absolute inset-0 flex items-center justify-center">
-                             <div class="w-32 h-1 bg-gradient-to-r from-transparent via-brand-primary/30 to-transparent"></div>
-                         </div>
-                         <div class="relative z-10 flex items-center justify-center space-x-4">
-                             <div class="w-3 h-3 bg-brand-primary rounded-full animate-pulse"></div>
-                             <div class="w-2 h-2 bg-brand-accent rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
-                             <div class="w-3 h-3 bg-brand-primary rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
-                         </div>
-                     </div>
-                     
-                     <div class="divider"></div>
-                 </div>
-             </div>
-         </section>
+                    <div class="divider"></div>
+                </div>
+            </div>
+        </section>
 
         <!-- Featured Events Section -->
         <section class="section-padding relative overflow-hidden">
-            <!-- Enhanced Background Elements -->
+            <!-- Background Elements -->
             <div class="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-accent/5"></div>
-            <div class="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-full filter blur-3xl animate-float"></div>
-            <div class="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-brand-accent/20 to-brand-primary/20 rounded-full filter blur-3xl animate-float-slow"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-brand-primary/10 to-transparent rounded-full filter blur-2xl animate-pulse-slow"></div>
+            <div class="absolute top-20 left-10 w-72 h-72 bg-brand-primary/10 rounded-full filter blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-brand-accent/10 rounded-full filter blur-3xl animate-float-slow"></div>
             
             <div class="container-custom relative z-10">
-                                 <div class="text-center mb-16 animate-slide-up">
-                     <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-3xl mb-6 shadow-2xl backdrop-blur-sm">
-                         <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
-                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                         </svg>
-                     </div>
-                     
-                     <h2 class="heading-medium mb-6 text-gradient">
-                         Upcoming Events
-                     </h2>
-                     
-                     <p class="text-lead max-w-2xl mx-auto text-brand-text/90 mb-8">
-                         Don't miss out on these exciting opportunities to connect with your campus community
-                     </p>
-                     
-                     <!-- Enhanced decorative elements -->
-                     <div class="flex items-center justify-center space-x-4 mb-6">
-                         <div class="w-1 h-8 bg-gradient-to-b from-brand-primary to-transparent rounded-full"></div>
-                         <div class="w-2 h-2 bg-brand-accent rounded-full animate-pulse"></div>
-                         <div class="w-1 h-8 bg-gradient-to-b from-transparent to-brand-primary rounded-full"></div>
-                     </div>
-                 </div>
+                <div class="text-center mb-16 animate-slide-up">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-3xl mb-6">
+                        <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h2 class="heading-medium mb-6">
+                        Upcoming Events
+                    </h2>
+                    <p class="text-lead max-w-2xl mx-auto">
+                        Don't miss out on these exciting opportunities to connect with your campus community
+                    </p>
+                </div>
 
-                <!-- Enhanced Events Grid -->
-                <div id="events-grid" class="grid-responsive relative">
-                    <!-- Additional floating elements for events section -->
-                    <div class="absolute top-10 right-20 w-16 h-16 bg-gradient-to-br from-brand-primary/15 to-transparent rounded-full filter blur-xl animate-float"></div>
-                    <div class="absolute bottom-10 left-20 w-20 h-20 bg-gradient-to-br from-brand-accent/15 to-transparent rounded-full filter blur-xl animate-float-slow"></div>
+                <!-- Events Grid -->
+                <div id="events-grid" class="grid-responsive">
                     <!-- Loading State -->
                     <div class="col-span-full text-center py-12">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-2xl mb-4 animate-pulse">
@@ -258,86 +216,212 @@
                     </div>
                 </div>
 
-                                 <!-- Enhanced View All Button -->
-                 <div class="text-center mt-16">
-                     <div class="relative inline-block group">
-                         <a href="events.html" class="btn btn-primary px-12 py-5 text-lg glow-effect hover:scale-105 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-brand-primary/25">
-                             <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                             </svg>
-                             View All Events
-                         </a>
-                         <!-- Glow effect -->
-                         <div class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-accent rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10"></div>
-                     </div>
-                     
-                     <!-- Decorative elements -->
-                     <div class="flex items-center justify-center mt-8 space-x-3">
-                         <div class="w-1 h-1 bg-brand-primary rounded-full animate-pulse"></div>
-                         <div class="w-2 h-2 bg-brand-accent rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
-                         <div class="w-1 h-1 bg-brand-primary rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
-                     </div>
-                 </div>
+                <!-- View All Button -->
+                <div class="text-center mt-16">
+                    <a href="events.html" class="btn btn-primary px-12 py-5 text-lg glow-effect hover:scale-105 transition-transform duration-300">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        View All Events
+                    </a>
+                </div>
             </div>
         </section>
 
-
-
-        <!-- Enhanced CTA Section -->
-        <section class="section-padding relative overflow-hidden">
-            <!-- Enhanced Background Elements -->
-            <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/10 via-transparent to-brand-primary/10"></div>
-            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-brand-primary/40 to-transparent"></div>
-            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent/40 to-transparent"></div>
-            <div class="absolute top-1/4 right-10 w-32 h-32 bg-gradient-to-br from-brand-accent/20 to-transparent rounded-full filter blur-2xl animate-float"></div>
-            <div class="absolute bottom-1/4 left-10 w-40 h-40 bg-gradient-to-br from-brand-primary/20 to-transparent rounded-full filter blur-2xl animate-float-slow"></div>
+        <!-- AI FAQ Chat Section -->
+        <section id="ai-faq-chat" class="section-padding relative overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-accent/5"></div>
+            <div class="absolute top-20 right-10 w-72 h-72 bg-brand-accent/10 rounded-full filter blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 left-10 w-96 h-96 bg-brand-primary/10 rounded-full filter blur-3xl animate-float-slow"></div>
             
             <div class="container-custom relative z-10">
-                                 <div class="max-w-4xl mx-auto text-center">
-                     <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-brand-accent/20 to-brand-primary/20 rounded-3xl mb-8 animate-pulse-slow shadow-2xl backdrop-blur-sm">
-                         <svg class="w-10 h-10 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
-                             <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                         </svg>
-                     </div>
-                     
-                     <h2 class="heading-medium mb-6 text-gradient">
-                         Ready to Get Started?
-                     </h2>
-                     <p class="text-lead mb-12 max-w-2xl mx-auto text-brand-text/90">
-                         Join thousands of students already using Eventify to discover amazing campus events
-                     </p>
-                     
-                     <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-                         <div class="relative group">
-                             <a href="auth-new.html#signup" class="btn btn-primary text-lg px-12 py-5 glow-effect hover:scale-105 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-brand-primary/25">
-                                 <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                                 </svg>
-                                 Create Your Account
-                             </a>
-                             <!-- Enhanced glow effect -->
-                             <div class="absolute inset-0 bg-gradient-to-r from-brand-primary to-brand-accent rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10"></div>
-                         </div>
-                         
-                         <div class="relative group">
-                             <a href="auth-new.html" class="btn btn-ghost text-lg px-12 py-5 hover:scale-105 transition-all duration-500 border-2 border-white/30 hover:border-white/50 hover:bg-white/5">
-                                 <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a1 1 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="false"/>
-                                 </svg>
-                                 Sign In
-                             </a>
-                         </div>
-                     </div>
-                     
-                     <!-- Enhanced decorative elements -->
-                     <div class="flex items-center justify-center space-x-6">
-                         <div class="w-3 h-3 bg-brand-primary rounded-full animate-pulse"></div>
-                         <div class="w-1 h-1 bg-brand-accent rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
-                         <div class="w-2 h-2 bg-brand-primary rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
-                         <div class="w-1 h-1 bg-brand-accent rounded-full animate-pulse" style="animation-delay: 0.6s"></div>
-                         <div class="w-3 h-3 bg-brand-primary rounded-full animate-pulse" style="animation-delay: 0.8s"></div>
-                     </div>
-                 </div>
+                <div class="text-center mb-16 animate-slide-up">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-primary/20 rounded-3xl mb-6">
+                        <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h2 class="heading-medium mb-6">
+                        AI-Powered FAQ Assistant
+                    </h2>
+                    <p class="text-lead max-w-2xl mx-auto">
+                        Get instant answers to any questions about events, the platform, or university activities
+                    </p>
+                </div>
+
+                <!-- AI Chat Interface -->
+                <div class="max-w-4xl mx-auto">
+                    <div class="card p-6 bg-white/5 backdrop-blur-sm border border-white/10">
+                        <!-- Chat Header -->
+                        <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-white/10">
+                            <div class="w-10 h-10 bg-gradient-to-br from-brand-accent to-brand-primary rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-brand-text">Eventify AI Assistant</h3>
+                                <p class="text-sm text-brand-muted">Ask me anything about events, the platform, or university activities</p>
+                            </div>
+                        </div>
+
+                        <!-- Chat Messages -->
+                        <div id="chat-messages" class="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                            <!-- Welcome Message -->
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-gradient-to-br from-brand-accent to-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div class="bg-brand-primary/10 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
+                                    <p class="text-brand-text text-sm">
+                                        👋 Hi! I'm your AI assistant. I can help you with:
+                                    </p>
+                                    <ul class="text-brand-muted text-xs mt-2 space-y-1">
+                                        <li>• Event information and registration</li>
+                                        <li>• Platform features and navigation</li>
+                                        <li>• University club activities</li>
+                                        <li>• General questions about Eventify</li>
+                                    </ul>
+                                    <p class="text-brand-text text-sm mt-2">
+                                        What would you like to know?
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="flex space-x-3">
+                            <div class="flex-1 relative">
+                                <input 
+                                    type="text" 
+                                    id="chat-input"
+                                    placeholder="Ask me anything about events, the platform, or university activities..." 
+                                    class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent transition-all"
+                                >
+                                <div id="typing-indicator" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2">
+                                    <div class="flex space-x-1">
+                                        <div class="w-2 h-2 bg-brand-accent rounded-full animate-bounce"></div>
+                                        <div class="w-2 h-2 bg-brand-accent rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                        <div class="w-2 h-2 bg-brand-accent rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button 
+                                id="send-btn"
+                                class="btn btn-primary px-6 py-3 rounded-2xl hover:scale-105 transition-transform duration-300"
+                                onclick="sendMessage()"
+                            >
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Quick Questions -->
+                        <div class="mt-6 pt-4 border-t border-white/10">
+                            <p class="text-sm text-brand-muted mb-3">Quick questions:</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button 
+                                    onclick="askQuickQuestion('How do I register for an event?')"
+                                    class="px-3 py-2 text-xs bg-brand-accent/20 text-brand-accent rounded-full hover:bg-brand-accent/30 transition-colors"
+                                >
+                                    How do I register for an event?
+                                </button>
+                                <button 
+                                    onclick="askQuickQuestion('What types of events are available?')"
+                                    class="px-3 py-2 text-xs bg-brand-primary/20 text-brand-primary rounded-full hover:bg-brand-primary/30 transition-colors"
+                                >
+                                    What types of events are available?
+                                </button>
+                                <button 
+                                    onclick="askQuickQuestion('How do I create a club event?')"
+                                    class="px-3 py-2 text-xs bg-brand-accent/20 text-brand-accent rounded-full hover:bg-brand-accent/30 transition-colors"
+                                >
+                                    How do I create a club event?
+                                </button>
+                                <button 
+                                    onclick="askQuickQuestion('What are the platform features?')"
+                                    class="px-3 py-2 text-xs bg-brand-primary/20 text-brand-primary rounded-full hover:bg-brand-primary/30 transition-colors"
+                                >
+                                    What are the platform features?
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Debug Panel (Development) -->
+                        <div class="mt-6 pt-4 border-t border-white/10">
+                            <details class="text-sm">
+                                <summary class="text-brand-muted cursor-pointer hover:text-brand-text transition-colors">
+                                    🔧 Debug Info (Click to expand)
+                                </summary>
+                                <div class="mt-3 space-y-2 text-xs">
+                                    <div class="bg-white/5 rounded-lg p-3">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-brand-muted">API Status:</span>
+                                            <span id="api-status" class="px-2 py-1 rounded text-white">Checking...</span>
+                                        </div>
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-brand-muted">Model:</span>
+                                            <span class="text-brand-text">gemini-2.0-flash</span>
+                                        </div>
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-brand-muted">Chat History:</span>
+                                            <span id="chat-history-count" class="text-brand-text">0 messages</span>
+                                        </div>
+                                        <button 
+                                            onclick="clearChatHistory()"
+                                            class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs hover:bg-red-500/30 transition-colors"
+                                        >
+                                            Clear Chat
+                                        </button>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section-padding relative overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/5 via-transparent to-brand-primary/5"></div>
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-brand-primary/30 to-transparent"></div>
+            
+            <div class="container-custom relative z-10">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-brand-accent/20 to-brand-primary/20 rounded-3xl mb-8 animate-pulse-slow">
+                        <svg class="w-10 h-10 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    
+                    <h2 class="heading-medium mb-6">
+                        Ready to Get Started?
+                    </h2>
+                    <p class="text-lead mb-12 max-w-2xl mx-auto">
+                        Join thousands of students already using Eventify to discover amazing campus events
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                        <a href="auth-new.html#signup" class="btn btn-primary text-lg px-12 py-5 glow-effect hover:scale-105 transition-transform duration-300">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Create Your Account
+                        </a>
+                        <a href="auth-new.html" class="btn btn-ghost text-lg px-12 py-5 hover:scale-105 transition-transform duration-300">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="false"/>
+                            </svg>
+                            Sign In
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -588,305 +672,351 @@
         });
 
         console.log('Home page script loaded');
-    </script>
 
-    <!-- Floating Chatbot Button -->
-    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50">
-        <!-- Chatbot Button -->
-        <button id="chatbot-toggle" class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group">
-            <svg id="chatbot-icon" class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
-            </svg>
-            <svg id="close-icon" class="w-8 h-8 text-white hidden" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-            </svg>
-        </button>
+        // AI Chat Functionality with Gemini API
+        let chatHistory = [];
 
-        <!-- Chatbot Modal -->
-        <div id="chatbot-modal" class="hidden absolute bottom-20 right-0 w-96 bg-gray-900 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-sm">
-            <!-- Header -->
-            <div class="flex items-center justify-between p-4 border-b border-white/10">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-white">Eventify Assistant</h3>
-                        <p class="text-sm text-gray-300">Ask me anything about events!</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Messages -->
-            <div id="chat-messages" class="h-96 overflow-y-auto p-4 space-y-4">
-                <!-- Welcome Message -->
-                <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <div class="bg-gray-800/50 rounded-2xl p-3 max-w-xs">
-                            <p class="text-sm text-white">Hi! I'm your Eventify assistant. I can help you with:</p>
-                            <ul class="text-xs text-gray-300 mt-2 space-y-1">
-                                <li>• Event registration</li>
-                                <li>• Cancellation policies</li>
-                                <li>• Event details</li>
-                                <li>• General questions</li>
-                            </ul>
-                            <p class="text-sm text-white mt-2">What would you like to know?</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Input Area -->
-            <div class="p-4 border-t border-white/10">
-                <div class="flex space-x-3">
-                    <input type="text" id="chat-input" placeholder="Type your question..." class="flex-1 px-4 py-2 bg-gray-800 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
-                    <button id="send-message" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.25A1 1 0 009 15.25l1.25 5a1 1 0 001.409 1.169l7-14a1 1 0 00-1.788-1.409L13.25 9a1 1 0 00-1.409-1.169l-1.25-5z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Chatbot Script -->
-    <script>
         // Gemini API Configuration
-        const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // Replace with your actual API key
-        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+        const GEMINI_API_KEY = 'AIzaSyCrCZ_FlcKv83pSiLI8l9po6VLGgXXzMNY';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
-        // Chatbot functionality
-        class EventifyChatbot {
-            constructor() {
-                this.isOpen = false;
-                this.messages = [];
-                this.initializeEventListeners();
+        // Send message function
+        window.sendMessage = async function() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessageToChat('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator(true);
+            
+            try {
+                // Get AI response
+                const response = await getAIResponse(message);
+                addMessageToChat('ai', response);
+            } catch (error) {
+                console.error('AI response error:', error);
+                addMessageToChat('ai', 'Sorry, I encountered an error. Please try again or check your internet connection.');
             }
+            
+            // Hide typing indicator
+            showTypingIndicator(false);
+        };
 
-            initializeEventListeners() {
-                const toggleBtn = document.getElementById('chatbot-toggle');
-                const modal = document.getElementById('chatbot-modal');
-                const input = document.getElementById('chat-input');
-                const sendBtn = document.getElementById('send-message');
-
-                toggleBtn.addEventListener('click', () => this.toggleChat());
-                sendBtn.addEventListener('click', () => this.sendMessage());
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.sendMessage();
-                });
-
-                // Close on outside click
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('#chatbot-container')) {
-                        this.closeChat();
-                    }
-                });
-            }
-
-            toggleChat() {
-                this.isOpen = !this.isOpen;
-                const modal = document.getElementById('chatbot-modal');
-                const icon = document.getElementById('chatbot-icon');
-                const closeIcon = document.getElementById('close-icon');
-
-                if (this.isOpen) {
-                    modal.classList.remove('hidden');
-                    icon.classList.add('hidden');
-                    closeIcon.classList.remove('hidden');
-                    document.getElementById('chat-input').focus();
-                } else {
-                    this.closeChat();
-                }
-            }
-
-            closeChat() {
-                this.isOpen = false;
-                const modal = document.getElementById('chatbot-modal');
-                const icon = document.getElementById('chatbot-icon');
-                const closeIcon = document.getElementById('close-icon');
-
-                modal.classList.add('hidden');
-                icon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-            }
-
-            async sendMessage() {
-                const input = document.getElementById('chat-input');
-                const message = input.value.trim();
-                
-                if (!message) return;
-
-                // Add user message to chat
-                this.addMessage(message, 'user');
-                input.value = '';
-
-                // Show typing indicator
-                this.showTypingIndicator();
-
-                try {
-                    // Get response from Gemini API
-                    const response = await this.getGeminiResponse(message);
-                    this.hideTypingIndicator();
-                    this.addMessage(response, 'bot');
-                } catch (error) {
-                    this.hideTypingIndicator();
-                    this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
-                    console.error('Chatbot error:', error);
-                }
-            }
-
-            addMessage(content, sender) {
-                const messagesContainer = document.getElementById('chat-messages');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'flex items-start space-x-3';
-
-                if (sender === 'user') {
-                    messageDiv.innerHTML = `
-                        <div class="flex-1"></div>
-                        <div class="flex-1">
-                            <div class="bg-blue-500/20 border border-blue-500/30 rounded-2xl p-3 max-w-xs ml-auto">
-                                <p class="text-sm text-white">${this.escapeHtml(content)}</p>
-                            </div>
-                        </div>
-                        <div class="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <div class="bg-gray-800/50 rounded-2xl p-3 max-w-xs">
-                                <p class="text-sm text-white">${this.escapeHtml(content)}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                messagesContainer.appendChild(messageDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-
-            showTypingIndicator() {
-                const messagesContainer = document.getElementById('chat-messages');
-                const typingDiv = document.createElement('div');
-                typingDiv.id = 'typing-indicator';
-                typingDiv.className = 'flex items-start space-x-3';
-                typingDiv.innerHTML = `
-                                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                    </svg>
-                </div>
-                <div class="flex-1">
-                    <div class="bg-gray-800/50 rounded-2xl p-3 max-w-xs">
-                        <div class="flex space-x-1">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                        </div>
+        // Add message to chat
+        function addMessageToChat(sender, message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex items-start space-x-3';
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
                     </div>
-                </div>
+                    <div class="bg-brand-primary/20 rounded-2xl rounded-tr-md px-4 py-3 max-w-xs ml-auto">
+                        <p class="text-brand-text text-sm">${escapeHtml(message)}</p>
+                    </div>
                 `;
-                messagesContainer.appendChild(typingDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-gradient-to-br from-brand-accent to-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="bg-brand-accent/10 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
+                        <p class="text-brand-text text-sm">${escapeHtml(message)}</p>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add to chat history
+            chatHistory.push({ sender, message, timestamp: new Date() });
+            
+            // Update debug panel
+            updateDebugPanel('chat-history-count', `${chatHistory.length} messages`, 'bg-blue-500');
+        }
+
+        // Get AI response from Gemini API
+        async function getAIResponse(userMessage) {
+            if (!GEMINI_API_KEY) {
+                return getFallbackResponse(userMessage);
             }
 
-            hideTypingIndicator() {
-                const typingIndicator = document.getElementById('typing-indicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-            }
-
-            async getGeminiResponse(message) {
-                if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
-                    // Fallback responses if no API key
-                    return this.getFallbackResponse(message);
-                }
-
-                try {
-                    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [{
-                                    text: `You are Eventify, a helpful assistant for a university club event management platform. Answer questions about events, registration, and general inquiries. Keep responses concise and helpful. User question: ${message}`
-                                }]
-                            }]
-                        })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                        return data.candidates[0].content.parts[0].text;
-                    } else {
-                        throw new Error('Invalid response format from Gemini API');
-                    }
-                } catch (error) {
-                    console.error('Gemini API error:', error);
-                    // Fallback to rule-based responses
-                    return this.getFallbackResponse(message);
-                }
-            }
-
-            getFallbackResponse(message) {
-                const lowerMessage = message.toLowerCase();
+            try {
+                // Build conversation context with chat history
+                const conversationContext = buildConversationContext(userMessage);
                 
-                // Rule-based responses for common questions
-                if (lowerMessage.includes('register') || lowerMessage.includes('sign up')) {
-                    return "To register for an event, simply click on the event you're interested in and look for the 'Register' or 'Sign Up' button. You'll need to be logged in to your Eventify account.";
-                } else if (lowerMessage.includes('cancel') || lowerMessage.includes('refund')) {
-                    return "Event cancellation policies vary by event. Generally, you can cancel your registration up to 24 hours before the event starts. Check the specific event details for cancellation policies.";
-                } else if (lowerMessage.includes('event') && lowerMessage.includes('detail')) {
-                    return "Event details include date, time, location, description, and attendee count. Click on any event card to view full details and registration options.";
-                } else if (lowerMessage.includes('login') || lowerMessage.includes('account')) {
-                    return "You can log in using the 'Login' button in the top navigation. If you don't have an account, use the 'Sign Up' button to create one.";
-                } else if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
-                    return "I'm here to help! You can ask me about event registration, cancellation policies, event details, or any other questions about using Eventify.";
-                } else {
-                    return "I'm not sure about that specific question. Try asking about event registration, cancellation policies, or general event information. You can also check our FAQ page for more detailed answers.";
-                }
-            }
+                const requestBody = {
+                    contents: conversationContext,
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 1024,
+                    },
+                    safetySettings: [
+                        {
+                            category: "HARM_CATEGORY_HARASSMENT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_HATE_SPEECH",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        }
+                    ]
+                };
 
-            escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
+                console.log('Sending request to Gemini API:', requestBody);
+
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-goog-api-key': GEMINI_API_KEY
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Response Error:', response.status, errorText);
+                    throw new Error(`HTTP error! status: ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('Gemini API Response:', data);
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    const aiResponse = data.candidates[0].content.parts[0].text;
+                    
+                    // Add to chat history
+                    chatHistory.push({ 
+                        sender: 'ai', 
+                        message: aiResponse, 
+                        timestamp: new Date() 
+                    });
+                    
+                    return aiResponse;
+                } else {
+                    console.error('Unexpected API response format:', data);
+                    throw new Error('Invalid response format from Gemini API');
+                }
+                
+            } catch (error) {
+                console.error('Gemini API error:', error);
+                return getFallbackResponse(userMessage);
             }
         }
 
-        // Initialize chatbot when page loads
+        // Build conversation context with chat history
+        function buildConversationContext(userMessage) {
+            const systemPrompt = {
+                role: "user",
+                parts: [{
+                    text: `You are EventifyAI, an intelligent AI assistant for Eventify - a university club event management platform. 
+
+Your role is to help users with:
+- Event discovery, registration, and management
+- Platform features and navigation
+- University club activities and information
+- General questions about the platform
+
+Key platform features:
+- Event browsing and search
+- User registration and profiles
+- Event creation and management
+- Attendance tracking
+- Certificate generation
+- Admin dashboard for clubs
+
+Be helpful, friendly, and informative. Keep responses concise but comprehensive. Always provide actionable advice when possible.
+
+Current user question: ${userMessage}
+
+Previous conversation context: ${chatHistory.length > 0 ? chatHistory.slice(-5).map(msg => `${msg.sender}: ${msg.message}`).join('\n') : 'No previous context'}
+
+Please provide a helpful, accurate response:`
+                }]
+            };
+
+            return [systemPrompt];
+        }
+
+        // Fallback response when API is not available
+        function getFallbackResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            
+            if (message.includes('register') || message.includes('sign up') || message.includes('join')) {
+                return "To register for events, you'll need to create an account first. Click the 'Sign Up' button in the navigation, then you can browse and register for events from your dashboard.";
+            } else if (message.includes('event') && message.includes('type')) {
+                return "Eventify supports various types of events including academic conferences, workshops, social gatherings, cultural festivals, sports competitions, and club meetings. You can filter events by category on the events page.";
+            } else if (message.includes('create') || message.includes('organize')) {
+                return "To create an event, you'll need to be logged in. After signing up, you can access the event creation form from your dashboard. You'll need to provide event details like title, description, date, location, and category.";
+            } else if (message.includes('feature') || message.includes('what can') || message.includes('platform')) {
+                return "Eventify offers event discovery, registration, user profiles, attendance tracking, certificate generation, and admin tools for event management. It's designed specifically for university clubs and student organizations.";
+            } else if (message.includes('club') || message.includes('organization')) {
+                return "University clubs can use Eventify to organize events, manage registrations, track attendance, and engage with students. The platform makes it easy to promote events and manage participants.";
+            } else {
+                return "I'm here to help with questions about Eventify, university events, and the platform features. Feel free to ask about event registration, creation, or any other platform-related questions!";
+            }
+        }
+
+        // Quick question function
+        window.askQuickQuestion = function(question) {
+            document.getElementById('chat-input').value = question;
+            sendMessage();
+        };
+
+        // Show/hide typing indicator
+        function showTypingIndicator(show) {
+            const indicator = document.getElementById('typing-indicator');
+            if (show) {
+                indicator.classList.remove('hidden');
+            } else {
+                indicator.classList.add('hidden');
+            }
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Enter key support for chat input
         document.addEventListener('DOMContentLoaded', () => {
-            new EventifyChatbot();
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+            
+            // Test API connection on page load
+            testGeminiAPIConnection();
         });
+
+        // Test Gemini API connection
+        async function testGeminiAPIConnection() {
+            try {
+                console.log('Testing Gemini API connection...');
+                updateDebugPanel('api-status', 'Checking...', 'bg-yellow-500');
+                
+                const testResponse = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-goog-api-key': GEMINI_API_KEY
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: "Hello! Please respond with 'EventifyAI is ready to help!'"
+                            }]
+                        }]
+                    })
+                });
+
+                if (testResponse.ok) {
+                    const data = await testResponse.json();
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                        console.log('✅ Gemini API connection successful!');
+                        console.log('Test response:', data.candidates[0].content.parts[0].text);
+                        
+                        // Update chat header to show API is connected
+                        const chatHeader = document.querySelector('#ai-faq-chat .text-lead');
+                        if (chatHeader) {
+                            chatHeader.innerHTML = `
+                                Get instant answers to any questions about events, the platform, or university activities
+                                <span class="inline-flex items-center px-2 py-1 ml-2 bg-green-500/20 text-green-400 text-xs rounded-full">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    AI Connected
+                                </span>
+                            `;
+                        }
+                        
+                        updateDebugPanel('api-status', 'Connected', 'bg-green-500');
+                    } else {
+                        throw new Error('Invalid test response format');
+                    }
+                } else {
+                    throw new Error(`Test failed with status: ${testResponse.status}`);
+                }
+                
+            } catch (error) {
+                console.error('❌ Gemini API connection test failed:', error);
+                
+                // Update chat header to show API is not connected
+                const chatHeader = document.querySelector('#ai-faq-chat .text-lead');
+                if (chatHeader) {
+                    chatHeader.innerHTML = `
+                        Get instant answers to any questions about events, the platform, or university activities
+                        <span class="inline-flex items-center px-2 py-1 ml-2 bg-yellow-500/20 text-yellow-400 text-xs rounded-full">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Using Fallback Mode
+                        </span>
+                    `;
+                }
+                
+                updateDebugPanel('api-status', 'Failed', 'bg-red-500');
+            }
+        }
+
+        // Update debug panel
+        function updateDebugPanel(elementId, text, bgClass) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = text;
+                element.className = `px-2 py-1 rounded text-white ${bgClass}`;
+            }
+            
+            // Update chat history count
+            const historyCount = document.getElementById('chat-history-count');
+            if (historyCount) {
+                historyCount.textContent = `${chatHistory.length} messages`;
+            }
+        }
+
+        // Clear chat history
+        window.clearChatHistory = function() {
+            chatHistory = [];
+            const chatMessages = document.getElementById('chat-messages');
+            if (chatMessages) {
+                // Keep only the welcome message
+                const welcomeMessage = chatMessages.querySelector('.flex.items-start.space-x-3');
+                chatMessages.innerHTML = '';
+                if (welcomeMessage) {
+                    chatMessages.appendChild(welcomeMessage);
+                }
+            }
+            updateDebugPanel('chat-history-count', '0 messages', 'bg-blue-500');
+        };
     </script>
 </body>
 </html>
