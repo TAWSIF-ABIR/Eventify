@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix User Profile - Eventify</title>
+    <link href="styles/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Fix User Profile</h1>
+                <p class="text-gray-600">Having trouble logging in? Let's fix your profile!</p>
+            </div>
+
+            <div id="status" class="mb-4"></div>
+
+            <div id="login-section" class="space-y-4">
+                <h2 class="text-lg font-semibold text-gray-800">Step 1: Sign In</h2>
+                <p class="text-sm text-gray-600">First, sign in with your existing account to fix the profile issue.</p>
+                
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="password" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <button type="submit" id="login-btn" 
+                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                        Sign In
+                    </button>
+                </form>
+            </div>
+
+            <div id="fix-section" class="hidden space-y-4">
+                <h2 class="text-lg font-semibold text-gray-800">Step 2: Fix Profile</h2>
+                <p class="text-sm text-gray-600">Your profile needs to be created. Click the button below to fix it.</p>
+                
+                <button id="fix-profile-btn" 
+                        class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors">
+                    Fix My Profile
+                </button>
+                
+                <div class="text-center">
+                    <a href="auth-new.html" class="text-blue-600 hover:text-blue-800 text-sm">
+                        ← Back to Login
+                    </a>
+                </div>
+            </div>
+
+            <div id="success-section" class="hidden space-y-4">
+                <div class="text-center">
+                    <div class="text-green-500 text-6xl mb-4">✅</div>
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">Profile Fixed!</h2>
+                    <p class="text-gray-600 mb-4">Your user profile has been created successfully. You can now log in normally.</p>
+                    
+                    <a href="auth-new.html" 
+                       class="inline-block bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition-colors">
+                        Go to Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvQvQvQvQvQvQvQvQvQvQvQvQvQvQvQvQ",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdefghijklmnop"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM elements
+        const statusDiv = document.getElementById('status');
+        const loginSection = document.getElementById('login-section');
+        const fixSection = document.getElementById('fix-section');
+        const successSection = document.getElementById('success-section');
+        const loginForm = document.getElementById('login-form');
+        const fixProfileBtn = document.getElementById('fix-profile-btn');
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            const statusClass = type === 'error' ? 'bg-red-100 text-red-700 border-red-200' : 
+                               type === 'success' ? 'bg-green-100 text-green-700 border-green-200' : 
+                               'bg-blue-100 text-blue-700 border-blue-200';
+            
+            statusDiv.innerHTML = `<div class="p-3 rounded-md border ${statusClass}">${message}</div>`;
+        }
+
+        // Check auth state
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log('User signed in:', user.email);
+                
+                // Check if user profile exists
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', user.uid));
+                    
+                    if (!userDoc.exists()) {
+                        // Profile doesn't exist, show fix section
+                        loginSection.classList.add('hidden');
+                        fixSection.classList.remove('hidden');
+                        showStatus('Profile not found. Click "Fix My Profile" to create it.', 'warning');
+                    } else {
+                        // Profile exists, show success
+                        loginSection.classList.add('hidden');
+                        fixSection.classList.add('hidden');
+                        successSection.classList.remove('hidden');
+                        showStatus('Profile already exists! You can log in normally.', 'success');
+                    }
+                } catch (error) {
+                    console.error('Error checking profile:', error);
+                    showStatus('Error checking profile. Please try again.', 'error');
+                }
+            } else {
+                // No user signed in, show login section
+                loginSection.classList.remove('hidden');
+                fixSection.classList.add('hidden');
+                successSection.classList.add('hidden');
+                statusDiv.innerHTML = '';
+            }
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Signing in...';
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showStatus('Signed in successfully! Checking profile...', 'success');
+            } catch (error) {
+                console.error('Login error:', error);
+                let message = 'Login failed. Please try again.';
+                if (error.code === 'auth/user-not-found') message = 'No account found with this email.';
+                else if (error.code === 'auth/wrong-password') message = 'Incorrect password.';
+                showStatus(message, 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Sign In';
+            }
+        });
+
+        // Fix profile button
+        fixProfileBtn.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                showStatus('No user signed in. Please sign in first.', 'error');
+                return;
+            }
+            
+            fixProfileBtn.disabled = true;
+            fixProfileBtn.textContent = 'Fixing Profile...';
+            
+            try {
+                // Create default user profile
+                const defaultUserData = {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || 'User',
+                    role: 'student',
+                    studentId: '',
+                    session: '',
+                    phone: '',
+                    department: '',
+                    bio: '',
+                    profileComplete: false,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                };
+                
+                await setDoc(doc(db, 'users', user.uid), defaultUserData);
+                
+                showStatus('Profile created successfully!', 'success');
+                
+                // Show success section
+                fixSection.classList.add('hidden');
+                successSection.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error creating profile:', error);
+                showStatus('Error creating profile: ' + error.message, 'error');
+            } finally {
+                fixProfileBtn.disabled = false;
+                fixProfileBtn.textContent = 'Fix My Profile';
+            }
+        });
+    </script>
+</body>
+</html>

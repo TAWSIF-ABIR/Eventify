@@ -56,6 +56,16 @@
                     </div>
                     <h1 class="text-4xl font-bold bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent mb-4">Welcome to Eventify</h1>
                     <p class="text-xl text-brand-muted mb-2">Choose your login type or create a student account</p>
+                    <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg max-w-md mx-auto">
+                        <p class="text-sm text-blue-700">
+                            <strong>Having trouble logging in?</strong> If you get a "User profile not found" error, 
+                            <a href="fix-profile.html" class="underline font-medium">click here to fix it</a>.
+                        </p>
+                        <p class="text-sm text-blue-700 mt-2">
+                            <strong>Signup not working?</strong> 
+                            <a href="test-signup.html" class="underline font-medium">Test the signup process here</a>.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Login Type Selection -->
@@ -829,38 +839,90 @@
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
                 
                 if (!userDoc.exists()) {
-                    // If no user document exists, sign out and show error
-                    await auth.signOut();
-                    statusDiv.innerHTML = '<div class="status error">User profile not found. Please contact support.</div>';
-                    return;
-                }
-                
-                const userData = userDoc.data();
-                const userRole = userData.role;
-                
-                // Validate that the user is logging in through the correct login type
-                if (currentLoginType === 'admin' && userRole !== 'admin') {
-                    // Admin trying to log in through student login
-                    await auth.signOut();
-                    statusDiv.innerHTML = '<div class="status error">This account is not an admin account. Please use Student Login.</div>';
-                    return;
-                } else if (currentLoginType === 'student' && userRole === 'admin') {
-                    // Admin trying to log in through student login
-                    await auth.signOut();
-                    statusDiv.innerHTML = '<div class="status error">Admin accounts must use Admin Login. Please use Admin Login.</div>';
-                    return;
-                }
-                
-                // Role validation passed, show success and redirect
-                statusDiv.innerHTML = '<div class="status success">Login successful! Redirecting...</div>';
-                
-                // Redirect based on role
-                if (userRole === 'admin') {
-                    window.location.href = 'admin-dashboard.html';
+                    // If no user document exists, create one with default values
+                    console.log('User document not found, creating default profile...');
+                    
+                    try {
+                        // Create a default user profile
+                        const defaultUserData = {
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName || 'User',
+                            role: 'student', // Default to student role
+                            studentId: '',
+                            session: '',
+                            phone: '',
+                            department: '',
+                            bio: '',
+                            profileComplete: false,
+                            createdAt: serverTimestamp(),
+                            updatedAt: serverTimestamp()
+                        };
+                        
+                        await setDoc(doc(db, 'users', user.uid), defaultUserData);
+                        console.log('Default user profile created successfully');
+                        
+                        // Use the default data for role validation
+                        const userData = defaultUserData;
+                        const userRole = userData.role;
+                        
+                        // Validate that the user is logging in through the correct login type
+                        if (currentLoginType === 'admin' && userRole !== 'admin') {
+                            // Admin trying to log in through student login
+                            await auth.signOut();
+                            statusDiv.innerHTML = '<div class="status error">This account is not an admin account. Please use Student Login.</div>';
+                            return;
+                        } else if (currentLoginType === 'student' && userRole === 'admin') {
+                            // Admin trying to log in through student login
+                            await auth.signOut();
+                            statusDiv.innerHTML = '<div class="status error">Admin accounts must use Admin Login. Please use Admin Login.</div>';
+                            return;
+                        }
+                        
+                        // Role validation passed, show success and redirect
+                        statusDiv.innerHTML = '<div class="status success">Login successful! Profile created. Redirecting...</div>';
+                        
+                        // Redirect based on role
+                        if (userRole === 'admin') {
+                            window.location.href = 'admin-dashboard.html';
+                        } else {
+                            window.location.href = 'dashboard.html';
+                        }
+                        
+                    } catch (createError) {
+                        console.error('Error creating default user profile:', createError);
+                        await auth.signOut();
+                        statusDiv.innerHTML = '<div class="status error">Failed to create user profile. <a href="fix-profile.html" class="underline text-blue-600">Click here to fix it manually</a> or contact support.</div>';
+                        return;
+                    }
                 } else {
-                    window.location.href = 'dashboard.html';
+                    // User document exists, proceed with normal login flow
+                    const userData = userDoc.data();
+                    const userRole = userData.role;
+                    
+                    // Validate that the user is logging in through the correct login type
+                    if (currentLoginType === 'admin' && userRole !== 'admin') {
+                        // Admin trying to log in through student login
+                        await auth.signOut();
+                        statusDiv.innerHTML = '<div class="status error">This account is not an admin account. Please use Student Login.</div>';
+                        return;
+                    } else if (currentLoginType === 'student' && userRole === 'admin') {
+                        // Admin trying to log in through student login
+                        await auth.signOut();
+                        statusDiv.innerHTML = '<div class="status error">Admin accounts must use Admin Login. Please use Admin Login.</div>';
+                        return;
+                    }
+                    
+                    // Role validation passed, show success and redirect
+                    statusDiv.innerHTML = '<div class="status success">Login successful! Redirecting...</div>';
+                    
+                    // Redirect based on role
+                    if (userRole === 'admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
                 }
-                
             } catch (error) {
                 console.error('Login error:', error);
                 let message = 'Login failed. Please try again.';
@@ -908,11 +970,13 @@
             signupBtn.innerHTML = '<svg class="w-5 h-5 animate-spin mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg> Creating Account...';
 
             try {
+                console.log('Starting user creation...');
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
+                console.log('Firebase Auth user created:', user.uid);
 
                 // Create user profile in Firestore with all signup data
-                await setDoc(doc(db, 'users', user.uid), {
+                const userData = {
                     uid: user.uid,
                     email: email,
                     displayName: displayName,
@@ -925,17 +989,25 @@
                     profileComplete: true,
                     createdAt: serverTimestamp(),
                     updatedAt: serverTimestamp()
-                });
-
-                statusDiv.innerHTML = '<div class="status success">Account created successfully! Sending welcome email...</div>';
+                };
                 
-                // Send welcome email
+                console.log('Creating Firestore user document...');
+                await setDoc(doc(db, 'users', user.uid), userData);
+                console.log('Firestore user document created successfully');
+
+                statusDiv.innerHTML = '<div class="status success">Account created successfully! Redirecting...</div>';
+                
+                // Try to send welcome email (but don't fail if it doesn't work)
                 try {
-                    await sendWelcomeEmail(user);
-                    statusDiv.innerHTML = '<div class="status success">Account created successfully! Welcome email sent. Redirecting...</div>';
+                    const emailResult = await sendWelcomeEmail(user);
+                    if (emailResult.success) {
+                        console.log('Welcome email sent successfully');
+                    } else {
+                        console.log('Welcome email not sent:', emailResult.error);
+                    }
                 } catch (emailError) {
                     console.error('Welcome email failed:', emailError);
-                    statusDiv.innerHTML = '<div class="status success">Account created successfully! Redirecting...</div>';
+                    // Don't show error to user, just log it
                 }
                 
                 // Redirect to dashboard after successful signup

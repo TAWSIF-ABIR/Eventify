@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Signup - Eventify</title>
+    <link href="styles/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Test Signup Process</h1>
+                <p class="text-gray-600">Use this page to test and debug signup issues</p>
+            </div>
+
+            <div id="status" class="mb-4"></div>
+
+            <form id="test-signup-form" class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Test Email</label>
+                    <input type="email" id="email" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="test@example.com">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Test Password</label>
+                    <input type="password" id="password" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="TestPassword123!">
+                </div>
+                
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Test Name</label>
+                    <input type="text" id="name" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="Test User">
+                </div>
+                
+                <button type="submit" id="test-btn" 
+                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                    Test Signup
+                </button>
+            </form>
+
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-medium text-gray-900 mb-2">Debug Information:</h3>
+                <div id="debug-info" class="text-sm text-gray-600 space-y-1">
+                    <div>Firebase Status: <span id="firebase-status">Checking...</span></div>
+                    <div>Auth Status: <span id="auth-status">Checking...</span></div>
+                    <div>Firestore Status: <span id="firestore-status">Checking...</span></div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="auth-new.html" class="text-blue-600 hover:text-blue-800 text-sm">
+                    ← Back to Main Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvQvQvQvQvQvQvQvQvQvQvQvQvQvQvQ",
+            authDomain: "eventify-5e54d.firebaseapp.com",
+            projectId: "eventify-5e54d",
+            storageBucket: "eventify-5e54d.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdefghijklmnop"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM elements
+        const statusDiv = document.getElementById('status');
+        const testForm = document.getElementById('test-signup-form');
+        const testBtn = document.getElementById('test-btn');
+        const firebaseStatus = document.getElementById('firebase-status');
+        const authStatus = document.getElementById('auth-status');
+        const firestoreStatus = document.getElementById('firestore-status');
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            const statusClass = type === 'error' ? 'bg-red-100 text-red-700 border-red-200' : 
+                               type === 'success' ? 'bg-green-100 text-green-700 border-green-200' : 
+                               'bg-blue-100 text-blue-700 border-blue-200';
+            
+            statusDiv.innerHTML = `<div class="p-3 rounded-md border ${statusClass}">${message}</div>`;
+        }
+
+        // Test Firebase services
+        async function testFirebaseServices() {
+            try {
+                // Test Firebase App
+                firebaseStatus.textContent = '✅ Initialized';
+                firebaseStatus.className = 'text-green-600';
+                
+                // Test Auth
+                authStatus.textContent = '✅ Ready';
+                authStatus.className = 'text-green-600';
+                
+                // Test Firestore
+                firestoreStatus.textContent = '✅ Ready';
+                firestoreStatus.className = 'text-green-600';
+                
+                console.log('All Firebase services are ready');
+                
+            } catch (error) {
+                console.error('Firebase service test failed:', error);
+                showStatus('Firebase services test failed: ' + error.message, 'error');
+            }
+        }
+
+        // Test signup form submission
+        testForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+            
+            testBtn.disabled = true;
+            testBtn.textContent = 'Testing...';
+            
+            try {
+                console.log('=== Starting Test Signup ===');
+                console.log('Email:', email);
+                console.log('Name:', name);
+                
+                // Step 1: Create Firebase Auth user
+                console.log('Step 1: Creating Firebase Auth user...');
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                console.log('✅ Firebase Auth user created:', user.uid);
+                
+                // Step 2: Create Firestore user document
+                console.log('Step 2: Creating Firestore user document...');
+                const userData = {
+                    uid: user.uid,
+                    email: email,
+                    displayName: name,
+                    role: 'student',
+                    studentId: 'TEST123',
+                    session: '2024-2025',
+                    phone: '+1234567890',
+                    department: 'Computer Science',
+                    bio: 'Test user for debugging',
+                    profileComplete: true,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                };
+                
+                await setDoc(doc(db, 'users', user.uid), userData);
+                console.log('✅ Firestore user document created');
+                
+                // Step 3: Verify the document was created
+                console.log('Step 3: Verifying document creation...');
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    console.log('✅ User document verified in Firestore');
+                    console.log('Document data:', userDoc.data());
+                } else {
+                    console.log('❌ User document not found in Firestore');
+                }
+                
+                showStatus('Test signup successful! Check console for details.', 'success');
+                console.log('=== Test Signup Completed Successfully ===');
+                
+                // Clean up - delete the test user
+                setTimeout(async () => {
+                    try {
+                        console.log('Cleaning up test user...');
+                        await user.delete();
+                        console.log('✅ Test user deleted from Firebase Auth');
+                        
+                        // Note: Firestore document will remain for inspection
+                        showStatus('Test completed! Test user deleted from Auth. Firestore document remains for inspection.', 'success');
+                    } catch (cleanupError) {
+                        console.error('Error cleaning up test user:', cleanupError);
+                    }
+                }, 5000);
+                
+            } catch (error) {
+                console.error('❌ Test signup failed:', error);
+                let message = 'Test signup failed: ' + error.message;
+                if (error.code === 'auth/email-already-in-use') {
+                    message = 'Test email already exists. Please use a different test email.';
+                }
+                showStatus(message, 'error');
+            } finally {
+                testBtn.disabled = false;
+                testBtn.textContent = 'Test Signup';
+            }
+        });
+
+        // Check auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('User signed in:', user.email);
+            } else {
+                console.log('No user signed in');
+            }
+        });
+
+        // Initialize page
+        testFirebaseServices();
+        console.log('Test signup page loaded. Check console for detailed logs.');
+    </script>
+</body>
+</html>
