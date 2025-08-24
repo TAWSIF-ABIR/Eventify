@@ -1003,21 +1003,38 @@
 
         // Chat Modal Functions
         window.openAIChat = function() {
+            console.log('openAIChat function called');
+            
             const modal = document.getElementById('ai-chat-modal');
             const container = document.getElementById('chat-container');
             
+            console.log('Modal element:', modal);
+            console.log('Container element:', container);
+            
+            if (!modal || !container) {
+                console.error('Modal or container not found!');
+                return;
+            }
+            
             modal.classList.remove('hidden');
+            console.log('Modal hidden class removed');
             
             // Animate in
             setTimeout(() => {
                 container.classList.remove('scale-95', 'opacity-0');
                 container.classList.add('scale-100', 'opacity-100');
+                console.log('Animation classes applied');
             }, 10);
             
             // Focus on input
             setTimeout(() => {
                 const input = document.getElementById('chat-input');
-                if (input) input.focus();
+                if (input) {
+                    input.focus();
+                    console.log('Input focused');
+                } else {
+                    console.error('Chat input not found!');
+                }
             }, 300);
             
             // Test API connection when opening
@@ -1247,10 +1264,7 @@
             }
         });
 
-        // Initialize chatbot when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new EventifyChatbot();
-        });
+
     </script>
 </body>
 </html>
