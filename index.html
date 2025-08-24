@@ -799,36 +799,18 @@
     <!-- Chatbot Script -->
     <script>
         // Gemini API Configuration
-        const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // Replace with your actual API key
-        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+        const GEMINI_API_KEY = 'AIzaSyCrCZ_FlcKv83pSiLI8l9po6VLGgXXzMNY';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
-        // Chatbot functionality
-        class EventifyChatbot {
-            constructor() {
-                this.isOpen = false;
-                this.messages = [];
-                this.initializeEventListeners();
+        // Initialize chat functionality when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Test API connection when page loads
+            if (typeof testGeminiAPIConnection === 'function') {
+                testGeminiAPIConnection();
             }
+        });
 
-            initializeEventListeners() {
-                const toggleBtn = document.getElementById('chatbot-toggle');
-                const modal = document.getElementById('chatbot-modal');
-                const input = document.getElementById('chat-input');
-                const sendBtn = document.getElementById('send-message');
 
-                toggleBtn.addEventListener('click', () => this.toggleChat());
-                sendBtn.addEventListener('click', () => this.sendMessage());
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.sendMessage();
-                });
-
-                // Close on outside click
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('#chatbot-container')) {
-                        this.closeChat();
-                    }
-                });
-            }
 
             toggleChat() {
                 this.isOpen = !this.isOpen;
