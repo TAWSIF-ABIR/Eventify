@@ -441,16 +441,24 @@
                 
                 // Load events
                 const eventsRef = collection(db, 'events');
+                console.log('Events collection reference:', eventsRef);
+                
                 const eventsQuery = query(eventsRef, orderBy('createdAt', 'desc'));
+                console.log('Events query:', eventsQuery);
+                
                 const eventsSnapshot = await getDocs(eventsQuery);
+                console.log('Events snapshot:', eventsSnapshot);
+                console.log('Number of events found:', eventsSnapshot.size);
                 
                 allEvents = [];
                 eventsSnapshot.forEach((doc) => {
                     const eventData = { id: doc.id, ...doc.data() };
+                    console.log('Processing event:', eventData);
                     allEvents.push(eventData);
                 });
 
                 console.log('Loaded events (filtered):', allEvents);
+                console.log('Total events loaded:', allEvents.length);
 
                 // Update stats
                 await updateStats();
@@ -757,18 +765,29 @@
 
         // Display events in admin panel
         function displayEvents() {
+            console.log('displayEvents called with allEvents:', allEvents);
+            
             const eventsContainer = document.getElementById('admin-events');
             const eventsLoading = document.getElementById('events-loading');
             const eventsEmpty = document.getElementById('events-empty');
+            
+            console.log('Events container:', eventsContainer);
+            console.log('Events loading element:', eventsLoading);
+            console.log('Events empty element:', eventsEmpty);
 
             // Hide loading
-            if (eventsLoading) eventsLoading.classList.add('hidden');
+            if (eventsLoading) {
+                eventsLoading.classList.add('hidden');
+                console.log('Hidden loading element');
+            }
 
             if (allEvents.length === 0) {
+                console.log('No events to display, showing empty state');
                 if (eventsEmpty) eventsEmpty.classList.remove('hidden');
                 return;
             }
 
+            console.log('Displaying', allEvents.length, 'events');
             // Hide empty state
             if (eventsEmpty) eventsEmpty.classList.add('hidden');
 
@@ -1648,116 +1667,6 @@
         }
 
         // Add refresh analytics event listener
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="card p-6 bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20">
-                        <h4 class="text-lg font-semibold text-brand-text mb-4">Attendance Metrics</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span class="text-brand-muted">Total Attended Events:</span>
-                                <span class="text-2xl font-bold text-purple-500">${attendedEvents.length}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-brand-muted">Most Attended:</span>
-                                <span class="text-lg font-semibold text-brand-text">${mostAttended}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-brand-muted">Average Attendance:</span>
-                                <span class="text-lg font-semibold text-brand-text">${avgAttendance}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-brand-muted">Growth Rate:</span>
-                                <span class="text-lg font-semibold text-brand-text text-green-500">+${growthRate}%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card p-6 bg-gradient-to-br from-indigo-500/10 to-indigo-600/5 border border-indigo-500/20">
-                        <h4 class="text-lg font-semibold text-brand-text mb-4">Top Attended Events</h4>
-                        <div class="space-y-3">
-                            ${attendedEvents
-                                .sort((a, b) => (b.attendeeCount || 0) - (a.attendeeCount || 0))
-                                .slice(0, 5)
-                                .map(event => `
-                                    <div class="p-3 bg-brand-surface/50 rounded-lg">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <h5 class="font-medium text-brand-text">${event.title}</h5>
-                                            <span class="text-sm font-semibold text-indigo-500">${event.attendeeCount || 0}</span>
-                                        </div>
-                                        <div class="grid grid-cols-2 gap-2 text-sm">
-                                            <div class="flex justify-between">
-                                                <span class="text-brand-muted">Category:</span>
-                                                <span class="text-brand-text">${event.category || 'General'}</span>
-                                            </div>
-                                            <div class="flex justify-between">
-                                                <span class="text-brand-muted">Views:</span>
-                                                <span class="text-brand-text">${event.viewCount || 0}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card p-6 mt-6">
-                    <h4 class="text-lg font-semibold text-brand-text mb-4">Attendance vs Views Correlation</h4>
-                    <div class="h-64">
-                        <canvas id="attendance-correlation-chart" class="w-full h-full"></canvas>
-                    </div>
-                </div>
-            `;
-
-            // Initialize modal chart
-            setTimeout(() => {
-                const ctx = document.getElementById('attendance-correlation-chart');
-                if (ctx) {
-                    new Chart(ctx, {
-                        type: 'scatter',
-                        data: {
-                            datasets: [{
-                                label: 'Events',
-                                data: attendedEvents.map(event => ({
-                                    x: event.viewCount || 0,
-                                    y: event.attendeeCount || 0
-                                })),
-                                backgroundColor: 'rgba(139, 92, 246, 0.8)',
-                                borderColor: '#8B5CF6',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    labels: { color: '#E5E7EB' }
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Views',
-                                        color: '#E5E7EB'
-                                    },
-                                    ticks: { color: '#E5E7EB' },
-                                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                                },
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Attendance',
-                                        color: '#E5E7EB'
-                                    },
-                                    ticks: { color: '#E5E7EB' },
-                                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                                }
-                            }
-                        }
-                    });
-                }
-            }, 100);
-        }
 
         // Add refresh analytics event listener
         document.addEventListener('DOMContentLoaded', function() {
