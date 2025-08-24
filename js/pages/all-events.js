@@ -152,17 +152,31 @@ class AllEventsPage {
         const isUpcoming = new Date(event.startAt) > new Date();
         
         card.innerHTML = `
+            <!-- Event Banner Image -->
+            <div class="relative h-40 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-t-2xl overflow-hidden mb-4">
+                ${event.imageUrl ? 
+                    `<img src="${event.imageUrl}" alt="${event.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">` :
+                    `<div class="w-full h-full flex items-center justify-center">
+                        <svg class="w-16 h-16 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>`
+                }
+                
+                <!-- Status Badges -->
+                <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                        isUpcoming ? 'bg-brand-success/90 text-white' : 'bg-brand-muted/90 text-white'
+                    }">
+                        ${isUpcoming ? 'Upcoming' : 'Past'}
+                    </div>
+                    ${isRegistered ? '<div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-primary/90 text-white">Registered</div>' : ''}
+                </div>
+            </div>
+
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
                     <h3 class="text-xl font-bold text-brand-text mb-2">${event.title}</h3>
-                    <div class="flex items-center space-x-2 mb-3">
-                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                            isUpcoming ? 'bg-brand-success/20 text-brand-success' : 'bg-brand-muted/20 text-brand-muted'
-                        }">
-                            ${isUpcoming ? 'Upcoming' : 'Past'}
-                        </div>
-                        ${isRegistered ? '<div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-primary/20 text-brand-primary">Registered</div>' : ''}
-                    </div>
                 </div>
             </div>
 
