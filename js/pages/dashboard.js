@@ -1,149 +1,155 @@
 import { auth, db } from '../firebase-init.js';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc, collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore';
+import { 
+    doc, 
+    getDoc, 
+    collection, 
+    query, 
+    where, 
+    onSnapshot, 
+    orderBy, 
+    limit,
+    getDocs
+} from 'firebase/firestore';
 import { ToastManager } from '../toast.js';
 
 class DashboardPage {
     constructor() {
         this.currentUser = null;
         this.toast = new ToastManager();
+        this.events = [];
         this.init();
     }
 
     async init() {
-        console.log('Dashboard initializing...');
-        
-        // Check authentication state
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                console.log('User authenticated:', user);
-                this.currentUser = user;
-                await this.loadUserData();
-                this.setupEventListeners();
-                this.loadUserEvents();
-            } else {
-                console.log('No user authenticated, redirecting to login');
-                window.location.href = 'login.html';
-            }
-        });
+        try {
+            // Check authentication state
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    this.currentUser = user;
+                    await this.loadUserProfile();
+                    this.setupEventListeners();
+                    this.loadUserEvents();
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+        } catch (error) {
+            console.error('Dashboard initialization error:', error);
+            this.toast.error('Failed to initialize dashboard');
+        }
     }
 
-    async loadUserData() {
+    async loadUserProfile() {
         try {
             const userDoc = await getDoc(doc(db, 'users', this.currentUser.uid));
             if (userDoc.exists()) {
                 const userData = userDoc.data();
-                this.currentUser = { ...this.currentUser, ...userData };
-                this.updateDashboardDisplay();
-                console.log('User data loaded:', userData);
-            } else {
-                console.log('No user document found');
+                this.updateUserInterface(userData);
             }
         } catch (error) {
-            console.error('Error loading user data:', error);
-            this.toast.error('Failed to load user data');
+            console.error('Error loading user profile:', error);
         }
     }
 
-    updateDashboardDisplay() {
-        // Update user info in sidebar
-        const userName = document.getElementById('user-name');
-        const userEmail = document.getElementById('user-email');
-        const welcomeName = document.getElementById('welcome-name');
-        
-        if (userName) userName.textContent = this.currentUser.displayName || 'Student';
-        if (userEmail) userEmail.textContent = this.currentUser.email || 'student@email.com';
-        if (welcomeName) welcomeName.textContent = this.currentUser.displayName || 'Student';
-        
-        // Update modal profile info
-        const modalUserName = document.getElementById('modal-user-name');
-        const modalUserEmail = document.getElementById('modal-user-email');
-        const modalProfileName = document.getElementById('modal-profile-name');
-        const modalProfileEmail = document.getElementById('modal-profile-email');
-        const modalProfileStudentId = document.getElementById('modal-profile-student-id');
-        const modalProfileSession = document.getElementById('modal-profile-session');
-        
-        if (modalUserName) modalUserName.textContent = this.currentUser.displayName || 'Student';
-        if (modalUserEmail) modalUserEmail.textContent = this.currentUser.email || 'student@email.com';
-        if (modalProfileName) modalProfileName.textContent = this.currentUser.displayName || 'Loading...';
-        if (modalProfileEmail) modalProfileEmail.textContent = this.currentUser.email || 'Loading...';
-        if (modalProfileStudentId) modalProfileStudentId.textContent = this.currentUser.studentId || 'Loading...';
-        if (modalProfileSession) modalProfileSession.textContent = this.currentUser.session || 'Loading...';
-    }
+    updateUserInterface(userData) {
+        const elements = {
+            userName: document.getElementById('user-name'),
+            userEmail: document.getElementById('user-email'),
+            welcomeName: document.getElementById('welcome-name'),
+            userAvatar: document.getElementById('user-avatar')
+        };
 
-    setupEventListeners() {
-        // Logout button
-        const logoutBtn = document.getElementById('logout-btn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => this.handleLogout());
-        }
-
-        // Refresh events button
-        const refreshBtn = document.getElementById('refresh-events');
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => this.loadUserEvents());
-        }
-
-        // Theme toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => this.toggleTheme());
-        }
-
-        console.log('Dashboard event listeners set up');
+        Object.entries(elements).forEach(([key, element]) => {
+            if (element) {
+                switch (key) {
+                    case 'userName':
+                        element.textContent = userData.displayName || 'Student';
+                        break;
+                    case 'userEmail':
+                        element.textContent = userData.email || 'student@email.com';
+                        break;
+                    case 'welcomeName':
+                        element.textContent = userData.displayName || 'Student';
+                        break;
+                    case 'userAvatar':
+                        element.innerHTML = userData.displayName ? 
+                            `<span class="text-sm font-bold">${userData.displayName.charAt(0).toUpperCase()}</span>` :
+                            `<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                            </svg>`;
+                        break;
+                }
+            }
+        });
     }
 
     async loadUserEvents() {
+        const eventsContainer = document.getElementById('registered-events');
+        const loadingElement = document.getElementById('events-loading');
+        const emptyElement = document.getElementById('events-empty');
+        
+        if (loadingElement) loadingElement.classList.remove('hidden');
+        if (emptyElement) emptyElement.classList.add('hidden');
+
         try {
-            const eventsContainer = document.getElementById('registered-events');
-            const loadingElement = document.getElementById('events-loading');
-            const emptyElement = document.getElementById('events-empty');
-            
-            if (loadingElement) loadingElement.style.display = 'block';
-            if (emptyElement) emptyElement.style.display = 'none';
-            
-            // Query user's registered events
             const registrationsRef = collection(db, 'users', this.currentUser.uid, 'registrations');
             const q = query(registrationsRef, orderBy('registeredAt', 'desc'));
             
-            onSnapshot(q, (snapshot) => {
-                const events = [];
-                snapshot.forEach((doc) => {
-                    events.push({ id: doc.id, ...doc.data() });
-                });
-                
-                this.displayEvents(events);
-                this.updateStats(events);
-                
-                if (loadingElement) loadingElement.style.display = 'none';
-            });
+            const snapshot = await getDocs(q);
             
+            if (snapshot.empty) {
+                if (loadingElement) loadingElement.classList.add('hidden');
+                if (emptyElement) emptyElement.classList.remove('hidden');
+                return;
+            }
+
+            const eventPromises = snapshot.docs.map(async (regDoc) => {
+                const eventId = regDoc.data().eventId;
+                const eventRef = doc(db, 'events', eventId);
+                const eventSnap = await getDoc(eventRef);
+                
+                if (eventSnap.exists()) {
+                    return { 
+                        id: eventId, 
+                        registeredAt: regDoc.data().registeredAt,
+                        ...eventSnap.data() 
+                    };
+                }
+                return null;
+            });
+
+            this.events = (await Promise.all(eventPromises)).filter(event => event !== null);
+            
+            this.renderEvents();
+            this.updateStats();
+            
+            if (loadingElement) loadingElement.classList.add('hidden');
         } catch (error) {
             console.error('Error loading events:', error);
             this.toast.error('Failed to load events');
-            if (loadingElement) loadingElement.style.display = 'none';
+            if (loadingElement) loadingElement.classList.add('hidden');
         }
     }
 
-    displayEvents(events) {
+    renderEvents() {
         const eventsContainer = document.getElementById('registered-events');
         const emptyElement = document.getElementById('events-empty');
         
         if (!eventsContainer) return;
         
-        if (events.length === 0) {
-            if (emptyElement) emptyElement.style.display = 'block';
+        // Clear existing events
+        eventsContainer.innerHTML = '';
+        
+        if (this.events.length === 0) {
+            if (emptyElement) emptyElement.classList.remove('hidden');
             return;
         }
         
-        if (emptyElement) emptyElement.style.display = 'none';
+        if (emptyElement) emptyElement.classList.add('hidden');
         
-        // Clear existing events
-        const existingEvents = eventsContainer.querySelectorAll('[data-event-id]');
-        existingEvents.forEach(el => el.remove());
-        
-        // Add new events
-        events.forEach(event => {
+        // Render new events
+        this.events.forEach(event => {
             const eventElement = this.createEventElement(event);
             eventsContainer.appendChild(eventElement);
         });
@@ -154,23 +160,23 @@ class DashboardPage {
         eventDiv.className = 'card p-6 hover:scale-105 transition-all duration-300';
         eventDiv.setAttribute('data-event-id', event.id);
         
-        const eventDate = event.eventDate ? new Date(event.eventDate.toDate()).toLocaleDateString() : 'TBD';
-        const status = this.getEventStatus(event.eventDate);
+        const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
+        const status = this.getEventStatus(event.startAt);
         
         eventDiv.innerHTML = `
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-brand-text mb-2">${event.eventName || 'Event'}</h3>
-                    <p class="text-brand-muted text-sm mb-1">${event.eventCategory || 'Category'}</p>
-                    <p class="text-brand-muted text-sm">Date: ${event.eventDate}</p>
+                    <h3 class="text-lg font-semibold text-brand-text mb-2">${event.title || 'Event'}</h3>
+                    <p class="text-brand-muted text-sm mb-1">${event.category || 'Category'}</p>
+                    <p class="text-brand-muted text-sm">Date: ${startDate.toLocaleDateString()}</p>
                 </div>
                 <span class="px-3 py-1 rounded-full text-xs font-medium ${this.getStatusClasses(status)}">
                     ${status}
                 </span>
             </div>
             <div class="flex items-center justify-between">
-                <span class="text-sm text-brand-muted">Registered: ${event.registeredAt ? new Date(event.registeredAt.toDate()).toLocaleDateString() : 'Recently'}</span>
-                <button onclick="unregisterFromEvent('${event.id}')" class="btn btn-danger px-3 py-1 text-sm rounded-lg hover:scale-105 transition-transform duration-300">
+                <span class="text-sm text-brand-muted">Registered: ${event.registeredAt ? new Date(event.registeredAt.seconds * 1000).toLocaleDateString() : 'Recently'}</span>
+                <button onclick="window.unregisterFromEvent('${event.id}')" class="btn btn-danger px-3 py-1 text-sm rounded-lg hover:scale-105 transition-transform duration-300">
                     Unregister
                 </button>
             </div>
@@ -179,11 +185,11 @@ class DashboardPage {
         return eventDiv;
     }
 
-    getEventStatus(eventDate) {
-        if (!eventDate) return 'TBD';
+    getEventStatus(startAt) {
+        if (!startAt) return 'TBD';
         
         const now = new Date();
-        const eventTime = eventDate.toDate ? eventDate.toDate() : new Date(eventDate);
+        const eventTime = new Date(startAt.seconds * 1000);
         
         if (eventTime < now) return 'Completed';
         if (eventTime.getTime() - now.getTime() < 7 * 24 * 60 * 60 * 1000) return 'This Week';
@@ -191,39 +197,63 @@ class DashboardPage {
     }
 
     getStatusClasses(status) {
-        switch (status) {
-            case 'Completed':
-                return 'bg-brand-success/20 text-brand-success';
-            case 'This Week':
-                return 'bg-brand-warning/20 text-brand-warning';
-            case 'Upcoming':
-                return 'bg-brand-primary/20 text-brand-primary';
-            default:
-                return 'bg-brand-muted/20 text-brand-muted';
-        }
+        const statusClassMap = {
+            'Completed': 'bg-brand-success/20 text-brand-success',
+            'This Week': 'bg-brand-warning/20 text-brand-warning',
+            'Upcoming': 'bg-brand-primary/20 text-brand-primary',
+            'TBD': 'bg-brand-muted/20 text-brand-muted'
+        };
+        
+        return statusClassMap[status] || statusClassMap['TBD'];
     }
 
-    updateStats(events) {
-        const totalEvents = events.length;
-        const upcomingEvents = events.filter(e => this.getEventStatus(e.eventDate) === 'Upcoming').length;
-        const thisWeek = events.filter(e => this.getEventStatus(e.eventDate) === 'This Week').length;
-        const completed = events.filter(e => this.getEventStatus(e.eventDate) === 'Completed').length;
-        
-        const totalElement = document.getElementById('total-events');
-        const upcomingElement = document.getElementById('upcoming-events');
-        const thisWeekElement = document.getElementById('this-week');
-        const completedElement = document.getElementById('completed-events');
-        
-        if (totalElement) totalElement.textContent = totalEvents;
-        if (upcomingElement) upcomingElement.textContent = upcomingEvents;
-        if (thisWeekElement) thisWeekElement.textContent = thisWeek;
-        if (completedElement) completedElement.textContent = completed;
+    updateStats() {
+        const statsElements = {
+            totalEvents: document.getElementById('total-events'),
+            upcomingEvents: document.getElementById('upcoming-events'),
+            completedEvents: document.getElementById('completed-events'),
+            certificatesCount: document.getElementById('certificates-count')
+        };
+
+        const stats = {
+            totalEvents: this.events.length,
+            upcomingEvents: this.events.filter(e => this.getEventStatus(e.startAt) === 'Upcoming').length,
+            completedEvents: this.events.filter(e => this.getEventStatus(e.startAt) === 'Completed').length,
+            certificatesCount: this.events.filter(e => this.getEventStatus(e.startAt) === 'Completed').length
+        };
+
+        Object.entries(statsElements).forEach(([key, element]) => {
+            if (element) element.textContent = stats[key];
+        });
+    }
+
+    setupEventListeners() {
+        const elements = {
+            logoutBtn: document.getElementById('logout-btn'),
+            refreshBtn: document.getElementById('refresh-events'),
+            themeToggle: document.getElementById('theme-toggle')
+        };
+
+        Object.entries(elements).forEach(([key, element]) => {
+            if (element) {
+                switch (key) {
+                    case 'logoutBtn':
+                        element.addEventListener('click', () => this.handleLogout());
+                        break;
+                    case 'refreshBtn':
+                        element.addEventListener('click', () => this.loadUserEvents());
+                        break;
+                    case 'themeToggle':
+                        element.addEventListener('click', () => this.toggleTheme());
+                        break;
+                }
+            }
+        });
     }
 
     async handleLogout() {
         try {
             await signOut(auth);
-            console.log('User logged out');
             window.location.href = 'login.html';
         } catch (error) {
             console.error('Logout error:', error);
@@ -233,56 +263,46 @@ class DashboardPage {
 
     toggleTheme() {
         const html = document.documentElement;
-        const isDark = html.classList.contains('dark');
-        
-        if (isDark) {
-            html.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        } else {
-            html.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        }
-    }
-
-    showCertificatesSection() {
-        const mainContent = document.querySelector('.space-y-4');
-        const certificatesSection = document.getElementById('certificates-section');
-        
-        if (mainContent && certificatesSection) {
-            // Hide other sections
-            const registeredEventsSection = mainContent.querySelector('.space-y-4');
-            if (registeredEventsSection) registeredEventsSection.style.display = 'none';
-            
-            // Show certificates section
-            certificatesSection.classList.remove('hidden');
-        }
+        html.classList.toggle('dark');
+        localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
     }
 }
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Dashboard DOM loaded, initializing...');
     window.dashboardPage = new DashboardPage();
 });
 
 // Global function for unregistering from events
 window.unregisterFromEvent = async function(eventId) {
-    if (confirm('Are you sure you want to unregister from this event?')) {
+    if (window.dashboardPage) {
         try {
-            // Remove from user's registrations
             const { db } = await import('../firebase-init.js');
-            const { deleteDoc, doc } = await import('firebase/firestore');
+            const { deleteDoc, doc, updateDoc, increment } = await import('firebase/firestore');
             
-            await deleteDoc(doc(db, 'users', window.dashboardPage.currentUser.uid, 'registrations', eventId));
+            const currentUser = window.dashboardPage.currentUser;
             
-            if (window.dashboardPage.toast) {
-                window.dashboardPage.toast.success('Successfully unregistered from event');
-            }
+            // Remove from user's registrations
+            const userRegRef = doc(db, 'users', currentUser.uid, 'registrations', eventId);
+            await deleteDoc(userRegRef);
+            
+            // Remove from event's attendees
+            const eventAttendeeRef = doc(db, 'events', eventId, 'attendees', currentUser.uid);
+            await deleteDoc(eventAttendeeRef);
+            
+            // Decrement attendee count
+            const eventRef = doc(db, 'events', eventId);
+            await updateDoc(eventRef, {
+                attendeeCount: increment(-1)
+            });
+            
+            // Reload events
+            window.dashboardPage.loadUserEvents();
+            
+            window.dashboardPage.toast.success('Successfully unregistered from event');
         } catch (error) {
             console.error('Error unregistering:', error);
-            if (window.dashboardPage.toast) {
-                window.dashboardPage.toast.error('Failed to unregister from event');
-            }
+            window.dashboardPage.toast.error('Failed to unregister from event');
         }
     }
 };

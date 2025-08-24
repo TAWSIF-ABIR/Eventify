@@ -33,13 +33,21 @@ class DatabaseManager {
       const eventDoc = {
         ...eventData,
         imageUrl: null, // No image upload without storage
-        attendeeCount: 0,
+        attendeeCount: 0, // Explicitly set to 0
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
+        // Ensure other potential missing fields are initialized
+        capacity: eventData.capacity || null,
+        attendees: [], // Optional: add an attendees array
+        status: eventData.status || 'upcoming'
       };
 
       const docRef = await addDoc(this.eventsCollection, eventDoc);
-      return { success: true, eventId: docRef.id };
+      return { 
+        success: true, 
+        eventId: docRef.id,
+        attendeeCount: 0 // Confirm attendee count is 0
+      };
     } catch (error) {
       console.error('Error creating event:', error);
       return { success: false, error: error.message };
@@ -171,15 +179,49 @@ class DatabaseManager {
   // Registration operations
   async registerForEvent(eventId, userId, userData) {
     try {
-      const { writeBatch, increment } = await import('firebase/firestore');
+      // Validate inputs
+      if (!eventId || !userId) {
+        throw new Error('Invalid event or user ID');
+      }
+
+      // Start a write batch for atomic operations
+      const { writeBatch, increment, serverTimestamp } = await import('firebase/firestore');
       const batch = writeBatch(db);
+      
+      // Verify event exists and is not full
+      const eventRef = doc(db, 'events', eventId);
+      const eventDoc = await getDoc(eventRef);
+      
+      if (!eventDoc.exists()) {
+        throw new Error('Event does not exist');
+      }
+
+      const eventData = eventDoc.data();
+      
+      // Check capacity
+      if (eventData.capacity && 
+          (eventData.attendeeCount || 0) >= eventData.capacity) {
+        throw new Error('Event is already full');
+      }
+
+      // Detailed logging
+      console.log('Registration Attempt:', {
+        eventId,
+        userId,
+        currentAttendeeCount: eventData.attendeeCount || 0,
+        capacity: eventData.capacity
+      });
       
       // Add to user's registrations
       const userRegRef = doc(db, 'users', userId, 'registrations', eventId);
       batch.set(userRegRef, {
         eventId,
         registeredAt: serverTimestamp(),
-        attended: false
+        attended: false,
+        userData: {
+          name: userData.name,
+          email: userData.email
+        }
       });
 
       // Add to event's attendees
@@ -193,25 +235,60 @@ class DatabaseManager {
         attended: false
       });
 
-      // Increment attendee count
-      const eventRef = doc(db, 'events', eventId);
+      // Increment attendee count with validation
       batch.update(eventRef, {
-        attendeeCount: increment(1)
+        attendeeCount: increment(1),
+        updatedAt: serverTimestamp()
       });
 
+      // Commit batch
       await batch.commit();
 
-      // Email confirmation will be automatically sent by Firebase Cloud Function
-      // when the registration document is created in Firestore
+      // Verify registration
+      const verifyAttendees = await getDocs(
+        query(collection(db, 'events', eventId, 'attendees'))
+      );
+
+      console.log('Post-Registration Verification:', {
+        totalAttendees: verifyAttendees.size,
+        registeredUserIds: verifyAttendees.docs.map(doc => doc.id)
+      });
       
       return { 
         success: true, 
-        emailSent: true, // Cloud Function will handle this
-        emailError: null 
+        emailSent: true, // Simulated
+        attendeeCount: (eventData.attendeeCount || 0) + 1
       };
     } catch (error) {
-      console.error('Error registering for event:', error);
-      return { success: false, error: error.message };
+      console.error('Detailed Registration Error:', {
+        message: error.message,
+        stack: error.stack,
+        eventId: eventId,
+        userId: userId
+      });
+
+      // Specific error handling
+      if (error.message === 'Event is already full') {
+        return { 
+          success: false, 
+          error: 'Event capacity reached',
+          code: 'capacity-full'
+        };
+      }
+
+      if (error.message === 'Event does not exist') {
+        return { 
+          success: false, 
+          error: 'Event not found',
+          code: 'event-not-found'
+        };
+      }
+
+      return { 
+        success: false, 
+        error: error.message,
+        code: 'registration-failed'
+      };
     }
   }
 
@@ -403,6 +480,75 @@ class DatabaseManager {
   onUserRegistrationsChange(userId, callback) {
     return onSnapshot(collection(db, 'users', userId, 'registrations'), callback);
   }
+
+  onEventAttendeesChange(eventId, callback) {
+    const attendeesRef = collection(db, 'events', eventId, 'attendees');
+    return onSnapshot(attendeesRef, callback);
+  }
+
+  async trackEventView(eventId) {
+    try {
+      const { increment } = await import('firebase/firestore');
+      const eventRef = doc(db, 'events', eventId);
+      
+      await updateDoc(eventRef, {
+        viewCount: increment(1)
+      });
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error tracking event view:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  async debugEventRegistration(eventId, userId) {
+    try {
+      // Check event document
+      const eventRef = doc(db, 'events', eventId);
+      const eventDoc = await getDoc(eventRef);
+      
+      if (!eventDoc.exists()) {
+        console.error('Event does not exist');
+        return { 
+          success: false, 
+          error: 'Event does not exist',
+          details: null 
+        };
+      }
+
+      const eventData = eventDoc.data();
+
+      // Check attendees collection
+      const attendeesRef = collection(db, 'events', eventId, 'attendees');
+      const attendeesQuery = query(attendeesRef, where('userId', '==', userId));
+      const attendeesSnapshot = await getDocs(attendeesQuery);
+
+      // Check user registrations
+      const userRegRef = doc(db, 'users', userId, 'registrations', eventId);
+      const userRegDoc = await getDoc(userRegRef);
+
+      return {
+        success: true,
+        details: {
+          eventId,
+          userId,
+          eventData,
+          attendeeCount: eventData.attendeeCount || 0,
+          hasAttendeeRecord: !attendeesSnapshot.empty,
+          attendeeRecordCount: attendeesSnapshot.size,
+          hasUserRegistration: userRegDoc.exists()
+        }
+      };
+    } catch (error) {
+      console.error('Error debugging event registration:', error);
+      return { 
+        success: false, 
+        error: error.message,
+        details: null 
+      };
+    }
+  }
 }
 
 // Create and export singleton instance
@@ -428,5 +574,8 @@ export const {
   checkSchedulingConflict,
   onEventsChange,
   onEventChange,
-  onUserRegistrationsChange
+  onUserRegistrationsChange,
+  onEventAttendeesChange,
+  trackEventView,
+  debugEventRegistration
 } = dbManager;

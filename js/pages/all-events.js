@@ -243,6 +243,12 @@ class AllEventsPage {
             </div>
         `;
         
+        // Add click event to track view
+        card.addEventListener('click', () => {
+            window.location.href = `event.html?id=${event.id}`;
+            window.trackEventView(event.id);
+        });
+        
         return card;
     }
 
@@ -267,12 +273,66 @@ class AllEventsPage {
                 return;
             }
 
-            // Register for event
-            const result = await dbManager.registerForEvent(eventId, this.currentUser.uid, {
+            // Check event capacity
+            if (event.capacity && event.attendeeCount >= event.capacity) {
+                toast.error('Sorry, this event is already full');
+                return;
+            }
+
+            // Prepare user data
+            const userData = {
                 name: this.currentUser.displayName || 'User',
                 email: this.currentUser.email
+            };
+
+            // Import Firestore functions
+            const { db } = await import('../firebase-init.js');
+            const { 
+                doc, 
+                setDoc, 
+                updateDoc, 
+                increment, 
+                collection, 
+                query, 
+                where, 
+                getDocs 
+            } = await import('firebase/firestore');
+
+            // Check if already registered (double-check)
+            const attendeesRef = collection(db, 'events', eventId, 'attendees');
+            const attendeeQuery = query(attendeesRef, where('userId', '==', this.currentUser.uid));
+            const attendeeSnapshot = await getDocs(attendeeQuery);
+
+            if (!attendeeSnapshot.empty) {
+                toast.info('You are already registered for this event');
+                return;
+            }
+
+            // Add to user's registrations
+            const userRegRef = doc(db, 'users', this.currentUser.uid, 'registrations', eventId);
+            await setDoc(userRegRef, {
+                eventId,
+                registeredAt: new Date(),
+                attended: false
             });
-            
+
+            // Add to event's attendees
+            const eventAttendeeRef = doc(db, 'events', eventId, 'attendees', this.currentUser.uid);
+            await setDoc(eventAttendeeRef, {
+                userId: this.currentUser.uid,
+                name: userData.name,
+                email: userData.email,
+                registeredAt: new Date(),
+                status: 'registered',
+                attended: false
+            });
+
+            // Increment attendee count
+            const eventRef = doc(db, 'events', eventId);
+            await updateDoc(eventRef, {
+                attendeeCount: increment(1)
+            });
+
             // Update local data
             const eventIndex = this.events.findIndex(e => e.id === eventId);
             if (eventIndex !== -1) {
@@ -282,20 +342,23 @@ class AllEventsPage {
                 }
                 this.events[eventIndex].attendees.push(this.currentUser.uid);
             }
-            
+
             // Re-render events
             this.renderEvents();
-            
-            if (result.emailSent) {
-                toast.success('Successfully registered for event! Check your email for confirmation.');
-            } else {
-                toast.success('Successfully registered for event! Email confirmation could not be sent.');
-                console.warn('Email error:', result.emailError);
-            }
+
+            // Success toast
+            toast.success('Successfully registered for the event!');
             
         } catch (error) {
             console.error('Error registering for event:', error);
-            toast.error('Failed to register for event. Please try again.');
+            
+            // Detailed error handling
+            const errorMessage = 
+                error.code === 'permission-denied' ? 'Permission denied. Please check your access.' :
+                error.code === 'not-found' ? 'Event not found.' :
+                'Failed to register for event. Please try again.';
+            
+            toast.error(errorMessage);
         }
     }
 

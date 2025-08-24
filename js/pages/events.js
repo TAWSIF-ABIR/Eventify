@@ -189,7 +189,7 @@ class EventsPage {
 
     return `
       <div class="card group hover:scale-105 transition-all duration-300 cursor-pointer" 
-           onclick="window.location.href='event.html?id=${event.id}'">
+           onclick="window.location.href='event.html?id=${event.id}'; window.trackEventView('${event.id}')">
         <!-- Event Image -->
         <div class="relative h-48 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-t-2xl overflow-hidden">
           ${event.imageUrl ? 

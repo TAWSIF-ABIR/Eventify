@@ -390,7 +390,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, doc, getDoc, updateDoc, increment, collection, onSnapshot, query, where, setDoc, serverTimestamp, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -452,6 +452,28 @@
             }
         });
 
+        // Real-time attendee listener
+        function setupAttendeeListener(eventId) {
+            const attendeesRef = collection(db, 'events', eventId, 'attendees');
+            return onSnapshot(attendeesRef, (snapshot) => {
+                const attendeeCount = snapshot.size;
+                const attendeeCountEl = document.getElementById('attendee-count');
+                const eventCapacityEl = document.getElementById('event-capacity');
+                
+                if (attendeeCountEl) {
+                    attendeeCountEl.textContent = attendeeCount;
+                }
+                
+                if (eventCapacityEl && currentEvent && currentEvent.capacity) {
+                    eventCapacityEl.textContent = `${attendeeCount}/${currentEvent.capacity}`;
+                }
+                
+                console.log('Real-time attendee count updated:', attendeeCount);
+            }, (error) => {
+                console.error('Error listening to attendees:', error);
+            });
+        }
+
         // Load event details
         async function loadEventDetails() {
             try {
@@ -476,6 +498,12 @@
 
                 currentEvent = { id: eventDoc.id, ...eventDoc.data() };
                 console.log('Loaded event:', currentEvent);
+                
+                // Track event view
+                await trackEventView(eventId);
+                
+                // Setup real-time attendee listener
+                setupAttendeeListener(eventId);
                 
                 // Display event details
                 displayEventDetails();
@@ -560,14 +588,109 @@
             document.getElementById('error-state').classList.remove('hidden');
         }
 
-        // Event handlers
-        document.getElementById('register-btn').addEventListener('click', () => {
+        // Event registration
+        document.getElementById('register-btn').addEventListener('click', async () => {
             if (!auth.currentUser) {
                 window.location.href = 'auth-new.html';
                 return;
             }
-            alert('Registration functionality will be implemented soon!');
+
+            if (!currentEvent) {
+                showToast('Event details not loaded. Please try again.', 'error');
+                return;
+            }
+
+            try {
+                // Import registration function
+                const { registerForEvent } = await import('./js/db.js');
+
+                // Attempt registration
+                const result = await registerForEvent(
+                    currentEvent.id, 
+                    auth.currentUser.uid, 
+                    {
+                        name: auth.currentUser.displayName || 'User',
+                        email: auth.currentUser.email
+                    }
+                );
+
+                // Handle registration result
+                if (result.success) {
+                    // Verify attendee count
+                    const attendeesRef = collection(db, 'events', currentEvent.id, 'attendees');
+                    const attendeeSnapshot = await getDocs(attendeesRef);
+                    
+                    console.log('Registration Verification:', {
+                        registrationResult: result,
+                        totalAttendees: attendeeSnapshot.size,
+                        attendeeIds: attendeeSnapshot.docs.map(doc => doc.id)
+                    });
+
+                    // Show success toast with attendee count
+                    showToast(
+                        `Successfully registered for "${currentEvent.title}"! ` +
+                        `Total attendees: ${attendeeSnapshot.size}`, 
+                        'success'
+                    );
+                } else {
+                    // Handle specific error codes
+                    const errorMessages = {
+                        'capacity-full': 'Sorry, this event is already full.',
+                        'event-not-found': 'The event could not be found.',
+                        'registration-failed': 'Failed to register for the event.'
+                    };
+
+                    showToast(
+                        errorMessages[result.code] || result.error || 'Registration failed', 
+                        'error'
+                    );
+                }
+
+            } catch (error) {
+                console.error('Detailed registration error:', {
+                    message: error.message,
+                    code: error.code,
+                    stack: error.stack
+                });
+                
+                // Show detailed error toast
+                const errorMessage = 
+                    error.code === 'permission-denied' ? 'Permission denied. Please check your access.' :
+                    error.code === 'not-found' ? 'Event or registration not found.' :
+                    'Failed to register for event. Please try again.';
+                
+                showToast(errorMessage, 'error');
+            }
         });
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg font-medium transform translate-x-full transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                type === 'warning' ? 'bg-yellow-500 text-white' :
+                'bg-blue-500 text-white'
+            }`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
 
         document.getElementById('share-btn').addEventListener('click', () => {
             if (navigator.share) {
@@ -610,6 +733,22 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadEventDetails();
         });
+
+        // Track event view
+        async function trackEventView(eventId) {
+            try {
+                const eventRef = doc(db, 'events', eventId);
+                await updateDoc(eventRef, {
+                    viewCount: increment(1)
+                });
+                console.log('Event view tracked:', eventId);
+            } catch (error) {
+                console.error('Error tracking event view:', error);
+            }
+        }
+
+        // Expose trackEventView globally
+        window.trackEventView = trackEventView;
 
         console.log('Event details page script loaded');
     </script>
