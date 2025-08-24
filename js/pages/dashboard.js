@@ -448,8 +448,197 @@ class DashboardPage {
         if (modal) modal.classList.add('hidden');
     }
 
-    downloadCertificate() {
-        this.toast.info('Certificate download functionality will be implemented!');
+    // Fetch and generate certificates for completed events
+    async generateCompletedEventCertificates() {
+        try {
+            console.group('Certificate Generation Debug');
+            console.log('🔍 Starting comprehensive certificate generation...');
+
+            // Validate current user
+            if (!this.currentUser) {
+                console.error('❌ No current user found');
+                return;
+            }
+
+            // Prepare certificates container
+            const certificatesContainer = document.querySelector('#certificates-section .grid');
+            if (!certificatesContainer) {
+                console.error('❌ Certificates container not found');
+                return;
+            }
+
+            // Clear existing certificates
+            certificatesContainer.innerHTML = '';
+
+            // Fetch user profile to get registrations
+            const userRef = doc(db, 'users', this.currentUser.uid);
+            const userDoc = await getDoc(userRef);
+            
+            if (!userDoc.exists()) {
+                console.error('❌ User document not found');
+                return;
+            }
+
+            const userData = userDoc.data();
+            const registrations = userData.registrations || {};
+            console.log('📋 User Registrations:', registrations);
+
+            // Fetch all events
+            const eventsRef = collection(db, 'events');
+            const eventsSnapshot = await getDocs(eventsRef);
+            const allEvents = {};
+            eventsSnapshot.forEach(doc => {
+                allEvents[doc.id] = { ...doc.data(), id: doc.id };
+            });
+
+            // Track certificates generated
+            let certificatesGenerated = 0;
+
+            // Process registrations
+            for (const [eventId, registration] of Object.entries(registrations)) {
+                const eventData = allEvents[eventId];
+                
+                if (!eventData) {
+                    console.warn(`⚠️ Event ${eventId} not found`);
+                    continue;
+                }
+
+                // Expanded certificate generation conditions
+                const isCompletedEvent = eventData.status === 'completed';
+                const isAttended = registration.attended === true;
+
+                console.log(`Event ${eventId} Certificate Check:`, {
+                    eventTitle: eventData.title,
+                    isCompletedEvent,
+                    isAttended
+                });
+
+                if (isCompletedEvent && isAttended) {
+                    console.log(`✅ Generating certificate for: ${eventData.title}`);
+
+                    // Create certificate card
+                    const certificateCard = document.createElement('div');
+                    certificateCard.className = 'card p-6 hover:shadow-xl transition-all duration-300 group relative';
+                    certificateCard.innerHTML = `
+                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="window.dashboardPage.downloadCertificate('${eventId}')" 
+                                    class="btn btn-primary px-4 py-2 rounded-lg text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                                Download Certificate
+                            </button>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-brand-primary to-brand-accent rounded-3xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-brand-text mb-2">${eventData.title}</h3>
+                            <p class="text-brand-muted text-sm mb-4">Certificate of Participation</p>
+                            <div class="text-sm text-brand-muted">
+                                <p>Issued on: ${new Date(eventData.endAt.toDate()).toLocaleDateString()}</p>
+                                <p>Category: ${eventData.category || 'University Event'}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    // Append to certificates container
+                    certificatesContainer.appendChild(certificateCard);
+                    certificatesGenerated++;
+                }
+            }
+
+            console.log(`📊 Total Certificates Generated: ${certificatesGenerated}`);
+
+            // Update no certificates message
+            const noCertificatesMessage = certificatesContainer.querySelector('.col-span-full');
+            if (noCertificatesMessage) {
+                certificatesGenerated > 0 
+                    ? noCertificatesMessage.classList.add('hidden')
+                    : noCertificatesMessage.classList.remove('hidden');
+            }
+
+            console.groupEnd();
+        } catch (error) {
+            console.error('❌ Certificate Generation Error:', error);
+            console.groupEnd();
+        }
+    }
+
+    // Download certificate as PDF
+    async downloadCertificate(eventId) {
+        try {
+            // Fetch event details
+            const eventRef = doc(db, 'events', eventId);
+            const eventDoc = await getDoc(eventRef);
+
+            if (!eventDoc.exists()) {
+                this.toast.error('Event details not found');
+                return;
+            }
+
+            const eventData = eventDoc.data();
+
+            // Fetch user profile for additional details
+            const userRef = doc(db, 'users', this.currentUser.uid);
+            const userDoc = await getDoc(userRef);
+            const userData = userDoc.data();
+
+            // Use jsPDF for PDF generation
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            // Certificate background
+            doc.setFillColor(255, 255, 255);
+            doc.rect(0, 0, 297, 210, 'F');
+
+            // Border
+            doc.setDrawColor(0, 0, 0);
+            doc.setLineWidth(1);
+            doc.rect(10, 10, 277, 190);
+
+            // Title
+            doc.setFontSize(24);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Certificate of Participation', 148, 50, { align: 'center' });
+
+            // Participant Details
+            doc.setFontSize(18);
+            doc.text(`${this.currentUser.displayName}`, 148, 80, { align: 'center' });
+            
+            // Student ID (if available)
+            if (userData.studentId) {
+                doc.setFontSize(14);
+                doc.text(`Student ID: ${userData.studentId}`, 148, 90, { align: 'center' });
+            }
+
+            // Event Details
+            doc.setFontSize(14);
+            doc.text(`has successfully participated in the event`, 148, 110, { align: 'center' });
+            doc.setFontSize(16);
+            doc.setTextColor(0, 100, 200);
+            doc.text(`${eventData.title}`, 148, 120, { align: 'center' });
+
+            // Date
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Date: ${new Date(eventData.endAt.toDate()).toLocaleDateString()}`, 148, 140, { align: 'center' });
+
+            // Save PDF
+            doc.save(`Certificate_${eventData.title.replace(/\s+/g, '_')}.pdf`);
+
+            this.toast.success('Certificate downloaded successfully');
+
+        } catch (error) {
+            console.error('Error downloading certificate:', error);
+            this.toast.error('Failed to download certificate');
+        }
     }
 
     printCertificate() {

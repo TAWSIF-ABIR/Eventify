@@ -129,21 +129,8 @@
                                 </svg>
                                 Refresh
                             </button>
-                            <button id="sync-counts" class="btn btn-accent px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-                                </svg>
-                                Sync Counts
-                            </button>
-                            <button id="debug-counts" class="btn btn-warning px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                Debug Counts
-                            </button>
-                            <button id="test-functions" class="btn btn-accent px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300 text-sm">
-                                Test Functions
-                            </button>
+
+
                         </div>
                     </div>
 
@@ -205,14 +192,44 @@
         let currentUser = null;
         let allEvents = [];
 
+        // Helper function to validate current user
+        function validateCurrentUser() {
+            if (!currentUser || !currentUser.uid) {
+                console.error('Current user validation failed:', currentUser);
+                return false;
+            }
+            return true;
+        }
+
+        // Debug function to log current state
+        function logCurrentState() {
+            console.log('=== CURRENT STATE DEBUG ===');
+            console.log('Current user:', currentUser);
+            console.log('Current user UID:', currentUser?.uid);
+            console.log('All events count:', allEvents.length);
+            console.log('Events with registration status:', allEvents.map(e => ({
+                id: e.id,
+                title: e.title,
+                isRegistered: e.isRegistered,
+                attendeeCount: e.attendeeCount
+            })));
+        }
+
         // Check authentication
         onAuthStateChanged(auth, (user) => {
-            if (!user) {
+            console.log('=== AUTH STATE CHANGED ===');
+            console.log('User object:', user);
+            
+            if (!user || !user.uid) {
+                console.log('No authenticated user, redirecting to login');
                 window.location.href = 'auth-new.html';
                 return;
             }
             
             currentUser = user;
+            console.log('Current user set:', currentUser);
+            console.log('User UID:', currentUser.uid);
+            console.log('User email:', currentUser.email);
             
             // Update user info
             const userName = document.getElementById('user-name');
@@ -222,6 +239,7 @@
             if (userEmail) userEmail.textContent = user.email;
             
             // Load events
+            console.log('Starting to load events for user:', currentUser.uid);
             loadAllEvents();
         });
 
@@ -231,6 +249,13 @@
                 console.log('=== LOADING ALL EVENTS ===');
                 console.log('Current user:', currentUser);
                 console.log('Database instance:', db);
+                
+                // Check if user is authenticated
+                if (!validateCurrentUser()) {
+                    showToast('Authentication required. Please log in again.', 'error');
+                    window.location.href = 'auth-new.html';
+                    return;
+                }
                 
                 // Load all events
                 const eventsRef = collection(db, 'events');
@@ -257,6 +282,9 @@
                 // Display events (now async)
                 await displayAllEvents();
                 
+                // Debug: Log current state after loading
+                logCurrentState();
+                
             } catch (error) {
                 console.error('Error loading events:', error);
                 console.error('Error details:', {
@@ -273,6 +301,12 @@
         async function syncRealAttendeeCounts() {
             try {
                 console.log('=== SYNCING REAL ATTENDEE COUNTS ===');
+                
+                // Check if user is authenticated
+                if (!validateCurrentUser()) {
+                    console.error('No authenticated user found in syncRealAttendeeCounts');
+                    return;
+                }
                 
                 // Instead of reading all users (which requires admin permissions),
                 // we'll use the existing attendeeCount from Firebase events
@@ -314,6 +348,13 @@
             const eventsContainer = document.getElementById('all-events-container');
             const eventsLoading = document.getElementById('events-loading');
             const eventsEmpty = document.getElementById('events-empty');
+
+            // Check if user is authenticated
+            if (!validateCurrentUser()) {
+                console.error('No authenticated user found in displayAllEvents');
+                eventsContainer.innerHTML = '<div class="text-center py-12"><div class="text-red-400">Authentication required. Please log in again.</div></div>';
+                return;
+            }
 
             // Hide loading
             if (eventsLoading) eventsLoading.classList.add('hidden');
@@ -421,6 +462,13 @@
             console.log('Current user:', currentUser);
             console.log('All events:', allEvents);
             
+            // Check if user is authenticated
+            if (!validateCurrentUser()) {
+                showToast('Authentication required. Please log in again.', 'error');
+                window.location.href = 'auth-new.html';
+                return;
+            }
+            
             try {
                 console.log('Registration requested for event:', eventId);
                 const event = allEvents.find(e => e.id === eventId);
@@ -504,6 +552,13 @@
             console.log('Event ID:', eventId);
             console.log('Current user:', currentUser);
             
+            // Check if user is authenticated
+            if (!validateCurrentUser()) {
+                showToast('Authentication required. Please log in again.', 'error');
+                window.location.href = 'auth-new.html';
+                return;
+            }
+            
             try {
                 console.log('Unregistration requested for event:', eventId);
                 const event = allEvents.find(e => e.id === eventId);
@@ -576,66 +631,9 @@
             await loadAllEvents();
         });
 
-        // Sync counts button
-        document.getElementById('sync-counts').addEventListener('click', async () => {
-            console.log('=== SYNCING ATTENDEE COUNTS MANUALLY ===');
-            await syncRealAttendeeCounts();
-            showToast('Attendee counts synced successfully!', 'success');
-        });
 
-        // Debug counts button
-        document.getElementById('debug-counts').addEventListener('click', async () => {
-            console.log('=== DEBUGGING FIREBASE ATTENDEE COUNTS ===');
-            const allEventsRef = collection(db, 'events');
-            const eventsSnapshot = await getDocs(allEventsRef);
-            const eventAttendeeCounts = {};
-            eventsSnapshot.forEach(doc => {
-                eventAttendeeCounts[doc.id] = doc.data().attendeeCount || 0;
-            });
-            console.log('Current Firebase Attendee Counts:', eventAttendeeCounts);
-            
-            // Show in console in a readable format
-            console.log('📊 Firebase Attendee Counts by Event:');
-            eventsSnapshot.forEach(doc => {
-                const eventData = doc.data();
-                console.log(`   ${eventData.title}: ${eventData.attendeeCount || 0} attendees`);
-            });
-            
-            // Show toast with summary
-            const totalEvents = eventsSnapshot.size;
-            const totalAttendees = Object.values(eventAttendeeCounts).reduce((sum, count) => sum + count, 0);
-            showToast(`Debug: ${totalEvents} events, ${totalAttendees} total attendees`, 'info');
-        });
 
-        // Test functions button
-        document.getElementById('test-functions').addEventListener('click', () => {
-            console.log('=== TESTING FUNCTIONS ===');
-            console.log('Window object:', window);
-            console.log('registerForEvent function:', typeof window.registerForEvent);
-            console.log('unregisterFromEvent function:', typeof window.unregisterFromEvent);
-            console.log('viewEventDetails function:', typeof window.viewEventDetails);
-            console.log('Current user:', currentUser);
-            console.log('All events:', allEvents);
-            
-            // Test if we can call the functions
-            if (typeof window.registerForEvent === 'function') {
-                console.log('✅ registerForEvent is accessible');
-            } else {
-                console.log('❌ registerForEvent is NOT accessible');
-            }
-            
-            if (typeof window.unregisterFromEvent === 'function') {
-                console.log('✅ unregisterFromEvent is accessible');
-            } else {
-                console.log('❌ unregisterFromEvent is NOT accessible');
-            }
-            
-            if (typeof window.viewEventDetails === 'function') {
-                console.log('✅ viewEventDetails is accessible');
-            } else {
-                console.log('❌ viewEventDetails is NOT accessible');
-            }
-        });
+
 
         // Logout functionality
         document.getElementById('logout-btn').addEventListener('click', async () => {

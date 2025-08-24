@@ -36,8 +36,6 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="admin-dashboard.html" class="text-brand-muted hover:text-brand-text transition-colors">Dashboard</a>
                     <a href="create-event.html" class="text-brand-primary font-medium">Create Event</a>
-                    <a href="analytics.html" class="text-brand-muted hover:text-brand-text transition-colors">Analytics</a>
-                    <a href="rooms.html" class="text-brand-muted hover:text-brand-text transition-colors">Rooms</a>
                 </div>
 
                 <!-- User Menu -->
@@ -64,12 +62,12 @@
                         </button>
                         
                         <!-- Dropdown Menu -->
-                        <div class="absolute right-0 mt-2 w-48 glass-effect rounded-2xl shadow-2xl opacity-0 invisible transition-all duration-200">
+                        <div class="absolute right-0 mt-2 w-48 bg-brand-card border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible transition-all duration-200">
                             <div class="py-2">
-                                <a href="profile.html" class="block px-4 py-2 text-sm text-brand-text hover:bg-white/5 transition-colors">Profile</a>
-                                <a href="settings.html" class="block px-4 py-2 text-sm text-brand-text hover:bg-white/5 transition-colors">Settings</a>
+                                <a href="profile.html" class="block px-4 py-2 text-sm text-brand-text hover:bg-white/10 transition-colors">Profile</a>
+                                <a href="settings.html" class="block px-4 py-2 text-sm text-brand-text hover:bg-white/10 transition-colors">Settings</a>
                                 <hr class="border-white/10 my-2">
-                                <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-brand-danger hover:bg-white/5 transition-colors">Logout</button>
+                                <button id="logout-btn" class="block w-full text-left px-4 py-2 text-sm text-brand-danger hover:bg-white/10 transition-colors">Logout</button>
                             </div>
                         </div>
                     </div>
@@ -88,8 +86,6 @@
                 <div class="flex flex-col space-y-4 pt-4">
                     <a href="admin-dashboard.html" class="text-brand-muted hover:text-brand-text transition-colors">Dashboard</a>
                     <a href="create-event.html" class="text-brand-primary font-medium">Create Event</a>
-                    <a href="analytics.html" class="text-brand-muted hover:text-brand-text transition-colors">Analytics</a>
-                    <a href="rooms.html" class="text-brand-muted hover:text-brand-text transition-colors">Rooms</a>
                     <hr class="border-white/10">
                     <a href="profile.html" class="text-brand-muted hover:text-brand-text transition-colors">Profile</a>
                     <a href="settings.html" class="text-brand-muted hover:text-brand-text transition-colors">Settings</a>
@@ -141,19 +137,29 @@
 
                             <div class="form-group">
                                 <label for="event-category" class="form-label">Category *</label>
-                                <select id="event-category" name="category" class="input" required>
-                                    <option value="">Select category</option>
-                                    <option value="academic">Academic</option>
-                                    <option value="social">Social</option>
-                                    <option value="cultural">Cultural</option>
-                                    <option value="sports">Sports</option>
-                                    <option value="technology">Technology</option>
-                                    <option value="arts">Arts & Music</option>
-                                    <option value="career">Career Development</option>
-                                    <option value="workshop">Workshop</option>
-                                    <option value="conference">Conference</option>
-                                    <option value="other">Other</option>
+                                <select id="event-category" name="category" class="input bg-brand-card border-white/10 text-brand-text" required>
+                                    <option value="" class="bg-brand-card">Select category</option>
+                                    <option value="academic" class="bg-brand-card">Academic</option>
+                                    <option value="social" class="bg-brand-card">Social</option>
+                                    <option value="cultural" class="bg-brand-card">Cultural</option>
+                                    <option value="sports" class="bg-brand-card">Sports</option>
+                                    <option value="technology" class="bg-brand-card">Technology</option>
+                                    <option value="arts" class="bg-brand-card">Arts & Music</option>
+                                    <option value="career" class="bg-brand-card">Career Development</option>
+                                    <option value="workshop" class="bg-brand-card">Workshop</option>
+                                    <option value="conference" class="bg-brand-card">Conference</option>
+                                    <option value="other" class="bg-brand-card">Other</option>
                                 </select>
+                                <style>
+                                    /* Ensure dark theme for dropdown in browsers that support it */
+                                    #event-category {
+                                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='%23ffffff'%3E%3Cpath fill-rule='evenodd' d='M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+                                        background-repeat: no-repeat;
+                                        background-position: right 0.5rem center;
+                                        background-size: 1.5em 1.5em;
+                                        appearance: none;
+                                    }
+                                </style>
                                 <div class="form-error" id="category-error"></div>
                             </div>
                         </div>
@@ -183,9 +189,15 @@
                                     type="date" 
                                     id="event-date" 
                                     name="date" 
-                                    class="input" 
+                                    class="input bg-brand-card border-white/10 text-brand-text" 
                                     required
                                 >
+                                <style>
+                                    /* Dark theme for date input */
+                                    #event-date::-webkit-calendar-picker-indicator {
+                                        filter: invert(1) brightness(2);
+                                    }
+                                </style>
                                 <div class="form-error" id="date-error"></div>
                             </div>
 
@@ -195,19 +207,22 @@
                                     type="time" 
                                     id="event-start-time" 
                                     name="startTime" 
-                                    class="input" 
+                                    class="input bg-brand-card border-white/10 text-brand-text" 
                                     required
                                 >
-                                <div class="form-error" id="start-time-error"></div>
-                            </div>
+                                <style>
+                                    /* Dark theme for time input */
+                                    #event-start-time::-webkit-calendar-picker-indicator,
+                                    #event-end-time::-webkit-calendar-picker-indicator {
+                                        filter: invert(1) brightness(2);
+                                    }
+                                </style>
 
-                            <div class="form-group">
-                                <label for="event-end-time" class="form-label">End Time *</label>
                                 <input 
                                     type="time" 
                                     id="event-end-time" 
                                     name="endTime" 
-                                    class="input" 
+                                    class="input bg-brand-card border-white/10 text-brand-text" 
                                     required
                                 >
                                 <div class="form-error" id="end-time-error"></div>
@@ -242,17 +257,27 @@
 
                             <div class="form-group">
                                 <label for="event-room" class="form-label">Room/Venue</label>
-                                <select id="event-room" name="room" class="input">
-                                    <option value="">Select room (optional)</option>
-                                    <option value="auditorium">Main Auditorium</option>
-                                    <option value="conference-room-1">Conference Room 1</option>
-                                    <option value="conference-room-2">Conference Room 2</option>
-                                    <option value="seminar-hall">Seminar Hall</option>
-                                    <option value="lab-101">Computer Lab 101</option>
-                                    <option value="lab-102">Computer Lab 102</option>
-                                    <option value="outdoor">Outdoor Venue</option>
-                                    <option value="other">Other</option>
+                                <select id="event-room" name="room" class="input bg-brand-card border-white/10 text-brand-text">
+                                    <option value="" class="bg-brand-card">Select room (optional)</option>
+                                    <option value="auditorium" class="bg-brand-card">Main Auditorium</option>
+                                    <option value="conference-room-1" class="bg-brand-card">Conference Room 1</option>
+                                    <option value="conference-room-2" class="bg-brand-card">Conference Room 2</option>
+                                    <option value="seminar-hall" class="bg-brand-card">Seminar Hall</option>
+                                    <option value="lab-101" class="bg-brand-card">Computer Lab 101</option>
+                                    <option value="lab-102" class="bg-brand-card">Computer Lab 102</option>
+                                    <option value="outdoor" class="bg-brand-card">Outdoor Venue</option>
+                                    <option value="other" class="bg-brand-card">Other</option>
                                 </select>
+                                <style>
+                                    /* Ensure dark theme for dropdown in browsers that support it */
+                                    #event-room {
+                                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='%23ffffff'%3E%3Cpath fill-rule='evenodd' d='M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+                                        background-repeat: no-repeat;
+                                        background-position: right 0.5rem center;
+                                        background-size: 1.5em 1.5em;
+                                        appearance: none;
+                                    }
+                                </style>
                                 <div class="form-error" id="room-error"></div>
                             </div>
                         </div>
@@ -502,6 +527,22 @@
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('hidden');
+        });
+
+        // User dropdown menu toggle
+        const userMenu = document.getElementById('user-menu');
+        const dropdownMenu = userMenu.querySelector('.absolute');
+
+        userMenu.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('opacity-0');
+            dropdownMenu.classList.toggle('invisible');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userMenu.contains(e.target)) {
+                dropdownMenu.classList.add('opacity-0', 'invisible');
+            }
         });
 
         // Theme toggle

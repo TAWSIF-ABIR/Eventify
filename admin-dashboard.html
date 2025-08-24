@@ -173,22 +173,22 @@
                                         </svg>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-2xl font-bold text-brand-text" id="selected-event-views">0</p>
+                                        <p class="text-2xl font-bold text-brand-text" id="selected-event-views">-</p>
                                         <p class="text-sm text-brand-muted">Total Views</p>
                                     </div>
                                 </div>
                                 <div class="space-y-3">
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-brand-muted">Today:</span>
-                                        <span class="text-brand-text font-medium" id="today-views">0</span>
+                                        <span class="text-brand-text font-medium" id="today-views">-</span>
                                     </div>
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-brand-muted">This Week:</span>
-                                        <span class="text-brand-text font-medium" id="week-views">0</span>
+                                        <span class="text-brand-text font-medium" id="week-views">-</span>
                                     </div>
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-brand-muted">This Month:</span>
-                                        <span class="text-brand-text font-medium" id="month-views">0</span>
+                                        <span class="text-brand-text font-medium" id="month-views">-</span>
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@
                                         </svg>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-2xl font-bold text-brand-text" id="popularity-score">0</p>
+                                        <p class="text-2xl font-bold text-brand-text" id="popularity-score">-</p>
                                         <p class="text-sm text-brand-muted">Popularity Score</p>
                                     </div>
                                 </div>
@@ -231,7 +231,7 @@
                                         </svg>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-2xl font-bold text-brand-text" id="top-attended-count">0</p>
+                                        <p class="text-2xl font-bold text-brand-text" id="top-attended-count">-</p>
                                         <p class="text-sm text-brand-muted">Top Attended</p>
                                     </div>
                                 </div>
@@ -242,7 +242,7 @@
                                     </div>
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-brand-muted">Attendees:</span>
-                                        <span class="text-brand-text font-medium" id="selected-event-attendees">0</span>
+                                        <span class="text-brand-text font-medium" id="selected-event-attendees">-</span>
                                     </div>
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-brand-muted">Capacity:</span>
@@ -1406,6 +1406,24 @@
 
 
 
+
+        // Event selector functionality
+        document.getElementById('event-selector').addEventListener('change', function() {
+            const selectedEventId = this.value;
+            if (selectedEventId) {
+                adminDashboardPage.loadEventAnalytics(selectedEventId);
+            } else {
+                document.getElementById('analytics-content').classList.add('hidden');
+            }
+        });
+
+        // Refresh analytics button
+        document.getElementById('refresh-analytics').addEventListener('click', function() {
+            const selectedEventId = document.getElementById('event-selector').value;
+            if (selectedEventId) {
+                adminDashboardPage.loadEventAnalytics(selectedEventId);
+            }
+        });
 
         console.log('Admin dashboard script loaded');
     </script>

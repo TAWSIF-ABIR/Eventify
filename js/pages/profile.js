@@ -20,16 +20,7 @@ class ProfilePage {
             // Setup UI
             this.setupUI();
             
-            // Test database connection
-            console.log('Testing database connection...');
-            try {
-                const testResult = await dbManager.getUserProfile(this.currentUser.uid);
-                console.log('Database test result:', testResult);
-            } catch (dbError) {
-                console.error('Database connection test failed:', dbError);
-            }
-            
-            // Load user profile
+            // Load user profile from Firebase
             await this.loadUserProfile();
             
             // Setup event listeners
@@ -80,6 +71,7 @@ class ProfilePage {
         // Update sidebar user info
         const userName = document.getElementById('user-name');
         const userEmail = document.getElementById('user-email');
+        const userAvatar = document.getElementById('user-avatar');
         
         if (userName) {
             userName.textContent = this.currentUser.displayName || 'Student';
@@ -88,19 +80,27 @@ class ProfilePage {
         if (userEmail) {
             userEmail.textContent = this.currentUser.email;
         }
+
+        // Update sidebar avatar
+        if (userAvatar) {
+            if (this.userProfile?.avatarUrl) {
+                userAvatar.innerHTML = `<img src="${this.userProfile.avatarUrl}" alt="Profile" class="w-full h-full rounded-full object-cover">`;
+            } else {
+                userAvatar.innerHTML = `
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                `;
+            }
+        }
     }
 
     async loadUserProfile() {
         try {
             console.log('Loading user profile for UID:', this.currentUser.uid);
             
-            // Test dbManager connection
-            console.log('Testing dbManager connection...');
-            console.log('dbManager object:', dbManager);
-            
-            // Get user profile from database
+            // Get user profile from Firebase database
             this.userProfile = await dbManager.getUserProfile(this.currentUser.uid);
-            console.log('Profile data received:', this.userProfile);
+            console.log('Profile data received from Firebase:', this.userProfile);
             
             // If no profile exists, create a basic one with current user data
             if (!this.userProfile) {
@@ -115,6 +115,9 @@ class ProfilePage {
                     department: '',
                     phone: '',
                     bio: '',
+                    avatarUrl: null,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
                     profileComplete: false
                 };
                 
@@ -135,14 +138,19 @@ class ProfilePage {
             }
             
             // Populate form fields
-            console.log('About to populate form fields...');
             this.populateProfileForm();
-            console.log('Form fields populated');
             
             // Update profile header
-            console.log('About to update profile header...');
             this.updateProfileHeader();
-            console.log('Profile header updated');
+            
+            // Update sidebar user info
+            this.updateUserInfo();
+            
+            // Update additional user data fields
+            this.updateUserDataFields();
+            
+            // Update avatar preview
+            this.updateAvatarPreview();
             
             console.log('User profile loaded successfully:', this.userProfile);
             
@@ -158,9 +166,9 @@ class ProfilePage {
             return;
         }
 
-        console.log('Starting to populate form fields...');
+        console.log('Starting to populate form fields with Firebase data...');
         
-        // Populate form fields with all user data
+        // Populate form fields with all user data from Firebase
         const fullName = document.getElementById('full-name');
         const studentId = document.getElementById('student-id');
         const email = document.getElementById('email');
@@ -188,7 +196,7 @@ class ProfilePage {
             console.log('Set studentId to:', studentId.value);
         }
         if (email) {
-            email.value = this.currentUser.email || '';
+            email.value = this.userProfile.email || this.currentUser.email || '';
             console.log('Set email to:', email.value);
         }
         if (session) {
@@ -209,13 +217,13 @@ class ProfilePage {
         }
         
         // Log the data being populated for debugging
-        console.log('Form populated successfully with profile data:', this.userProfile);
+        console.log('Form populated successfully with Firebase profile data:', this.userProfile);
     }
 
     updateProfileHeader() {
         if (!this.userProfile) return;
 
-        // Update profile header display with all user information
+        // Update profile header display with all user information from Firebase
         const profileDisplayName = document.getElementById('profile-display-name');
         const profileDisplayEmail = document.getElementById('profile-display-email');
         const profileDisplayRole = document.getElementById('profile-display-role');
@@ -225,19 +233,116 @@ class ProfilePage {
         }
         
         if (profileDisplayEmail) {
-            profileDisplayEmail.textContent = this.currentUser.email;
+            profileDisplayEmail.textContent = this.userProfile.email || this.currentUser.email;
         }
         
         if (profileDisplayRole) {
             profileDisplayRole.textContent = this.userProfile.role || 'Student';
         }
+
+        // Update profile avatar in header
+        const profileAvatar = document.querySelector('.card.p-8.mb-8 .w-24.h-24');
+        if (profileAvatar && this.userProfile.avatarUrl) {
+            profileAvatar.innerHTML = `<img src="${this.userProfile.avatarUrl}" alt="Profile" class="w-full h-full rounded-3xl object-cover">`;
+        } else if (profileAvatar) {
+            profileAvatar.innerHTML = `
+                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                </svg>
+            `;
+        }
         
         // Log the profile header update for debugging
-        console.log('Updated profile header with:', {
+        console.log('Updated profile header with Firebase data:', {
             displayName: this.userProfile.displayName,
-            email: this.currentUser.email,
-            role: this.userProfile.role
+            email: this.userProfile.email,
+            role: this.userProfile.role,
+            avatarUrl: this.userProfile.avatarUrl
         });
+    }
+
+    updateUserDataFields() {
+        if (!this.userProfile) return;
+
+        // Update additional user data fields
+        const userUid = document.getElementById('user-uid');
+        const userCreated = document.getElementById('user-created');
+        const userUpdated = document.getElementById('user-updated');
+        const userAvatarStatus = document.getElementById('user-avatar-status');
+        
+        if (userUid) {
+            userUid.textContent = this.userProfile.uid || 'N/A';
+        }
+        
+        if (userCreated) {
+            if (this.userProfile.createdAt) {
+                const createdDate = this.userProfile.createdAt instanceof Date 
+                    ? this.userProfile.createdAt 
+                    : this.userProfile.createdAt.toDate ? this.userProfile.createdAt.toDate() 
+                    : new Date(this.userProfile.createdAt);
+                userCreated.textContent = createdDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else {
+                userCreated.textContent = 'N/A';
+            }
+        }
+        
+        if (userUpdated) {
+            if (this.userProfile.updatedAt) {
+                const updatedDate = this.userProfile.updatedAt instanceof Date 
+                    ? this.userProfile.updatedAt 
+                    : this.userProfile.updatedAt.toDate ? this.userProfile.updatedAt.toDate() 
+                    : new Date(this.userProfile.updatedAt);
+                userUpdated.textContent = updatedDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else {
+                userUpdated.textContent = 'N/A';
+            }
+        }
+        
+        if (userAvatarStatus) {
+            if (this.userProfile.avatarUrl) {
+                userAvatarStatus.textContent = 'Avatar uploaded';
+                userAvatarStatus.className = 'text-sm text-brand-success';
+            } else {
+                userAvatarStatus.textContent = 'No avatar';
+                userAvatarStatus.className = 'text-sm text-brand-muted';
+            }
+        }
+        
+        console.log('Updated user data fields with Firebase data:', {
+            uid: this.userProfile.uid,
+            createdAt: this.userProfile.createdAt,
+            updatedAt: this.userProfile.updatedAt,
+            avatarUrl: this.userProfile.avatarUrl
+        });
+    }
+
+    updateAvatarPreview() {
+        if (!this.userProfile) return;
+
+        const profileAvatarPreview = document.getElementById('profile-avatar-preview');
+        if (profileAvatarPreview) {
+            if (this.userProfile.avatarUrl) {
+                profileAvatarPreview.innerHTML = `<img src="${this.userProfile.avatarUrl}" alt="Profile" class="w-full h-full rounded-3xl object-cover">`;
+            } else {
+                profileAvatarPreview.innerHTML = `
+                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                    </svg>
+                `;
+            }
+        }
     }
 
     async saveProfile() {
@@ -268,9 +373,9 @@ class ProfilePage {
                 `;
             }
             
-            console.log('Saving profile data:', formData);
+            console.log('Saving profile data to Firebase:', formData);
             
-            // Update user profile in database
+            // Update user profile in Firebase database
             const result = await dbManager.updateUserProfile(this.currentUser.uid, formData);
             
             if (!result.success) {
@@ -292,7 +397,7 @@ class ProfilePage {
             // Show success message
             toast.success('Profile updated successfully!');
             
-            console.log('Profile saved successfully:', this.userProfile);
+            console.log('Profile saved successfully to Firebase:', this.userProfile);
             
         } catch (error) {
             console.error('Error saving profile:', error);
@@ -336,7 +441,8 @@ class ProfilePage {
             department: department ? department.value.trim() : '',
             phone: phone ? phone.value.trim() : '',
             bio: bio ? bio.value.trim() : '',
-            role: 'student',
+            role: this.userProfile?.role || 'student',
+            avatarUrl: this.userProfile?.avatarUrl || null,
             updatedAt: new Date()
         };
     }
@@ -400,6 +506,19 @@ class ProfilePage {
             });
         }
         
+        // Avatar upload
+        const avatarUploadBtn = document.getElementById('avatar-upload-btn');
+        const avatarUpload = document.getElementById('avatar-upload');
+        if (avatarUploadBtn && avatarUpload) {
+            avatarUploadBtn.addEventListener('click', () => {
+                avatarUpload.click();
+            });
+            
+            avatarUpload.addEventListener('change', (e) => {
+                this.handleAvatarUpload(e.target.files[0]);
+            });
+        }
+        
         // Add profile completion indicator
         this.showProfileCompletionStatus();
     }
@@ -431,6 +550,38 @@ class ProfilePage {
                 profileHeader.appendChild(statusDiv);
             }
         }
+    }
+
+    handleAvatarUpload(file) {
+        if (!file) return;
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please select a valid image file');
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error('Image size must be less than 5MB');
+            return;
+        }
+        
+        // Create a preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const profileAvatarPreview = document.getElementById('profile-avatar-preview');
+            if (profileAvatarPreview) {
+                profileAvatarPreview.innerHTML = `<img src="${e.target.result}" alt="Profile" class="w-full h-full rounded-3xl object-cover">`;
+            }
+        };
+        reader.readAsDataURL(file);
+        
+        // Store the data URL in the user profile
+        // In a real app, you'd upload to Firebase Storage and get a URL
+        this.userProfile.avatarUrl = e.target.result;
+        
+        toast.success('Avatar updated! Click Save Changes to persist the change.');
     }
 
     async handleLogout() {

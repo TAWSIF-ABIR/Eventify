@@ -467,17 +467,18 @@
                 </div>
             </div>
 
-            <!-- Enhanced Chat Input with Glass Effect -->
+            <!-- Enhanced Chat Input with Capsule Design -->
             <div class="p-6 bg-gradient-to-t from-white/80 to-white/60 backdrop-blur-xl border-t border-white/20">
                 <div class="flex space-x-4 mb-4">
-                    <div class="flex-1 relative">
+                    <div class="flex-1 relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-primary/20 to-brand-accent/20 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-all duration-500"></div>
                         <input 
                             type="text" 
                             id="chat-input"
                             placeholder="Ask me anything about Eventify..." 
-                            class="w-full px-5 py-4 bg-gray-100/90 backdrop-blur-sm border border-gray-300/40 rounded-2xl text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent/50 transition-all duration-300 shadow-lg"
+                            class="relative w-full px-6 py-4 bg-brand-card border border-white/10 text-brand-text placeholder-brand-muted rounded-full focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent/50 transition-all duration-300 shadow-lg group-hover:shadow-xl"
                         >
-                        <div id="typing-indicator" class="hidden absolute right-4 top-1/2 transform -translate-y-1/2">
+                        <div id="typing-indicator" class="hidden absolute right-6 top-1/2 transform -translate-y-1/2">
                             <div class="flex space-x-1">
                                 <div class="w-2 h-2 bg-brand-accent rounded-full animate-bounce"></div>
                                 <div class="w-2 h-2 bg-brand-accent rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
@@ -488,21 +489,23 @@
                     <button 
                         id="send-btn"
                         onclick="sendMessage()"
-                        class="w-14 h-14 bg-gradient-to-r from-brand-primary to-brand-accent rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center group"
+                        class="relative w-16 h-16 bg-gradient-to-r from-brand-primary to-brand-accent rounded-full hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center group"
                     >
-                        <svg class="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-primary/20 to-brand-accent/20 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-all duration-500"></div>
+                        <svg class="relative w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300 z-10" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
                         </svg>
                     </button>
                 </div>
 
-                <!-- Enhanced Quick Questions with Better Design -->
+                <!-- Enhanced Quick Questions with Capsule Design -->
                 <div class="grid grid-cols-2 gap-3">
                     <button 
                         onclick="askQuickQuestion('How do I register for an event?')"
-                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-accent/10 to-brand-accent/5 text-brand-accent rounded-2xl hover:from-brand-accent/20 hover:to-brand-accent/10 transition-all duration-300 border border-brand-accent/20 hover:border-brand-accent/30 hover:scale-105 shadow-md"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-accent/10 to-brand-accent/5 text-brand-accent rounded-full hover:from-brand-accent/20 hover:to-brand-accent/10 transition-all duration-300 border border-brand-accent/20 hover:border-brand-accent/30 hover:scale-105 shadow-md group relative"
                     >
-                        <div class="flex items-center space-x-2">
+                        <div class="absolute -inset-0.5 bg-brand-accent/20 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-all duration-500"></div>
+                        <div class="relative flex items-center space-x-2 z-10">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
@@ -511,9 +514,10 @@
                     </button>
                     <button 
                         onclick="askQuickQuestion('What types of events are available?')"
-                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-primary/10 to-brand-primary/5 text-brand-primary rounded-2xl hover:from-brand-primary/20 hover:to-brand-primary/10 transition-all duration-300 border border-brand-primary/20 hover:border-brand-primary/30 hover:scale-105 shadow-md"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-primary/10 to-brand-primary/5 text-brand-primary rounded-full hover:from-brand-primary/20 hover:to-brand-primary/10 transition-all duration-300 border border-brand-primary/20 hover:border-brand-primary/30 hover:scale-105 shadow-md group relative"
                     >
-                        <div class="flex items-center space-x-2">
+                        <div class="absolute -inset-0.5 bg-brand-primary/20 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-all duration-500"></div>
+                        <div class="relative flex items-center space-x-2 z-10">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
@@ -522,9 +526,10 @@
                     </button>
                     <button 
                         onclick="askQuickQuestion('How do I create a club event?')"
-                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-accent/10 to-brand-accent/5 text-brand-accent rounded-2xl hover:from-brand-accent/20 hover:to-brand-accent/10 transition-all duration-300 border border-brand-accent/20 hover:border-brand-accent/30 hover:scale-105 shadow-md"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-accent/10 to-brand-accent/5 text-brand-accent rounded-full hover:from-brand-accent/20 hover:to-brand-accent/10 transition-all duration-300 border border-brand-accent/20 hover:border-brand-accent/30 hover:scale-105 shadow-md group relative"
                     >
-                        <div class="flex items-center space-x-2">
+                        <div class="absolute -inset-0.5 bg-brand-accent/20 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-all duration-500"></div>
+                        <div class="relative flex items-center space-x-2 z-10">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M12 6v6m-3 0h6m-9-3a9 9 0 1190 0 9 9 0 01-9 9z"/>
                             </svg>
@@ -533,9 +538,10 @@
                     </button>
                     <button 
                         onclick="testGeminiAPIConnection()"
-                        class="px-4 py-3 text-sm bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 text-yellow-600 rounded-2xl hover:from-yellow-500/20 hover:to-yellow-500/10 transition-all duration-300 border border-yellow-500/20 hover:border-yellow-500/30 hover:scale-105 shadow-md"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 text-yellow-600 rounded-full hover:from-yellow-500/20 hover:to-yellow-500/10 transition-all duration-300 border border-yellow-500/20 hover:border-yellow-500/30 hover:scale-105 shadow-md group relative"
                     >
-                        <div class="flex items-center space-x-2">
+                        <div class="absolute -inset-0.5 bg-yellow-500/20 rounded-full blur-sm opacity-0 group-hover:opacity-50 transition-all duration-500"></div>
+                        <div class="relative flex items-center space-x-2 z-10">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
