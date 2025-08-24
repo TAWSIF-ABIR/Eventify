@@ -1014,9 +1014,9 @@
 
                 // Update event attendee count in Firestore
                 const eventRef = doc(db, 'events', eventId);
-                await updateDoc(eventRef, {
-                    attendeeCount: increment(-1) // Decrement by 1
-                });
+                    await updateDoc(eventRef, {
+                        attendeeCount: increment(-1) // Decrement by 1
+                    });
 
                 // Verify the update was successful
                 const updatedEventDoc = await getDoc(eventRef);
