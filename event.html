@@ -201,12 +201,6 @@
 
                         <!-- Action Buttons -->
                         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                            <button id="register-btn" class="btn btn-primary px-8 py-4 text-lg font-medium hover:scale-105 transition-transform duration-300 shadow-lg">
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                                </svg>
-                                Register for Event
-                            </button>
                             <button id="share-btn" class="btn btn-secondary px-8 py-4 text-lg font-medium hover:scale-105 transition-transform duration-300">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
@@ -452,27 +446,7 @@
             }
         });
 
-        // Real-time attendee listener
-        function setupAttendeeListener(eventId) {
-            const attendeesRef = collection(db, 'events', eventId, 'attendees');
-            return onSnapshot(attendeesRef, (snapshot) => {
-                const attendeeCount = snapshot.size;
-                const attendeeCountEl = document.getElementById('attendee-count');
-                const eventCapacityEl = document.getElementById('event-capacity');
-                
-                if (attendeeCountEl) {
-                    attendeeCountEl.textContent = attendeeCount;
-                }
-                
-                if (eventCapacityEl && currentEvent && currentEvent.capacity) {
-                    eventCapacityEl.textContent = `${attendeeCount}/${currentEvent.capacity}`;
-                }
-                
-                console.log('Real-time attendee count updated:', attendeeCount);
-            }, (error) => {
-                console.error('Error listening to attendees:', error);
-            });
-        }
+        // Removed attendee listener to avoid permission errors
 
         // Load event details
         async function loadEventDetails() {
@@ -501,9 +475,6 @@
                 
                 // Track event view
                 await trackEventView(eventId);
-                
-                // Setup real-time attendee listener
-                setupAttendeeListener(eventId);
                 
                 // Display event details
                 displayEventDetails();
@@ -588,80 +559,7 @@
             document.getElementById('error-state').classList.remove('hidden');
         }
 
-        // Event registration
-        document.getElementById('register-btn').addEventListener('click', async () => {
-            if (!auth.currentUser) {
-                window.location.href = 'auth-new.html';
-                return;
-            }
-
-            if (!currentEvent) {
-                showToast('Event details not loaded. Please try again.', 'error');
-                return;
-            }
-
-            try {
-                // Import registration function
-                const { registerForEvent } = await import('./js/db.js');
-
-                // Attempt registration
-                const result = await registerForEvent(
-                    currentEvent.id, 
-                    auth.currentUser.uid, 
-                    {
-                        name: auth.currentUser.displayName || 'User',
-                        email: auth.currentUser.email
-                    }
-                );
-
-                // Handle registration result
-                if (result.success) {
-                    // Verify attendee count
-                    const attendeesRef = collection(db, 'events', currentEvent.id, 'attendees');
-                    const attendeeSnapshot = await getDocs(attendeesRef);
-                    
-                    console.log('Registration Verification:', {
-                        registrationResult: result,
-                        totalAttendees: attendeeSnapshot.size,
-                        attendeeIds: attendeeSnapshot.docs.map(doc => doc.id)
-                    });
-
-                    // Show success toast with attendee count
-                    showToast(
-                        `Successfully registered for "${currentEvent.title}"! ` +
-                        `Total attendees: ${attendeeSnapshot.size}`, 
-                        'success'
-                    );
-                } else {
-                    // Handle specific error codes
-                    const errorMessages = {
-                        'capacity-full': 'Sorry, this event is already full.',
-                        'event-not-found': 'The event could not be found.',
-                        'registration-failed': 'Failed to register for the event.'
-                    };
-
-                    showToast(
-                        errorMessages[result.code] || result.error || 'Registration failed', 
-                        'error'
-                    );
-                }
-
-            } catch (error) {
-                console.error('Detailed registration error:', {
-                    message: error.message,
-                    code: error.code,
-                    stack: error.stack
-                });
-                
-                // Show detailed error toast
-                const errorMessage = 
-                    error.code === 'permission-denied' ? 'Permission denied. Please check your access.' :
-                    error.code === 'not-found' ? 'Event or registration not found.' :
-                    'Failed to register for event. Please try again.';
-                
-                showToast(errorMessage, 'error');
-            }
-        });
+        // Registration functionality removed to avoid permission errors
 
         // Toast notification function
         function showToast(message, type = 'info') {
@@ -728,6 +626,8 @@
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('hidden');
         });
+
+        // Registration functions removed to avoid permission errors
 
         // Load event details when page loads
         document.addEventListener('DOMContentLoaded', () => {

@@ -36,7 +36,31 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="text-brand-text hover:text-brand-primary transition-colors font-medium">Home</a>
                     <a href="events.html" class="text-brand-muted hover:text-brand-text transition-colors">Events</a>
-                    <a href="#" onclick="openAIChat(); return false;" class="text-brand-muted hover:text-brand-text transition-colors">AI FAQ Chat</a>
+                    <a href="#" onclick="openAIChat(); return false;" class="group relative flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 hover:from-brand-primary/20 hover:to-brand-accent/20 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-brand-primary/25">
+                        <!-- Animated AI Logo -->
+                        <div class="relative">
+                            <!-- Main AI Icon -->
+                            <div class="w-6 h-6 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 21H5V3H13V9H19V21M16 11C16 12.66 14.66 14 13 14C11.34 14 10 12.66 10 11C10 9.34 11.34 8 13 8C14.66 8 16 9.34 16 11M13 10C12.45 10 12 10.45 12 11C12 11.55 12.45 12 13 12C13.55 12 14 11.55 14 11C14 10.45 13.55 10 13 10M9 16C9 17.66 7.66 19 6 19C4.34 19 3 17.66 3 16C3 14.34 4.34 13 6 13C7.66 13 9 14.34 9 16M6 15C5.45 15 5 15.45 5 16C5 16.55 5.45 17 6 17C6.55 17 7 16.55 7 16C7 15.45 6.55 15 6 15M18 16C18 17.66 16.66 19 15 19C13.34 19 12 17.66 12 16C12 14.34 13.34 13 15 13C16.66 13 18 14.34 18 16M15 15C14.45 15 14 15.45 14 16C14 16.55 14.45 17 15 17C15.55 17 16 16.55 16 16C16 15.45 15.55 15 15 15Z"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Animated Pulse Rings -->
+                            <div class="absolute inset-0 w-6 h-6 bg-gradient-to-br from-brand-primary/40 to-brand-accent/40 rounded-xl animate-ping opacity-75"></div>
+                            <div class="absolute inset-0 w-6 h-6 bg-gradient-to-br from-brand-accent/30 to-brand-primary/30 rounded-xl animate-pulse"></div>
+                            
+                            <!-- Floating Particles -->
+                            <div class="absolute -top-1 -right-1 w-2 h-2 bg-brand-accent rounded-full animate-bounce opacity-80" style="animation-delay: 0.5s;"></div>
+                            <div class="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-brand-primary rounded-full animate-bounce opacity-80" style="animation-delay: 1s;"></div>
+                        </div>
+                        
+                        <!-- Text with Gradient -->
+                        <span class="font-semibold bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent group-hover:from-brand-accent group-hover:to-brand-primary transition-all duration-300">AI FAQ Chat</span>
+                        
+                        <!-- Hover Glow Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-accent/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
+                    </a>
                     
                     <!-- Guest Navigation -->
                     <div data-auth="guest" class="flex items-center space-x-4">
@@ -96,7 +120,31 @@
                 <div class="flex flex-col space-y-4 pt-4">
                     <a href="index.html" class="text-brand-text hover:text-brand-primary transition-colors font-medium">Home</a>
                     <a href="events.html" class="text-brand-muted hover:text-brand-text transition-colors">Events</a>
-                    <a href="#" onclick="openAIChat(); return false;" class="text-brand-muted hover:text-brand-text transition-colors">AI FAQ Chat</a>
+                    <a href="#" onclick="openAIChat(); return false;" class="group relative flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 hover:from-brand-primary/20 hover:to-brand-accent/20 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-brand-primary/25">
+                        <!-- Animated AI Logo -->
+                        <div class="relative">
+                            <!-- Main AI Icon -->
+                            <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 21H5V3H13V9H19V21M16 11C16 12.66 14.66 14 13 14C11.34 14 10 12.66 10 11C10 9.34 11.34 8 13 8C14.66 8 16 9.34 16 11M13 10C12.45 10 12 10.45 12 11C12 11.55 12.45 12 13 12C13.55 12 14 11.55 14 11C14 10.45 13.55 10 13 10M9 16C9 17.66 7.66 19 6 19C4.34 19 3 17.66 3 16C3 14.34 4.34 13 6 13C7.66 13 9 14.34 9 16M6 15C5.45 15 5 15.45 5 16C5 16.55 5.45 17 6 17C6.55 17 7 16.55 7 16C7 15.45 6.55 15 6 15M18 16C18 17.66 16.66 19 15 19C13.34 19 12 17.66 12 16C12 14.34 13.34 13 15 13C16.66 13 18 14.34 18 16M15 15C14.45 15 14 15.45 14 16C14 16.55 14.45 17 15 17C15.55 17 16 16.55 16 16C16 15.45 15.55 15 15 15Z"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Animated Pulse Rings -->
+                            <div class="absolute inset-0 w-8 h-8 bg-gradient-to-br from-brand-primary/40 to-brand-accent/40 rounded-xl animate-ping opacity-75"></div>
+                            <div class="absolute inset-0 w-8 h-8 bg-gradient-to-br from-brand-accent/30 to-brand-primary/30 rounded-xl animate-pulse"></div>
+                            
+                            <!-- Floating Particles -->
+                            <div class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-brand-accent rounded-full animate-bounce opacity-80" style="animation-delay: 0.5s;"></div>
+                            <div class="absolute -bottom-1 -left-1 w-2 h-2 bg-brand-primary rounded-full animate-bounce opacity-80" style="animation-delay: 1s;"></div>
+                        </div>
+                        
+                        <!-- Text with Gradient -->
+                        <span class="font-semibold text-lg bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent group-hover:from-brand-accent group-hover:to-brand-primary transition-all duration-300">AI FAQ Chat</span>
+                        
+                        <!-- Hover Glow Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-accent/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
+                    </a>
                     
                     <!-- Guest Mobile Navigation -->
                     <div data-auth="guest" class="flex flex-col space-y-2">
@@ -138,28 +186,10 @@
                         Connect with your campus community through exciting events, workshops, and activities organized by university clubs.
                     </p>
 
-                                         <!-- Enhanced Search Bar -->
-                    <div class="max-w-2xl mx-auto mb-12">
-                         <div class="relative group">
-                            <input 
-                                type="text" 
-                                placeholder="Search events, clubs, or categories..." 
-                                 class="w-full px-6 py-4 pl-14 text-lg bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all duration-300 group-hover:bg-white/15 group-hover:border-white/30"
-                                id="hero-search"
-                            >
-                             <svg class="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-brand-muted group-hover:text-brand-primary transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
-                            </svg>
-                             <button class="absolute right-3 top-1/2 transform -translate-y-1/2 btn btn-primary px-6 py-2 hover:scale-105 transition-transform duration-300" id="hero-search-btn">
-                                Search
-                            </button>
-                             <!-- Search bar glow effect -->
-                             <div class="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-accent/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
-                        </div>
-                    </div>
+
 
                     <div class="flex justify-center mb-16">
-                        <a href="events.html" class="btn btn-primary text-lg px-10 py-5 glow-effect">
+                        <a href="events.html" class="btn btn-primary text-lg px-10 py-5 glow-effect cursor-pointer relative z-10">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
@@ -167,30 +197,7 @@
                         </a>
                     </div>
 
-                                         <!-- Enhanced Stats -->
-                    <div class="grid grid-cols-3 gap-8 max-w-md mx-auto text-center mb-16">
-                         <div class="animate-fade-in group">
-                             <div class="relative">
-                                 <div class="text-3xl font-bold text-brand-primary mb-1 group-hover:scale-110 transition-transform duration-300" id="total-events-stat">500+</div>
-                                 <div class="absolute inset-0 bg-brand-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                             </div>
-                            <div class="text-sm text-brand-muted">Events</div>
-                        </div>
-                         <div class="animate-fade-in group" style="animation-delay: 0.1s">
-                             <div class="relative">
-                                 <div class="text-3xl font-bold text-brand-accent mb-1 group-hover:scale-110 transition-transform duration-300" id="total-clubs-stat">50+</div>
-                                 <div class="absolute inset-0 bg-brand-accent/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                             </div>
-                            <div class="text-sm text-brand-muted">Clubs</div>
-                        </div>
-                         <div class="animate-fade-in group" style="animation-delay: 0.2s">
-                             <div class="relative">
-                                 <div class="text-3xl font-bold text-brand-success mb-1 group-hover:scale-110 transition-transform duration-300" id="total-students-stat">2000+</div>
-                                 <div class="absolute inset-0 bg-brand-success/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                             </div>
-                            <div class="text-sm text-brand-muted">Students</div>
-                        </div>
-                    </div>
+
 
                                          <!-- Decorative Elements -->
                      <div class="relative">
@@ -261,7 +268,7 @@
                                  <!-- Enhanced View All Button -->
                 <div class="text-center mt-16">
                      <div class="relative inline-block group">
-                         <a href="events.html" class="btn btn-primary px-12 py-5 text-lg glow-effect hover:scale-105 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-brand-primary/25">
+                         <a href="events.html" class="btn btn-primary px-12 py-5 text-lg glow-effect hover:scale-105 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-brand-primary/25 cursor-pointer relative z-10">
                              <svg class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -310,7 +317,7 @@
                     
                      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
                          <div class="relative group">
-                             <a href="auth-new.html#signup" class="btn btn-primary text-lg px-12 py-5 glow-effect hover:scale-105 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-brand-primary/25">
+                             <a href="auth-new.html#signup" class="btn btn-primary text-lg px-12 py-5 glow-effect hover:scale-105 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-brand-primary/25 cursor-pointer relative z-10">
                                  <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
                             </svg>
@@ -321,7 +328,7 @@
                          </div>
                          
                          <div class="relative group">
-                             <a href="auth-new.html" class="btn btn-ghost text-lg px-12 py-5 hover:scale-105 transition-all duration-500 border-2 border-white/30 hover:border-white/50 hover:bg-white/5">
+                             <a href="auth-new.html" class="btn btn-ghost text-lg px-12 py-5 hover:scale-105 transition-all duration-500 border-2 border-white/30 hover:border-white/50 hover:bg-white/5 cursor-pointer relative z-10">
                                  <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
                                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a1 1 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="false"/>
                             </svg>
@@ -347,15 +354,15 @@
     <button 
         id="floating-chat-btn"
         onclick="openAIChat()"
-        class="fixed bottom-4 right-4 w-24 h-24 bg-gradient-to-br from-brand-primary via-brand-primary/90 to-brand-accent rounded-3xl shadow-2xl hover:scale-110 transition-all duration-500 z-40 flex items-center justify-center group border-2 border-white/40 backdrop-blur-sm hover:shadow-3xl relative overflow-hidden"
+        class="fixed bottom-6 right-6 w-20 h-20 bg-gradient-to-br from-brand-primary via-brand-primary/90 to-brand-accent rounded-3xl shadow-2xl hover:scale-110 transition-all duration-500 z-50 flex items-center justify-center group border-2 border-white/40 backdrop-blur-sm hover:shadow-3xl overflow-hidden"
     >
         <!-- Beautiful AI Icon with Glow -->
         <div class="relative z-10">
-            <svg class="w-12 h-12 text-white group-hover:scale-110 transition-transform duration-500 drop-shadow-2xl" fill="currentColor" viewBox="0 0 24 24">
+            <svg class="w-10 h-10 text-white group-hover:scale-110 transition-transform duration-500 drop-shadow-2xl" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 21H5V3H13V9H19V21M16 11C16 12.66 14.66 14 13 14C11.34 14 10 12.66 10 11C10 9.34 11.34 8 13 8C14.66 8 16 9.34 16 11M13 10C12.45 10 12 10.45 12 11C12 11.55 12.45 12 13 12C13.55 12 14 11.55 14 11C14 10.45 13.55 10 13 10M9 16C9 17.66 7.66 19 6 19C4.34 19 3 17.66 3 16C3 14.34 4.34 13 6 13C7.66 13 9 14.34 9 16M6 15C5.45 15 5 15.45 5 16C5 16.55 5.45 17 6 17C6.55 17 7 16.55 7 16C7 15.45 6.55 15 6 15M18 16C18 17.66 16.66 19 15 19C13.34 19 12 17.66 12 16C12 14.34 13.34 13 15 13C16.66 13 18 14.34 18 16M15 15C14.45 15 14 15.45 14 16C14 16.55 14.45 17 15 17C15.55 17 16 16.55 16 16C16 15.45 15.55 15 15 15Z"/>
             </svg>
             <!-- Icon Glow Effect -->
-            <div class="absolute inset-0 w-12 h-12 bg-white/20 rounded-full blur-lg group-hover:blur-xl transition-all duration-500"></div>
+            <div class="absolute inset-0 w-10 h-10 bg-white/20 rounded-full blur-lg group-hover:blur-xl transition-all duration-500"></div>
         </div>
         
         <!-- Stunning Pulse Animations -->
@@ -398,7 +405,7 @@
         <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeAIChat()"></div>
         
         <!-- Enhanced Chat Container -->
-        <div class="absolute bottom-0 right-0 w-[420px] h-[680px] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transform transition-all duration-500 scale-95 opacity-0" id="chat-container">
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[420px] h-[680px] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transform transition-all duration-500 scale-95 opacity-0" id="chat-container">
             <!-- Enhanced Chat Header with Glass Effect -->
             <div class="relative bg-gradient-to-r from-brand-primary via-brand-primary/90 to-brand-accent p-6 text-white overflow-hidden">
                 <!-- Background Pattern -->
@@ -468,7 +475,7 @@
                             type="text" 
                             id="chat-input"
                             placeholder="Ask me anything about Eventify..." 
-                            class="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border border-white/40 rounded-2xl text-brand-text placeholder-brand-muted/70 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent/50 transition-all duration-300 shadow-lg"
+                            class="w-full px-5 py-4 bg-gray-100/90 backdrop-blur-sm border border-gray-300/40 rounded-2xl text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent/50 transition-all duration-300 shadow-lg"
                         >
                         <div id="typing-indicator" class="hidden absolute right-4 top-1/2 transform -translate-y-1/2">
                             <div class="flex space-x-1">
@@ -480,6 +487,7 @@
                     </div>
                     <button 
                         id="send-btn"
+                        onclick="sendMessage()"
                         class="w-14 h-14 bg-gradient-to-r from-brand-primary to-brand-accent rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center group"
                     >
                         <svg class="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
@@ -595,13 +603,17 @@
                         </svg>`;
                 }
 
-                // Update CTA buttons
+                // Update CTA buttons for logged-in users
                 const signupBtn = document.querySelector('a[href="auth-new.html#signup"]');
                 const loginBtn = document.querySelector('a[href="auth-new.html"]');
-                if (signupBtn) signupBtn.href = 'dashboard.html';
-                if (loginBtn) loginBtn.href = 'dashboard.html';
-                if (signupBtn) signupBtn.textContent = 'Go to Dashboard';
-                if (loginBtn) loginBtn.textContent = 'View Profile';
+                if (signupBtn) {
+                    signupBtn.href = 'dashboard.html';
+                    signupBtn.textContent = 'Go to Dashboard';
+                }
+                if (loginBtn) {
+                    loginBtn.href = 'dashboard.html';
+                    loginBtn.textContent = 'View Profile';
+                }
                 
 
             } else {
@@ -610,6 +622,18 @@
                 requiredElements.forEach(el => el.classList.add('hidden'));
                 adminElements.forEach(el => el.classList.add('hidden'));
                 studentElements.forEach(el => el.classList.add('hidden'));
+                
+                // Reset CTA buttons for guests
+                const signupBtn = document.querySelector('a[href="dashboard.html"]');
+                const loginBtn = document.querySelector('a[href="dashboard.html"]');
+                if (signupBtn && signupBtn.textContent === 'Go to Dashboard') {
+                    signupBtn.href = 'auth-new.html#signup';
+                    signupBtn.textContent = 'Create Your Account';
+                }
+                if (loginBtn && loginBtn.textContent === 'View Profile') {
+                    loginBtn.href = 'auth-new.html';
+                    loginBtn.textContent = 'Sign In';
+                }
             }
         });
 
@@ -780,13 +804,38 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Load events for everyone (public access)
             loadFeaturedEvents();
+            
+            // Debug: Check if buttons are working
+            console.log('Checking button functionality...');
+            
+            // Test View All Events button
+            const viewAllEventsBtn = document.querySelector('a[href="events.html"]');
+            if (viewAllEventsBtn) {
+                console.log('✅ View All Events button found:', viewAllEventsBtn);
+                viewAllEventsBtn.addEventListener('click', (e) => {
+                    console.log('View All Events button clicked!');
+                });
+            } else {
+                console.log('❌ View All Events button not found');
+            }
+            
+            // Test Create Account button
+            const createAccountBtn = document.querySelector('a[href="auth-new.html#signup"]');
+            if (createAccountBtn) {
+                console.log('✅ Create Account button found:', createAccountBtn);
+                createAccountBtn.addEventListener('click', (e) => {
+                    console.log('Create Account button clicked!');
+                });
+            } else {
+                console.log('❌ Create Account button not found');
+            }
         });
 
         console.log('Home page script loaded');
     </script>
 
-    <!-- Floating Chatbot Button -->
-    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50">
+    <!-- Floating Chatbot Button (Legacy - Hidden) -->
+    <div id="chatbot-container" class="hidden fixed bottom-6 right-6 z-50">
         <!-- Chatbot Button -->
         <button id="chatbot-toggle" class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group">
             <svg id="chatbot-icon" class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -855,228 +904,15 @@
         </div>
     </div>
 
-    <!-- Chatbot Script -->
+    <!-- Chatbot Script (Legacy - Disabled) -->
     <script>
-        // Gemini API Configuration
+        // Legacy chatbot functionality disabled to prevent conflicts
+        // The main AI chat functionality is now handled by the floating chat button
+        console.log('Legacy chatbot disabled - using main AI chat system');
+        
+        // Gemini API Configuration (moved to main script)
         const GEMINI_API_KEY = 'AIzaSyCrCZ_FlcKv83pSiLI8l9po6VLGgXXzMNY';
         const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-
-        // Chatbot functionality
-        class EventifyChatbot {
-            constructor() {
-                this.isOpen = false;
-                this.messages = [];
-                this.initializeEventListeners();
-            }
-
-            initializeEventListeners() {
-                const toggleBtn = document.getElementById('chatbot-toggle');
-                const modal = document.getElementById('chatbot-modal');
-                const input = document.getElementById('chat-input');
-                const sendBtn = document.getElementById('send-message');
-
-                toggleBtn.addEventListener('click', () => this.toggleChat());
-                sendBtn.addEventListener('click', () => this.sendMessage());
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.sendMessage();
-                });
-
-                // Close on outside click
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('#chatbot-container')) {
-                        this.closeChat();
-                    }
-                });
-            }
-
-            toggleChat() {
-                this.isOpen = !this.isOpen;
-                const modal = document.getElementById('chatbot-modal');
-                const icon = document.getElementById('chatbot-icon');
-                const closeIcon = document.getElementById('close-icon');
-
-                if (this.isOpen) {
-                    modal.classList.remove('hidden');
-                    icon.classList.add('hidden');
-                    closeIcon.classList.remove('hidden');
-                    document.getElementById('chat-input').focus();
-                } else {
-                    this.closeChat();
-                }
-            }
-
-            closeChat() {
-                this.isOpen = false;
-                const modal = document.getElementById('chatbot-modal');
-                const icon = document.getElementById('chatbot-icon');
-                const closeIcon = document.getElementById('close-icon');
-
-                modal.classList.add('hidden');
-                icon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-            }
-
-            async sendMessage() {
-                const input = document.getElementById('chat-input');
-                const message = input.value.trim();
-                
-                if (!message) return;
-
-                // Add user message to chat
-                this.addMessage(message, 'user');
-                input.value = '';
-
-                // Show typing indicator
-                this.showTypingIndicator();
-
-                try {
-                    // Get response from Gemini API
-                    const response = await this.getGeminiResponse(message);
-                    this.hideTypingIndicator();
-                    this.addMessage(response, 'bot');
-                } catch (error) {
-                    this.hideTypingIndicator();
-                    this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
-                    console.error('Chatbot error:', error);
-                }
-            }
-
-            addMessage(content, sender) {
-                const messagesContainer = document.getElementById('chat-messages');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'flex items-start space-x-3';
-
-                if (sender === 'user') {
-                    messageDiv.innerHTML = `
-                        <div class="flex-1"></div>
-                        <div class="flex-1">
-                            <div class="bg-blue-500/20 border border-blue-500/30 rounded-2xl p-3 max-w-xs ml-auto">
-                                <p class="text-sm text-white">${this.escapeHtml(content)}</p>
-                            </div>
-                        </div>
-                        <div class="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
-                            </svg>
-                        </div>
-                        <div class="flex-1">
-                            <div class="bg-gray-800/50 rounded-2xl p-3 max-w-xs">
-                                <p class="text-sm text-white">${this.escapeHtml(content)}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                messagesContainer.appendChild(messageDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-
-            showTypingIndicator() {
-                const messagesContainer = document.getElementById('chat-messages');
-                const typingDiv = document.createElement('div');
-                typingDiv.id = 'typing-indicator';
-                typingDiv.className = 'flex items-start space-x-3';
-                typingDiv.innerHTML = `
-                                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                    </svg>
-                </div>
-                <div class="flex-1">
-                    <div class="bg-gray-800/50 rounded-2xl p-3 max-w-xs">
-                        <div class="flex space-x-1">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                        </div>
-                    </div>
-                </div>
-                `;
-                messagesContainer.appendChild(typingDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-
-            hideTypingIndicator() {
-                const typingIndicator = document.getElementById('typing-indicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-            }
-
-            async getGeminiResponse(message) {
-                            if (!GEMINI_API_KEY) {
-                // Fallback responses if no API key
-                return this.getFallbackResponse(message);
-            }
-
-                try {
-                    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [{
-                                    text: `You are Eventify, a helpful assistant for a university club event management platform. Answer questions about events, registration, and general inquiries. Keep responses concise and helpful. User question: ${message}`
-                                }]
-                            }]
-                        })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                        return data.candidates[0].content.parts[0].text;
-                    } else {
-                        throw new Error('Invalid response format from Gemini API');
-                    }
-                } catch (error) {
-                    console.error('Gemini API error:', error);
-                    // Fallback to rule-based responses
-                    return this.getFallbackResponse(message);
-                }
-            }
-
-            getFallbackResponse(message) {
-                const lowerMessage = message.toLowerCase();
-                
-                // Rule-based responses for common questions
-                if (lowerMessage.includes('register') || lowerMessage.includes('sign up')) {
-                    return "To register for an event, simply click on the event you're interested in and look for the 'Register' or 'Sign Up' button. You'll need to be logged in to your Eventify account.";
-                } else if (lowerMessage.includes('cancel') || lowerMessage.includes('refund')) {
-                    return "Event cancellation policies vary by event. Generally, you can cancel your registration up to 24 hours before the event starts. Check the specific event details for cancellation policies.";
-                } else if (lowerMessage.includes('event') && lowerMessage.includes('detail')) {
-                    return "Event details include date, time, location, description, and attendee count. Click on any event card to view full details and registration options.";
-                } else if (lowerMessage.includes('login') || lowerMessage.includes('account')) {
-                    return "You can log in using the 'Login' button in the top navigation. If you don't have an account, use the 'Sign Up' button to create one.";
-                } else if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
-                    return "I'm here to help! You can ask me about event registration, cancellation policies, event details, or any other questions about using Eventify.";
-                } else {
-                    return "I'm not sure about that specific question. Try asking about event registration, cancellation policies, or general event information. You can also check our FAQ page for more detailed answers.";
-                }
-            }
-
-            escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-        }
 
         // Chat Modal Functions
         window.openAIChat = function() {
@@ -1341,12 +1177,19 @@
                     }
                 });
             }
+            
+            // Add click event listener for send button
+            const sendBtn = document.getElementById('send-btn');
+            if (sendBtn) {
+                sendBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sendMessage();
+                });
+            }
         });
 
-        // Initialize chatbot when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new EventifyChatbot();
-        });
+        // Legacy chatbot initialization disabled
+        // The main AI chat functionality is now handled by the floating chat button
     </script>
 </body>
 </html>

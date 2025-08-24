@@ -185,7 +185,7 @@ class DatabaseManager {
       }
 
       // Start a write batch for atomic operations
-      const { writeBatch, increment, serverTimestamp } = await import('firebase/firestore');
+      const { writeBatch, increment, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
       const batch = writeBatch(db);
       
       // Verify event exists and is not full
@@ -294,7 +294,7 @@ class DatabaseManager {
 
   async unregisterFromEvent(eventId, userId) {
     try {
-      const { writeBatch, increment } = await import('firebase/firestore');
+      const { writeBatch, increment } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
       const batch = writeBatch(db);
       
       // Remove from user's registrations
@@ -488,7 +488,7 @@ class DatabaseManager {
 
   async trackEventView(eventId) {
     try {
-      const { increment } = await import('firebase/firestore');
+      const { increment } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
       const eventRef = doc(db, 'events', eventId);
       
       await updateDoc(eventRef, {
