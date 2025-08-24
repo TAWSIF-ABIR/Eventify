@@ -59,6 +59,8 @@ class DashboardPage {
             const userDoc = await getDoc(doc(db, 'users', this.currentUser.uid));
             if (userDoc.exists()) {
                 const userData = userDoc.data();
+                console.log('📋 User profile loaded:', userData);
+                console.log('📋 User displayName:', userData.displayName);
                 this.updateUserInterface(userData);
             }
         } catch (error) {
@@ -421,6 +423,9 @@ class DashboardPage {
         // Generate certificates for completed events
         await this.generateCompletedEventCertificates();
         console.log('🎯 Certificate generation complete');
+        
+        // Update certificate preview with user data
+        this.updateCertificatePreview();
     }
 
     hideCertificateModal() {
@@ -541,13 +546,21 @@ class DashboardPage {
                     const certificateCard = document.createElement('div');
                     certificateCard.className = 'card p-6 hover:shadow-xl transition-all duration-300 group relative';
                     certificateCard.innerHTML = `
-                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-2">
+                            <button onclick="window.showCertificateModal('${eventId}')" 
+                                    class="btn btn-secondary px-3 py-2 rounded-lg text-sm">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Preview
+                            </button>
                             <button onclick="window.dashboardPage.downloadCertificate('${eventId}')" 
-                                    class="btn btn-primary px-4 py-2 rounded-lg text-sm">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    class="btn btn-primary px-3 py-2 rounded-lg text-sm">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                 </svg>
-                                Download Certificate
+                                Download
                             </button>
                         </div>
                         <div class="text-center">
@@ -624,6 +637,12 @@ class DashboardPage {
             const userRef = doc(db, 'users', this.currentUser.uid);
             const userDoc = await getDoc(userRef);
             const userData = userDoc.data();
+            
+            // Get user's display name from userData, fallback to currentUser.displayName, then to 'Student'
+            const studentName = userData?.displayName || this.currentUser?.displayName || 'Student';
+            console.log('Certificate generation - Student name:', studentName);
+            console.log('User data:', userData);
+            console.log('Current user:', this.currentUser);
 
             // Use jsPDF for PDF generation
             const { jsPDF } = window.jspdf;
@@ -649,7 +668,7 @@ class DashboardPage {
 
             // Participant Details
             pdfDoc.setFontSize(18);
-            pdfDoc.text(`${this.currentUser.displayName}`, 148, 80, { align: 'center' });
+            pdfDoc.text(`${studentName}`, 148, 80, { align: 'center' });
             
             // Student ID (if available)
             if (userData.studentId) {
@@ -683,6 +702,82 @@ class DashboardPage {
     printCertificate() {
         window.print();
     }
+    
+    // Update certificate preview with actual user data
+    async updateCertificatePreview() {
+        try {
+            // Fetch user profile data
+            const userRef = doc(db, 'users', this.currentUser.uid);
+            const userDoc = await getDoc(userRef);
+            
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                const studentName = userData?.displayName || this.currentUser?.displayName || 'Student';
+                
+                // Update certificate preview elements
+                const studentNameElement = document.getElementById('student-name');
+                if (studentNameElement) {
+                    studentNameElement.textContent = studentName;
+                }
+                
+                // Update other preview elements if needed
+                const eventNameElement = document.getElementById('event-name');
+                if (eventNameElement) {
+                    eventNameElement.textContent = 'Sample Event';
+                }
+                
+                const eventCategoryElement = document.getElementById('event-category');
+                if (eventCategoryElement) {
+                    eventCategoryElement.textContent = 'University Event';
+                }
+                
+                console.log('✅ Certificate preview updated with student name:', studentName);
+            }
+        } catch (error) {
+            console.error('Error updating certificate preview:', error);
+        }
+    }
+    
+    // Show certificate modal for a specific event
+    async showCertificateModal(eventId) {
+        try {
+            // Fetch event details
+            const eventRef = doc(db, 'events', eventId);
+            const eventDoc = await getDoc(eventRef);
+            
+            if (eventDoc.exists()) {
+                const eventData = eventDoc.data();
+                
+                // Fetch user profile data
+                const userRef = doc(db, 'users', this.currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                const userData = userDoc.data();
+                const studentName = userData?.displayName || this.currentUser?.displayName || 'Student';
+                
+                // Update certificate modal with event and user data
+                const studentNameElement = document.getElementById('student-name');
+                const eventNameElement = document.getElementById('event-name');
+                const eventCategoryElement = document.getElementById('event-category');
+                const eventDateElement = document.getElementById('event-date');
+                
+                if (studentNameElement) studentNameElement.textContent = studentName;
+                if (eventNameElement) eventNameElement.textContent = eventData.title || 'Event';
+                if (eventCategoryElement) eventCategoryElement.textContent = eventData.category || 'University Event';
+                if (eventDateElement && eventData.endAt) {
+                    eventDateElement.textContent = new Date(eventData.endAt.toDate()).toLocaleDateString();
+                }
+                
+                // Show the modal
+                const modal = document.getElementById('certificate-modal');
+                if (modal) modal.classList.remove('hidden');
+                
+                console.log('✅ Certificate modal opened for event:', eventData.title);
+            }
+        } catch (error) {
+            console.error('Error showing certificate modal:', error);
+            this.toast.error('Failed to load certificate preview');
+        }
+    }
 }
 
 // Initialize dashboard when DOM is loaded
@@ -692,6 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make functions globally available for onclick handlers
                     window.showCertificatesSection = async () => await window.dashboardPage.showCertificatesSection();
         window.hideCertificateModal = () => window.dashboardPage.hideCertificateModal();
+        window.showCertificateModal = (eventId) => window.dashboardPage.showCertificateModal(eventId);
         window.debugCertificates = () => window.dashboardPage.generateCompletedEventCertificates();
     window.showProfileModal = () => window.dashboardPage.showProfileModal();
     window.hideProfileModal = () => window.dashboardPage.hideProfileModal();
