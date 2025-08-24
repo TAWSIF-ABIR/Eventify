@@ -517,5 +517,304 @@
 
         console.log('Home page script loaded');
     </script>
+
+    <!-- Floating Chatbot Button -->
+    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50">
+        <!-- Chatbot Button -->
+        <button id="chatbot-toggle" class="w-16 h-16 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group">
+            <svg id="chatbot-icon" class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+            </svg>
+            <svg id="close-icon" class="w-8 h-8 text-white hidden" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+
+        <!-- Chatbot Modal -->
+        <div id="chatbot-modal" class="hidden absolute bottom-20 right-0 w-96 bg-brand-card border border-white/10 rounded-2xl shadow-2xl backdrop-blur-sm">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 border-b border-white/10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-brand-text">Eventify Assistant</h3>
+                        <p class="text-sm text-brand-muted">Ask me anything about events!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="h-96 overflow-y-auto p-4 space-y-4">
+                <!-- Welcome Message -->
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                            <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-brand-surface/50 rounded-2xl p-3 max-w-xs">
+                            <p class="text-sm text-brand-text">Hi! I'm your Eventify assistant. I can help you with:</p>
+                            <ul class="text-xs text-brand-muted mt-2 space-y-1">
+                                <li>• Event registration</li>
+                                <li>• Cancellation policies</li>
+                                <li>• Event details</li>
+                                <li>• General questions</li>
+                            </ul>
+                            <p class="text-sm text-brand-text mt-2">What would you like to know?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 border-t border-white/10">
+                <div class="flex space-x-3">
+                    <input type="text" id="chat-input" placeholder="Type your question..." class="flex-1 px-4 py-2 bg-brand-surface border border-white/10 rounded-xl text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/50">
+                    <button id="send-message" class="px-4 py-2 bg-gradient-to-r from-brand-primary to-brand-accent text-white rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.25A1 1 0 009 15.25l1.25 5a1 1 0 001.409 1.169l7-14a1 1 0 00-1.788-1.409L13.25 9a1 1 0 00-1.409-1.169l-1.25-5z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Script -->
+    <script>
+        // Gemini API Configuration
+        const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // Replace with your actual API key
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+        // Chatbot functionality
+        class EventifyChatbot {
+            constructor() {
+                this.isOpen = false;
+                this.messages = [];
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                const toggleBtn = document.getElementById('chatbot-toggle');
+                const modal = document.getElementById('chatbot-modal');
+                const input = document.getElementById('chat-input');
+                const sendBtn = document.getElementById('send-message');
+
+                toggleBtn.addEventListener('click', () => this.toggleChat());
+                sendBtn.addEventListener('click', () => this.sendMessage());
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#chatbot-container')) {
+                        this.closeChat();
+                    }
+                });
+            }
+
+            toggleChat() {
+                this.isOpen = !this.isOpen;
+                const modal = document.getElementById('chatbot-modal');
+                const icon = document.getElementById('chatbot-icon');
+                const closeIcon = document.getElementById('close-icon');
+
+                if (this.isOpen) {
+                    modal.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                    closeIcon.classList.remove('hidden');
+                    document.getElementById('chat-input').focus();
+                } else {
+                    this.closeChat();
+                }
+            }
+
+            closeChat() {
+                this.isOpen = false;
+                const modal = document.getElementById('chatbot-modal');
+                const icon = document.getElementById('chatbot-icon');
+                const closeIcon = document.getElementById('close-icon');
+
+                modal.classList.add('hidden');
+                icon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+
+            async sendMessage() {
+                const input = document.getElementById('chat-input');
+                const message = input.value.trim();
+                
+                if (!message) return;
+
+                // Add user message to chat
+                this.addMessage(message, 'user');
+                input.value = '';
+
+                // Show typing indicator
+                this.showTypingIndicator();
+
+                try {
+                    // Get response from Gemini API
+                    const response = await this.getGeminiResponse(message);
+                    this.hideTypingIndicator();
+                    this.addMessage(response, 'bot');
+                } catch (error) {
+                    this.hideTypingIndicator();
+                    this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                    console.error('Chatbot error:', error);
+                }
+            }
+
+            addMessage(content, sender) {
+                const messagesContainer = document.getElementById('chat-messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'flex items-start space-x-3';
+
+                if (sender === 'user') {
+                    messageDiv.innerHTML = `
+                        <div class="flex-1"></div>
+                        <div class="flex-1">
+                            <div class="bg-brand-primary/20 border border-brand-primary/30 rounded-2xl p-3 max-w-xs ml-auto">
+                                <p class="text-sm text-brand-text">${this.escapeHtml(content)}</p>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 bg-gradient-to-br from-brand-accent to-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    `;
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <div class="bg-brand-surface/50 rounded-2xl p-3 max-w-xs">
+                                <p class="text-sm text-brand-text">${this.escapeHtml(content)}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                messagesContainer.appendChild(messageDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            showTypingIndicator() {
+                const messagesContainer = document.getElementById('chat-messages');
+                const typingDiv = document.createElement('div');
+                typingDiv.id = 'typing-indicator';
+                typingDiv.className = 'flex items-start space-x-3';
+                typingDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-brand-surface/50 rounded-2xl p-3 max-w-xs">
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-2 bg-brand-primary rounded-full animate-bounce"></div>
+                                <div class="w-2 h-2 bg-brand-primary rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                <div class="w-2 h-2 bg-brand-primary rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                messagesContainer.appendChild(typingDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
+            async getGeminiResponse(message) {
+                if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+                    // Fallback responses if no API key
+                    return this.getFallbackResponse(message);
+                }
+
+                try {
+                    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{
+                                    text: `You are Eventify, a helpful assistant for a university club event management platform. Answer questions about events, registration, and general inquiries. Keep responses concise and helpful. User question: ${message}`
+                                }]
+                            }]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                        return data.candidates[0].content.parts[0].text;
+                    } else {
+                        throw new Error('Invalid response format from Gemini API');
+                    }
+                } catch (error) {
+                    console.error('Gemini API error:', error);
+                    // Fallback to rule-based responses
+                    return this.getFallbackResponse(message);
+                }
+            }
+
+            getFallbackResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // Rule-based responses for common questions
+                if (lowerMessage.includes('register') || lowerMessage.includes('sign up')) {
+                    return "To register for an event, simply click on the event you're interested in and look for the 'Register' or 'Sign Up' button. You'll need to be logged in to your Eventify account.";
+                } else if (lowerMessage.includes('cancel') || lowerMessage.includes('refund')) {
+                    return "Event cancellation policies vary by event. Generally, you can cancel your registration up to 24 hours before the event starts. Check the specific event details for cancellation policies.";
+                } else if (lowerMessage.includes('event') && lowerMessage.includes('detail')) {
+                    return "Event details include date, time, location, description, and attendee count. Click on any event card to view full details and registration options.";
+                } else if (lowerMessage.includes('login') || lowerMessage.includes('account')) {
+                    return "You can log in using the 'Login' button in the top navigation. If you don't have an account, use the 'Sign Up' button to create one.";
+                } else if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
+                    return "I'm here to help! You can ask me about event registration, cancellation policies, event details, or any other questions about using Eventify.";
+                } else {
+                    return "I'm not sure about that specific question. Try asking about event registration, cancellation policies, or general event information. You can also check our FAQ page for more detailed answers.";
+                }
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Initialize chatbot when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new EventifyChatbot();
+        });
+    </script>
 </body>
 </html>
