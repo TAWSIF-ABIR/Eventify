@@ -707,6 +707,55 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Email service functions
+        let emailService = null;
+
+        // Initialize email service
+        async function initEmailService() {
+            try {
+                // Dynamically import email service
+                const { emailService: importedEmailService } = await import('./js/email.js');
+                emailService = importedEmailService;
+                
+                // Initialize with your EmailJS credentials
+                const result = await emailService.init(
+                    'n_KnN0vv_3JWsFOOw',     // Your EmailJS Public Key
+                    'service_bmp4amu',        // Your Gmail Service ID
+                    'template_supbavs'        // Your Event Registration Template ID
+                );
+                
+                if (result.success) {
+                    console.log('Email service initialized successfully');
+                } else {
+                    console.error('Email service initialization failed:', result.error);
+                }
+            } catch (error) {
+                console.error('Error initializing email service:', error);
+            }
+        }
+
+        // Send welcome email
+        async function sendWelcomeEmail(user) {
+            if (!emailService) {
+                console.error('Email service not initialized');
+                return { success: false, error: 'Email service not available' };
+            }
+
+            try {
+                const userData = {
+                    displayName: user.displayName || 'Student',
+                    email: user.email,
+                    role: 'student'
+                };
+                
+                const result = await emailService.sendWelcomeEmail(userData);
+                return result;
+            } catch (error) {
+                console.error('Error sending welcome email:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
         const loginForm = document.getElementById('login-form');
         const signupForm = document.getElementById('signup-form');
         const toggleBtn = document.getElementById('toggle-btn');
@@ -716,6 +765,9 @@
         const signupSection = document.getElementById('signup-form-section');
 
         let isLoginMode = true;
+
+        // Initialize email service when page loads
+        initEmailService();
 
         // Toggle between login and signup
         toggleBtn.addEventListener('click', () => {
@@ -875,7 +927,16 @@
                     updatedAt: serverTimestamp()
                 });
 
-                statusDiv.innerHTML = '<div class="status success">Account created successfully! Redirecting...</div>';
+                statusDiv.innerHTML = '<div class="status success">Account created successfully! Sending welcome email...</div>';
+                
+                // Send welcome email
+                try {
+                    await sendWelcomeEmail(user);
+                    statusDiv.innerHTML = '<div class="status success">Account created successfully! Welcome email sent. Redirecting...</div>';
+                } catch (emailError) {
+                    console.error('Welcome email failed:', emailError);
+                    statusDiv.innerHTML = '<div class="status success">Account created successfully! Redirecting...</div>';
+                }
                 
                 // Redirect to dashboard after successful signup
                 setTimeout(() => {

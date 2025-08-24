@@ -192,6 +192,49 @@
         let currentUser = null;
         let allEvents = [];
 
+        // Email service functions
+        let emailService = null;
+
+        // Initialize email service
+        async function initEmailService() {
+            try {
+                // Dynamically import email service
+                const { emailService: importedEmailService } = await import('./js/email.js');
+                emailService = importedEmailService;
+                
+                // Initialize with your EmailJS credentials
+                const result = await emailService.init(
+                    'n_KnN0vv_3JWsFOOw',     // Your EmailJS Public Key
+                    'service_bmp4amu',        // Your Gmail Service ID
+                    'template_supbavs'        // Your Event Registration Template ID
+                );
+                
+                if (result.success) {
+                    console.log('Email service initialized successfully');
+                } else {
+                    console.error('Email service initialization failed:', result.error);
+                }
+            } catch (error) {
+                console.error('Error initializing email service:', error);
+            }
+        }
+
+        // Send event registration email
+        async function sendEventRegistrationEmail(userData, eventData) {
+            if (!emailService) {
+                console.error('Email service not initialized');
+                return { success: false, error: 'Email service not available' };
+            }
+
+            try {
+                const result = await emailService.sendEventRegistrationEmail(userData, eventData);
+                return result;
+            } catch (error) {
+                console.error('Error sending email:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
         // Helper function to validate current user
         function validateCurrentUser() {
             if (!currentUser || !currentUser.uid) {
@@ -216,7 +259,7 @@
         }
 
         // Check authentication
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             console.log('=== AUTH STATE CHANGED ===');
             console.log('User object:', user);
             
@@ -237,6 +280,9 @@
             
             if (userName) userName.textContent = user.displayName || 'Student';
             if (userEmail) userEmail.textContent = user.email;
+            
+            // Initialize email service
+            await initEmailService();
             
             // Load events
             console.log('Starting to load events for user:', currentUser.uid);
@@ -525,6 +571,18 @@
                     }
                     
                     showToast('Successfully registered for the event!', 'success');
+                    
+                    // Send confirmation email
+                    try {
+                        const emailResult = await sendEventRegistrationEmail(currentUser, event);
+                        if (emailResult.success) {
+                            showToast('Registration confirmed! Check your email for details.', 'success');
+                        } else {
+                            console.error('Email failed to send:', emailResult.error);
+                        }
+                    } catch (emailError) {
+                        console.error('Error sending email:', emailError);
+                    }
                     
                     // Refresh the display immediately
                     console.log('Refreshing display...');

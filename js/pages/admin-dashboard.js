@@ -127,32 +127,16 @@ class AdminDashboardPage {
         card.className = 'card p-6 hover:scale-105 transition-all duration-300 max-w-2xl mx-auto w-full';
         
         card.innerHTML = `
-            <!-- Event Banner Image -->
-            <div class="relative h-40 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-t-2xl overflow-hidden mb-4">
-                ${event.imageUrl ? 
-                    `<img src="${event.imageUrl}" alt="${event.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">` :
-                    `<div class="w-full h-full flex items-center justify-center">
-                        <svg class="w-16 h-16 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>`
-                }
-                
-                <!-- Status Badge -->
-                <div class="absolute top-3 right-3">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                        event.status === 'upcoming' ? 'bg-brand-success/90 text-white' :
-                        event.status === 'ongoing' ? 'bg-brand-warning/90 text-white' :
-                        'bg-brand-muted/90 text-white'
-                    }">
-                        ${event.status.charAt(0).toUpperCase() + event.status.slice(1)}
-                    </div>
-                </div>
-            </div>
-
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
                     <h3 class="text-xl font-bold text-brand-text mb-3">${event.title}</h3>
+                    <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                        event.status === 'upcoming' ? 'bg-brand-success/20 text-brand-success' :
+                        event.status === 'ongoing' ? 'bg-brand-warning/20 text-brand-warning' :
+                        'bg-brand-muted/20 text-brand-muted'
+                    }">
+                        ${event.status.charAt(0).toUpperCase() + event.status.slice(1)}
+                    </div>
                 </div>
             </div>
 

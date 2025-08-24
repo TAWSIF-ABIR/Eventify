@@ -1,6 +1,8 @@
 // Use global Firebase instances from CDN
 const { auth, db } = window.firebase;
 import { toastManager } from '../toast.js';
+import { emailService } from '../email.js';
+import { emailConfig } from '../email-config.js';
 
 // Import Firebase functions from the global scope
 const { 
@@ -26,6 +28,9 @@ class DashboardPage {
         this.toast = toastManager;
         this.events = [];
         this.init();
+        
+        // Initialize email service with your EmailJS credentials
+        this.initEmailService();
     }
 
     async init() {
@@ -51,6 +56,25 @@ class DashboardPage {
         } catch (error) {
             console.error('❌ Dashboard initialization error:', error);
             this.toast.error('Failed to initialize dashboard');
+        }
+    }
+
+        // Initialize email service with your EmailJS credentials
+    async initEmailService() {
+        try {
+            const result = await emailService.init(
+                emailConfig.publicKey,     // Your EmailJS Public Key
+                emailConfig.serviceId,     // Your Gmail Service ID
+                emailConfig.templateId     // Your Event Registration Template ID
+            );
+            
+            if (result.success) {
+                console.log('Email service initialized successfully');
+            } else {
+                console.error('Email service initialization failed:', result.error);
+            }
+        } catch (error) {
+            console.error('Error initializing email service:', error);
         }
     }
 
@@ -251,25 +275,6 @@ class DashboardPage {
         const timeDisplay = startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         
         eventDiv.innerHTML = `
-            <!-- Event Banner Image -->
-            <div class="relative h-32 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-t-2xl overflow-hidden mb-4">
-                ${event.imageUrl ? 
-                    `<img src="${event.imageUrl}" alt="${event.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">` :
-                    `<div class="w-full h-full flex items-center justify-center">
-                        <svg class="w-12 h-12 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>`
-                }
-                
-                <!-- Status Badge -->
-                <div class="absolute top-2 right-2">
-                    <span class="px-3 py-1 rounded-full text-xs font-medium status-badge ${this.getStatusClasses(status)}">
-                        ${status}
-                    </span>
-                </div>
-            </div>
-
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
                     <h3 class="text-lg font-semibold text-brand-text mb-2">${event.title || 'Event'}</h3>
@@ -281,6 +286,9 @@ class DashboardPage {
                         <p>👥 ${attendeeCount} attending (Firebase)</p>
                     </div>
                 </div>
+                <span class="px-3 py-1 rounded-full text-xs font-medium status-badge ${this.getStatusClasses(status)} ml-4">
+                    ${status}
+                </span>
             </div>
             <div class="flex items-center justify-between pt-4 border-t border-white/10">
                 <span class="text-sm text-brand-muted">Registered: ${event.registeredAt ? new Date(event.registeredAt.seconds * 1000).toLocaleDateString() : 'Recently'}</span>

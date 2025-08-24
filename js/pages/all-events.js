@@ -2,6 +2,8 @@ import { authManager } from '../auth.js';
 import { dbManager } from '../db.js';
 import { uiManager } from '../ui.js';
 import { toast } from '../toast.js';
+import { emailService } from '../email.js';
+import { emailConfig } from '../email-config.js';
 
 class AllEventsPage {
     constructor() {
@@ -9,6 +11,9 @@ class AllEventsPage {
         this.filteredEvents = [];
         this.currentUser = null;
         this.init();
+        
+        // Initialize email service with your EmailJS credentials
+        this.initEmailService();
     }
 
     async init() {
@@ -28,6 +33,25 @@ class AllEventsPage {
         } catch (error) {
             console.error('Error initializing AllEventsPage:', error);
             toast.error('Failed to initialize page');
+        }
+    }
+
+    // Initialize email service with your EmailJS credentials
+    async initEmailService() {
+        try {
+            const result = await emailService.init(
+                emailConfig.publicKey,     // Your EmailJS Public Key
+                emailConfig.serviceId,     // Your Gmail Service ID
+                emailConfig.templateId     // Your Event Registration Template ID
+            );
+            
+            if (result.success) {
+                console.log('Email service initialized successfully');
+            } else {
+                console.error('Email service initialization failed:', result.error);
+            }
+        } catch (error) {
+            console.error('Error initializing email service:', error);
         }
     }
 
@@ -152,31 +176,17 @@ class AllEventsPage {
         const isUpcoming = new Date(event.startAt) > new Date();
         
         card.innerHTML = `
-            <!-- Event Banner Image -->
-            <div class="relative h-40 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-t-2xl overflow-hidden mb-4">
-                ${event.imageUrl ? 
-                    `<img src="${event.imageUrl}" alt="${event.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">` :
-                    `<div class="w-full h-full flex items-center justify-center">
-                        <svg class="w-16 h-16 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>`
-                }
-                
-                <!-- Status Badges -->
-                <div class="absolute top-3 left-3 flex flex-col space-y-2">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                        isUpcoming ? 'bg-brand-success/90 text-white' : 'bg-brand-muted/90 text-white'
-                    }">
-                        ${isUpcoming ? 'Upcoming' : 'Past'}
-                    </div>
-                    ${isRegistered ? '<div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-primary/90 text-white">Registered</div>' : ''}
-                </div>
-            </div>
-
             <div class="flex items-start justify-between mb-4">
                 <div class="flex-1">
                     <h3 class="text-xl font-bold text-brand-text mb-2">${event.title}</h3>
+                    <div class="flex items-center space-x-2 mb-3">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                            isUpcoming ? 'bg-brand-success/20 text-brand-success' : 'bg-brand-muted/20 text-brand-muted'
+                        }">
+                            ${isUpcoming ? 'Upcoming' : 'Past'}
+                        </div>
+                        ${isRegistered ? '<div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-primary/20 text-brand-primary">Registered</div>' : ''}
+                    </div>
                 </div>
             </div>
 
@@ -362,6 +372,18 @@ class AllEventsPage {
 
             // Success toast
             toast.success('Successfully registered for the event!');
+            
+            // Send confirmation email
+            try {
+                const emailResult = await emailService.sendEventRegistrationEmail(userData, event);
+                if (emailResult.success) {
+                    toast.success('Registration confirmed! Check your email for details.');
+                } else {
+                    console.error('Email failed to send:', emailResult.error);
+                }
+            } catch (emailError) {
+                console.error('Error sending email:', emailError);
+            }
             
         } catch (error) {
             console.error('Error registering for event:', error);
