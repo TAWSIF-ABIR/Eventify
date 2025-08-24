@@ -125,31 +125,6 @@
                         <div class="w-12 h-1 bg-gradient-to-r from-brand-success to-brand-success/60 rounded-full mx-auto mt-3"></div>
                         <p class="text-xs text-brand-success mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
                     </div>
-
-                    <div id="track-views-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-3xl font-bold text-brand-text mb-2" id="total-views">0</h3>
-                        <p class="text-brand-muted font-medium">Track Views</p>
-                        <div class="w-12 h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mx-auto mt-3"></div>
-                        <p class="text-xs text-blue-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
-                    </div>
-
-                    <div id="popular-events-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
-                        <div class="w-16 h-16 bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-3xl font-bold text-brand-text mb-2" id="popular-events-count">0</h3>
-                        <p class="text-brand-muted font-medium">Popular Events</p>
-                        <div class="w-12 h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-full mx-auto mt-3"></div>
-                        <p class="text-xs text-green-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
-                    </div>
                 </div>
 
                 <!-- Event Selection for Analytics -->
@@ -327,35 +302,43 @@
 
     <!-- Detail Modals -->
     <!-- Total Events Modal -->
-    <div id="total-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-brand-text">Total Events Overview</h3>
-                <button onclick="adminDashboardPage.hideModal('total-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="total-events-content" class="space-y-4">
-                <!-- Content will be loaded dynamically -->
+    <div id="total-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-brand-text">Total Events Overview</h3>
+                        <button onclick="adminDashboardPage.hideModal('total-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="total-events-content" class="space-y-4">
+                        <!-- Content will be loaded dynamically -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Upcoming Events Modal -->
-    <div id="upcoming-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-brand-text">Upcoming Events Details</h3>
-                <button onclick="adminDashboardPage.hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="upcoming-events-content" class="space-y-4">
-                <!-- Content will be loaded dynamically -->
+    <div id="upcoming-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-brand-text">Upcoming Events Details</h3>
+                        <button onclick="adminDashboardPage.hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="upcoming-events-content" class="space-y-4">
+                        <!-- Content will be loaded dynamically -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -501,8 +484,6 @@
         async function updateStats() {
             const totalEventsEl = document.getElementById('total-events');
             const upcomingEventsEl = document.getElementById('upcoming-events');
-            const totalViewsEl = document.getElementById('total-views');
-            const popularEventsEl = document.getElementById('popular-events-count');
 
             const totalEvents = allEvents.length;
             const now = new Date();
@@ -512,26 +493,15 @@
                 return eventDate > now;
             }).length;
 
-            // Calculate total views and popular events
-            const totalViews = allEvents.reduce((sum, event) => sum + (event.viewCount || 0), 0);
-            const popularEvents = allEvents.filter(event => {
-                const popularityScore = (event.viewCount || 0) * 0.4 + (event.attendeeCount || 0) * 0.6;
-                return popularityScore > 50;
-            }).length;
-
-            console.log('Final stats - Total Events:', totalEvents, 'Upcoming:', upcomingEvents, 'Total Views:', totalViews, 'Popular Events:', popularEvents);
+            console.log('Final stats - Total Events:', totalEvents, 'Upcoming:', upcomingEvents);
 
             if (totalEventsEl) totalEventsEl.textContent = totalEvents;
             if (upcomingEventsEl) upcomingEventsEl.textContent = upcomingEvents;
-            if (totalViewsEl) totalViewsEl.textContent = totalViews;
-            if (popularEventsEl) popularEventsEl.textContent = popularEvents;
 
             // Store stats for modals
             window.dashboardStats = {
                 totalEvents,
                 upcomingEvents,
-                totalViews,
-                popularEvents,
                 allEvents
             };
 
@@ -630,95 +600,92 @@
 
         // Display events in admin panel
         function displayEvents() {
-            console.log('displayEvents called with allEvents:', allEvents);
-            
             const eventsContainer = document.getElementById('admin-events');
             const eventsLoading = document.getElementById('events-loading');
             const eventsEmpty = document.getElementById('events-empty');
-            
-            console.log('Events container:', eventsContainer);
-            console.log('Events loading element:', eventsLoading);
-            console.log('Events empty element:', eventsEmpty);
 
             // Hide loading
             if (eventsLoading) {
                 eventsLoading.classList.add('hidden');
-                console.log('Hidden loading element');
             }
 
             if (allEvents.length === 0) {
-                console.log('No events to display, showing empty state');
                 if (eventsEmpty) eventsEmpty.classList.remove('hidden');
                 return;
             }
 
-            console.log('Displaying', allEvents.length, 'events');
-
             // Hide empty state
             if (eventsEmpty) eventsEmpty.classList.add('hidden');
 
-            const eventsHTML = allEvents.map(event => {
+            // Use document fragment for better performance
+            const fragment = document.createDocumentFragment();
+            
+            allEvents.forEach(event => {
                 const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
                 const formattedDate = startDate.toLocaleDateString();
                 const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 
-                return `
-                    <div class="card p-6 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <div class="flex items-center space-x-3 mb-3">
-                                    <h3 class="text-xl font-semibold text-brand-text">${event.title}</h3>
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
-                                        ${event.status || 'upcoming'}
-                                    </span>
-                                </div>
-                                <p class="text-brand-muted mb-4 line-clamp-2">${event.description || 'No description available'}</p>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                        </svg>
-                                        <span class="text-brand-text">${formattedDate}</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                        </svg>
-                                        <span class="text-brand-text">${formattedTime}</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        <span class="text-brand-text">${event.location || 'Location TBD'}</span>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-2">
-                                        <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-                                        </svg>
-                                        <span class="text-brand-text">${event.attendeeCount || 0} attending</span>
-                                    </div>
-                                </div>
+                const eventCard = document.createElement('div');
+                eventCard.className = 'card p-6 hover:shadow-xl transition-all duration-300';
+                eventCard.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <h3 class="text-xl font-semibold text-brand-text">${event.title}</h3>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                                    ${event.status || 'upcoming'}
+                                </span>
                             </div>
+                            <p class="text-brand-muted mb-4 line-clamp-2">${event.description || 'No description available'}</p>
                             
-                            <div class="flex flex-col space-y-2 ml-4">
-                                <button class="btn btn-secondary text-xs px-3 py-1" onclick="editEvent('${event.id}')">
-                                    Edit
-                                </button>
-                                <button class="btn btn-danger text-xs px-3 py-1" onclick="deleteEvent('${event.id}')">
-                                    Delete
-                                </button>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="text-brand-text">${formattedDate}</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="text-brand-text">${formattedTime}</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="text-brand-text">${event.location || 'Location TBD'}</span>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                                    </svg>
+                                    <span class="text-brand-text">${event.attendeeCount || 0} attending</span>
+                                </div>
                             </div>
+                        </div>
+                        
+                        <div class="flex flex-col space-y-2 ml-4">
+                            <button class="btn btn-secondary text-xs px-3 py-1" onclick="editEvent('${event.id}')">
+                                Edit
+                            </button>
+                            <button class="btn btn-danger text-xs px-3 py-1" onclick="deleteEvent('${event.id}')">
+                                Delete
+                            </button>
                         </div>
                     </div>
                 `;
-            }).join('');
+                
+                fragment.appendChild(eventCard);
+            });
 
-            eventsContainer.innerHTML = eventsHTML;
+            // Clear and append all events at once
+            eventsContainer.innerHTML = '';
+            eventsContainer.appendChild(fragment);
         }
 
         // Global functions for event actions
@@ -943,26 +910,6 @@
             }
         });
 
-
-
-
-
-
-
-
-
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            try {
-                await auth.signOut();
-                window.location.href = 'auth-new.html';
-            } catch (error) {
-                console.error('Logout error:', error);
-            }
-        });
-
-
-
         // Theme toggle
         document.getElementById('theme-toggle').addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
@@ -1104,7 +1051,7 @@
                                 </div>
                                 <div>
                                     <span class="text-brand-muted">End:</span>
-                                    <span class="text-brand-text ml-2">${formatDate(event.endAt)}</span>
+                                    <span class="text-brand-text ml-2">${formatDate(event.endAt || event.startAt)}</span>
                                 </div>
                                 <div>
                                     <span class="text-brand-muted">Location:</span>
@@ -1129,19 +1076,7 @@
             `).join('');
         }
 
-
-
-
-
-                
-                
-
-
-
-
-
-
-                // Helper function to format dates
+        // Helper function to format dates
         function formatDate(timestamp) {
             if (!timestamp) return 'N/A';
             
@@ -1161,149 +1096,6 @@
                 hour: '2-digit',
                 minute: '2-digit'
             });
-        }
-
-        // Modal functions
-        function showModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('hidden');
-                const modalContent = modal.querySelector('.card');
-                setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                    modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            }
-        }
-
-        function hideModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                const modalContent = modal.querySelector('.card');
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
-            }
-        }
-
-        // Populate total events modal
-        function populateTotalEventsModal() {
-            const container = document.getElementById('total-events-list');
-            if (!container) return;
-
-            if (allEvents.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12">
-                        <div class="w-16 h-16 bg-brand-muted/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <p class="text-brand-muted">No events found</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = allEvents.map(event => `
-                <div class="card p-4 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <h4 class="text-lg font-semibold text-brand-text mb-2">${event.title}</h4>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                <div>
-                                    <span class="text-brand-muted">Category:</span>
-                                    <span class="text-brand-text ml-2 capitalize">${event.category || 'N/A'}</span>
-                                </div>
-                                <div>
-                                    <span class="text-brand-muted">Status:</span>
-                                    <span class="text-brand-text ml-2 capitalize">${event.status || 'N/A'}</span>
-                                </div>
-                                <div>
-                                    <span class="text-brand-muted">Attendees:</span>
-                                    <span class="text-brand-text ml-2">${event.attendeeCount || 0}</span>
-                                </div>
-                                <div>
-                                    <span class="text-brand-muted">Created:</span>
-                                    <span class="text-brand-text ml-2">${formatDate(event.createdAt)}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2 ml-4">
-                            <button onclick="editEvent('${event.id}')" class="btn btn-primary px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
-                                Edit
-                            </button>
-                            <button onclick="deleteEvent('${event.id}')" class="btn btn-danger px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Populate upcoming events modal
-        function populateUpcomingEventsModal() {
-            const container = document.getElementById('upcoming-events-list');
-            if (!container) return;
-
-            const now = new Date();
-            const upcomingEvents = allEvents.filter(event => {
-                if (!event.startAt) return false;
-                const eventDate = new Date(event.startAt.seconds * 1000);
-                return eventDate > now;
-            });
-
-            if (upcomingEvents.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12">
-                        <div class="w-16 h-16 bg-brand-muted/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <p class="text-brand-muted">No upcoming events</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = upcomingEvents.map(event => `
-                <div class="card p-4 hover:scale-105 transition-transform duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <h4 class="text-lg font-semibold text-brand-text mb-2">${event.title}</h4>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                <div>
-                                    <span class="text-brand-muted">Start:</span>
-                                    <span class="text-brand-text ml-2">${formatDate(event.startAt)}</span>
-                                </div>
-                                <div>
-                                    <span class="text-brand-muted">End:</span>
-                                    <span class="text-brand-text ml-2">${formatDate(event.startAt)}</span>
-                                </div>
-                                <div>
-                                    <span class="text-brand-muted">Location:</span>
-                                    <span class="text-brand-text ml-2">${event.location || 'N/A'}</span>
-                                </div>
-                                <div>
-                                    <span class="text-brand-muted">Attendees:</span>
-                                    <span class="text-brand-text ml-2">${event.attendeeCount || 0}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2 ml-4">
-                            <button onclick="editEvent('${event.id}')" class="btn btn-primary px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
-                                Edit
-                            </button>
-                            <button onclick="deleteEvent('${event.id}')" class="btn btn-danger px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
         }
 
         // Setup statistics card click listeners
@@ -1327,67 +1119,6 @@
                     populateUpcomingEventsModal();
                 });
             }
-
-            // Track Views card
-            const trackViewsCard = document.getElementById('track-views-card');
-            if (trackViewsCard) {
-                trackViewsCard.addEventListener('click', () => {
-                    console.log('Track views card clicked');
-                    // Focus on event selector
-                    const eventSelector = document.getElementById('event-selector');
-                    if (eventSelector) {
-                        eventSelector.focus();
-                        showToast('Select an event to view detailed analytics', 'info');
-                    }
-                });
-            }
-
-            // Popular Events card
-            const popularEventsCard = document.getElementById('popular-events-card');
-            if (popularEventsCard) {
-                popularEventsCard.addEventListener('click', () => {
-                    console.log('Popular events card clicked');
-                    // Focus on event selector
-                    const eventSelector = document.getElementById('event-selector');
-                    if (eventSelector) {
-                        eventSelector.focus();
-                        showToast('Select an event to view popularity metrics', 'info');
-                    }
-                });
-            }
-        }
-
-
-
-
-
-        // Toast notification function
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg font-medium transform translate-x-full transition-all duration-300 ${
-                type === 'success' ? 'bg-green-500 text-white' :
-                type === 'error' ? 'bg-red-500 text-white' :
-                type === 'warning' ? 'bg-yellow-500 text-white' :
-                'bg-blue-500 text-white'
-            }`;
-            toast.textContent = message;
-            
-            document.body.appendChild(toast);
-            
-            // Animate in
-            setTimeout(() => {
-                toast.classList.remove('translate-x-full');
-            }, 10);
-            
-            // Auto remove
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 300);
-            }, 3000);
         }
 
         console.log('Admin dashboard script loaded');
@@ -1395,7 +1126,7 @@
 
     <!-- Statistics Modals -->
     <!-- Total Events Modal -->
-    <div id="total-events-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+    <div id="total-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
                 <div class="p-6 border-b border-white/10">
@@ -1418,7 +1149,7 @@
     </div>
 
     <!-- Upcoming Events Modal -->
-    <div id="upcoming-events-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+    <div id="upcoming-events-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
                 <div class="p-6 border-b border-white/10">
