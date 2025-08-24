@@ -1041,22 +1041,6 @@
             }
         }
 
-        // Make functions available globally
-        window.unregisterUserForEvent = unregisterUserForEvent;
-        window.showToast = showToast;
-        window.refreshDisplayWithAnimation = refreshDisplayWithAnimation;
-        window.displayRegisteredEvents = displayRegisteredEvents;
-        window.updateStats = updateStats;
-        window.showUnregisterSuccessModal = showUnregisterSuccessModal;
-        window.closeUnregisterConfirmModal = closeUnregisterConfirmModal;
-        window.showUnregisterConfirmationModal = showUnregisterConfirmationModal;
-        window.syncAttendeeCounts = syncAttendeeCounts;
-        window.loadDashboardData = loadDashboardData;
-        window.showRegistrationModal = showRegistrationModal;
-        window.closeRegistrationModal = closeRegistrationModal;
-        window.registerUserForEvent = registerUserForEvent;
-        window.displayAllEvents = displayAllEvents;
-
         // Refresh events with enhanced animation
         document.getElementById('refresh-events').addEventListener('click', async () => {
             const refreshBtn = document.getElementById('refresh-events');
@@ -1078,14 +1062,14 @@
                 refreshBtn.style.transition = 'transform 0.5s ease-in-out';
                 
                 // Load data with animation
-                await window.loadDashboardData();
+                await loadDashboardData();
                 
                 // Show success toast
-                window.showToast('Events refreshed successfully!', 'success');
+                showToast('Events refreshed successfully!', 'success');
                 
             } catch (error) {
                 console.error('Error refreshing events:', error);
-                window.showToast('Failed to refresh events. Please try again.', 'error');
+                showToast('Failed to refresh events. Please try again.', 'error');
             } finally {
                 // Reset button state with smooth transition
                 setTimeout(() => {
@@ -1860,15 +1844,13 @@
         });
 
         // Show unregister confirmation modal
-        // This function is now available globally via window.showUnregisterConfirmationModal
-        // function showUnregisterConfirmationModal(event) {
-            // const modal = document.getElementById('unregister-confirm-modal');
-            // const modalTitle = document.getElementById('unconfirm-event-title');
-            // const modalDetails = document.getElementById('unconfirm-event-details');
-            // const confirmBtn = document.getElementById('confirm-unregister-btn');
-            // const cancelBtn = document.querySelector('#unregister-confirm-modal .btn-secondary');
+        function showUnregisterConfirmationModal(event) {
+            const modal = document.getElementById('unregister-confirm-modal');
+            const modalTitle = document.getElementById('unconfirm-event-title');
+            const modalDetails = document.getElementById('unconfirm-event-details');
+            const confirmBtn = document.getElementById('confirm-unregister-btn');
             
-            // if (modal && modalTitle && modalDetails && confirmBtn) {
+            if (modal && modalTitle && modalDetails && confirmBtn) {
                 // Update modal content
                 modalTitle.textContent = event.title;
                 
@@ -1885,13 +1867,6 @@
                     </div>
                 `;
                 
-                // Set up cancel button action
-                if (cancelBtn) {
-                    cancelBtn.onclick = () => {
-                        closeUnregisterConfirmModal();
-                    };
-                }
-                
                 // Set up confirm button action with loading state
                 confirmBtn.onclick = async () => {
                     try {
@@ -1906,7 +1881,7 @@
                         confirmBtn.disabled = true;
                         
                         // Unregister from event
-                        const success = await window.unregisterUserForEvent(event.id, event);
+                        const success = await unregisterUserForEvent(event.id, event);
                         if (success) {
                             // Update local event data immediately for responsive UI
                             event.attendeeCount = Math.max(0, (event.attendeeCount || 0) - 1);
@@ -1954,122 +1929,88 @@
             }
         }
 
-        // Close unregister confirmation modal - using the one from module scope
-        // This function is now available globally via window.closeUnregisterConfirmModal
-        // function closeUnregisterConfirmModal() {
-        //     const modal = document.getElementById('unregister-confirm-modal');
-        //     if (modal) {
-        //         const modalContent = modal.querySelector('.card');
-        //         modalContent.style.transform = 'scale(0.8) translateY(20px)';
-        //         modalContent.style.opacity = '0';
-        //         modalContent.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        // Close unregister confirmation modal
+        function closeUnregisterConfirmModal() {
+            const modal = document.getElementById('unregister-confirm-modal');
+            if (modal) {
+                const modalContent = modal.querySelector('.card');
+                modalContent.style.transform = 'scale(0.8) translateY(20px)';
+                modalContent.style.opacity = '0';
+                modalContent.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
                 
-        //         setTimeout(() => {
-        //             modal.classList.add('hidden');
-        //             document.body.style.overflow = 'auto';
-        //             // Reset modal content styles
-        //             modalContent.style.transform = '';
-        //             modalContent.style.opacity = '';
-        //             modalContent.style.transition = '';
-        //         }, 300);
-        //     }
-        // }
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                    // Reset modal content styles
+                    modalContent.style.transform = '';
+                    modalContent.style.opacity = '';
+                    modalContent.style.transition = '';
+                }, 300);
+            }
+        }
 
-        // Show unregister success modal - using the one from module scope
-        // This function is now available globally via window.showUnregisterSuccessModal
-        // function showUnregisterSuccessModal(event) {
-        //     const modal = document.getElementById('registration-modal');
-        //     const modalTitle = document.getElementById('modal-event-title');
-        //     const modalDetails = document.getElementById('modal-event-details');
+        // Show unregister success modal
+        function showUnregisterSuccessModal(event) {
+            const modal = document.getElementById('registration-modal');
+            const modalTitle = document.getElementById('modal-event-title');
+            const modalDetails = document.getElementById('modal-event-details');
             
-        //     if (modal && modalTitle && modalDetails) {
-        //         // Update modal content for unregistration
-        //         modalTitle.textContent = 'Unregistration Successful!';
+            if (modal && modalTitle && modalDetails) {
+                // Update modal content for unregistration
+                modalTitle.textContent = 'Unregistration Successful!';
                 
-        //         const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
-        //         const formattedDate = startDate.toLocaleDateString();
-        //         const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const startDate = event.startAt ? new Date(event.startAt.seconds * 1000) : new Date();
+                const formattedDate = startDate.toLocaleDateString();
+                const formattedTime = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 
-        //         modalDetails.innerHTML = `
-        //             <div class="space-y-2">
-        //                 <p><strong>Event:</strong> ${event.title}</p>
-        //         <p><strong>Date:</strong> ${formattedDate}</p>
-        //         <p><strong>Time:</strong> ${formattedTime}</p>
-        //         <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
-        //         <p class="text-green-400 font-medium">You have been successfully unregistered from this event.</p>
-        //     </div>
-        // `;
+                modalDetails.innerHTML = `
+                    <div class="space-y-2">
+                        <p><strong>Event:</strong> ${event.title}</p>
+                        <p><strong>Date:</strong> ${formattedDate}</p>
+                        <p><strong>Time:</strong> ${formattedTime}</p>
+                        <p><strong>Location:</strong> ${event.location || 'TBD'}</p>
+                        <p class="text-green-400 font-medium">You have been successfully unregistered from this event.</p>
+                    </div>
+                `;
                 
-        //         // Show modal with animation
-        //         modal.classList.remove('hidden');
-        //         const modalContent = modal.querySelector('.card');
-        //         setTimeout(() => {
-        //             modalContent.classList.remove('scale-95', 'opacity-0');
-        //             modalContent.classList.add('scale-100', 'opacity-100');
-        //         }, 10);
-        //     }
-        // }
-
-        // Make showUnregisterSuccessModal available globally
-        // This function is now available globally via window.showUnregisterSuccessModal
-        // The function is defined in the module scope and exported globally
-        // No need to redefine it here
+                // Show modal with animation
+                modal.classList.remove('hidden');
+                const modalContent = modal.querySelector('.card');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+        }
 
         // Function to manually sync attendee counts with Firestore
-        // This function is now available globally via window.syncAttendeeCounts
-        // The function is now available globally via window.syncAttendeeCounts
-        // The function is defined in the module scope and exported globally
-        // No need to redefine it here
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // The function is already available globally
-        // async function syncAttendeeCounts() {
-        //     try {
-        //         window.showToast('Syncing attendee counts...', 'info');
+        async function syncAttendeeCounts() {
+            try {
+                showToast('Syncing attendee counts...', 'info');
                 
-        //         // Reload all events from Firestore
-        //         const eventsRef = collection(db, 'events');
-        //         const eventsQuery = query(eventsRef, orderBy('startAt', 'asc'));
-        //         const eventsSnapshot = await getDocs(eventsQuery);
+                // Reload all events from Firestore
+                const eventsRef = collection(db, 'events');
+                const eventsQuery = query(eventsRef, orderBy('startAt', 'asc'));
+                const eventsSnapshot = await getDocs(eventsQuery);
                 
-        //         // Update the allEvents array with fresh data
-        //         allEvents = [];
-        //         eventsSnapshot.forEach((doc) => {
-        //             allEvents.push({ id: doc.id, ...doc.data() });
-        //         });
+                // Update the allEvents array with fresh data
+                allEvents = [];
+                eventsSnapshot.forEach((doc) => {
+                    allEvents.push({ id: doc.id, ...doc.data() });
+                });
                 
-        //         // Refresh display
-        //         await window.displayRegisteredEvents();
-        //         window.updateStats();
+                // Refresh display
+                await displayRegisteredEvents();
+                updateStats();
                 
-        //         window.showToast('Attendee counts synced successfully!', 'success');
-        //         console.log('Attendee counts synced:', allEvents.map(e => ({ title: e.title, attendeeCount: e.attendeeCount })));
+                showToast('Attendee counts synced successfully!', 'success');
+                console.log('Attendee counts synced:', allEvents.map(e => ({ title: e.title, attendeeCount: e.attendeeCount })));
                 
-        //     } catch (error) {
-        //         console.error('Error syncing attendee counts:', error);
-        //         window.showToast('Failed to sync attendee counts. Please try again.', 'error');
-        //     }
-        // }
+            } catch (error) {
+                console.error('Error syncing attendee counts:', error);
+                showToast('Failed to sync attendee counts. Please try again.', 'error');
+            }
+        }
 
         // Close modals on overlay click
         document.addEventListener('click', function(event) {
@@ -2082,9 +2023,9 @@
                 const modal = document.getElementById(modalId);
                 if (event.target === modal) {
                     if (modalId === 'registration-modal') {
-                        window.closeRegistrationModal();
+                        closeRegistrationModal();
                     } else if (modalId === 'unregister-confirm-modal') {
-                        window.closeUnregisterConfirmModal();
+                        closeUnregisterConfirmModal();
                     }
                 }
             });
@@ -2093,8 +2034,8 @@
         // Close modals on escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
-                window.closeRegistrationModal();
-                window.closeUnregisterConfirmModal();
+                closeRegistrationModal();
+                closeUnregisterConfirmModal();
             }
         });
     </script>
