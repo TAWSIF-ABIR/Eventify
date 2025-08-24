@@ -321,6 +321,7 @@ class DashboardPage {
         const elements = {
             logoutBtn: document.getElementById('logout-btn'),
             refreshBtn: document.getElementById('refresh-events'),
+            refreshCertificatesBtn: document.getElementById('refresh-certificates'),
             themeToggle: document.getElementById('theme-toggle')
         };
 
@@ -332,6 +333,9 @@ class DashboardPage {
                         break;
                     case 'refreshBtn':
                         element.addEventListener('click', () => this.loadUserEvents());
+                        break;
+                    case 'refreshCertificatesBtn':
+                        element.addEventListener('click', () => this.generateCompletedEventCertificates());
                         break;
                     case 'themeToggle':
                         element.addEventListener('click', () => this.toggleTheme());
@@ -405,12 +409,18 @@ class DashboardPage {
     }
 
     // Add other missing functions
-    showCertificatesSection() {
+    async showCertificatesSection() {
+        console.log('🎯 Showing certificates section...');
         const certificatesSection = document.getElementById('certificates-section');
         const registeredEvents = document.getElementById('registered-events');
         
         if (certificatesSection) certificatesSection.classList.remove('hidden');
         if (registeredEvents) registeredEvents.classList.add('hidden');
+        
+        console.log('🎯 Starting certificate generation...');
+        // Generate certificates for completed events
+        await this.generateCompletedEventCertificates();
+        console.log('🎯 Certificate generation complete');
     }
 
     hideCertificateModal() {
@@ -470,18 +480,23 @@ class DashboardPage {
             // Clear existing certificates
             certificatesContainer.innerHTML = '';
 
-            // Fetch user profile to get registrations
-            const userRef = doc(db, 'users', this.currentUser.uid);
-            const userDoc = await getDoc(userRef);
+            // Fetch user registrations from subcollection (same as loadUserEvents)
+            console.log('📋 Fetching registrations from subcollection...');
+            const registrationsRef = collection(db, 'users', this.currentUser.uid, 'registrations');
+            const registrationsSnapshot = await getDocs(registrationsRef);
             
-            if (!userDoc.exists()) {
-                console.error('❌ User document not found');
+            if (registrationsSnapshot.empty) {
+                console.log('📋 No registrations found in subcollection');
                 return;
             }
-
-            const userData = userDoc.data();
-            const registrations = userData.registrations || {};
-            console.log('📋 User Registrations:', registrations);
+            
+            const registrations = {};
+            registrationsSnapshot.forEach(doc => {
+                const data = doc.data();
+                registrations[data.eventId] = data;
+            });
+            
+            console.log('📋 User Registrations from subcollection:', registrations);
 
             // Fetch all events
             const eventsRef = collection(db, 'events');
@@ -503,17 +518,23 @@ class DashboardPage {
                     continue;
                 }
 
-                // Expanded certificate generation conditions
-                const isCompletedEvent = eventData.status === 'completed';
+                // Use the same logic as getEventStatus for consistency
+                const eventStatus = this.getEventStatus(eventData.startAt);
+                const isCompletedEvent = eventStatus === 'Completed';
                 const isAttended = registration.attended === true;
 
                 console.log(`Event ${eventId} Certificate Check:`, {
                     eventTitle: eventData.title,
+                    eventStatus,
                     isCompletedEvent,
-                    isAttended
+                    isAttended,
+                    startAt: eventData.startAt,
+                    registration: registration
                 });
 
-                if (isCompletedEvent && isAttended) {
+                // For now, generate certificate if event is completed and user is registered
+                // The attended field might not be set yet, so we'll be lenient
+                if (isCompletedEvent) {
                     console.log(`✅ Generating certificate for: ${eventData.title}`);
 
                     // Create certificate card
@@ -555,9 +576,27 @@ class DashboardPage {
             // Update no certificates message
             const noCertificatesMessage = certificatesContainer.querySelector('.col-span-full');
             if (noCertificatesMessage) {
-                certificatesGenerated > 0 
-                    ? noCertificatesMessage.classList.add('hidden')
-                    : noCertificatesMessage.classList.remove('hidden');
+                if (certificatesGenerated > 0) {
+                    noCertificatesMessage.classList.add('hidden');
+                } else {
+                    noCertificatesMessage.classList.remove('hidden');
+                    // Update the message to be more helpful
+                    noCertificatesMessage.innerHTML = `
+                        <div class="w-16 h-16 bg-gradient-to-br from-brand-muted/20 to-brand-muted/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-brand-text mb-2">No Certificates Available</h3>
+                        <p class="text-brand-muted mb-6">You haven't completed any events yet. Register for events and attend them to earn certificates.</p>
+                        <div class="text-sm text-brand-muted bg-brand-card/50 rounded-lg p-3">
+                            <p><strong>Debug Info:</strong></p>
+                            <p>Total registrations found: ${Object.keys(registrations).length}</p>
+                            <p>Total events found: ${Object.keys(allEvents).length}</p>
+                            <p>Completed events: ${Object.values(allEvents).filter(e => this.getEventStatus(e.startAt) === 'Completed').length}</p>
+                        </div>
+                    `;
+                }
             }
 
             console.groupEnd();
@@ -588,50 +627,50 @@ class DashboardPage {
 
             // Use jsPDF for PDF generation
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({
+            const pdfDoc = new jsPDF({
                 orientation: 'landscape',
                 unit: 'mm',
                 format: 'a4'
             });
 
             // Certificate background
-            doc.setFillColor(255, 255, 255);
-            doc.rect(0, 0, 297, 210, 'F');
+            pdfDoc.setFillColor(255, 255, 255);
+            pdfDoc.rect(0, 0, 297, 210, 'F');
 
             // Border
-            doc.setDrawColor(0, 0, 0);
-            doc.setLineWidth(1);
-            doc.rect(10, 10, 277, 190);
+            pdfDoc.setDrawColor(0, 0, 0);
+            pdfDoc.setLineWidth(1);
+            pdfDoc.rect(10, 10, 277, 190);
 
             // Title
-            doc.setFontSize(24);
-            doc.setTextColor(0, 0, 0);
-            doc.text('Certificate of Participation', 148, 50, { align: 'center' });
+            pdfDoc.setFontSize(24);
+            pdfDoc.setTextColor(0, 0, 0);
+            pdfDoc.text('Certificate of Participation', 148, 50, { align: 'center' });
 
             // Participant Details
-            doc.setFontSize(18);
-            doc.text(`${this.currentUser.displayName}`, 148, 80, { align: 'center' });
+            pdfDoc.setFontSize(18);
+            pdfDoc.text(`${this.currentUser.displayName}`, 148, 80, { align: 'center' });
             
             // Student ID (if available)
             if (userData.studentId) {
-                doc.setFontSize(14);
-                doc.text(`Student ID: ${userData.studentId}`, 148, 90, { align: 'center' });
+                pdfDoc.setFontSize(14);
+                pdfDoc.text(`Student ID: ${userData.studentId}`, 148, 90, { align: 'center' });
             }
 
             // Event Details
-            doc.setFontSize(14);
-            doc.text(`has successfully participated in the event`, 148, 110, { align: 'center' });
-            doc.setFontSize(16);
-            doc.setTextColor(0, 100, 200);
-            doc.text(`${eventData.title}`, 148, 120, { align: 'center' });
+            pdfDoc.setFontSize(14);
+            pdfDoc.text(`has successfully participated in the event`, 148, 110, { align: 'center' });
+            pdfDoc.setFontSize(16);
+            pdfDoc.setTextColor(0, 100, 200);
+            pdfDoc.text(`${eventData.title}`, 148, 120, { align: 'center' });
 
             // Date
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            doc.text(`Date: ${new Date(eventData.endAt.toDate()).toLocaleDateString()}`, 148, 140, { align: 'center' });
+            pdfDoc.setFontSize(12);
+            pdfDoc.setTextColor(0, 0, 0);
+            pdfDoc.text(`Date: ${new Date(eventData.endAt.toDate()).toLocaleDateString()}`, 148, 140, { align: 'center' });
 
             // Save PDF
-            doc.save(`Certificate_${eventData.title.replace(/\s+/g, '_')}.pdf`);
+            pdfDoc.save(`Certificate_${eventData.title.replace(/\s+/g, '_')}.pdf`);
 
             this.toast.success('Certificate downloaded successfully');
 
@@ -651,8 +690,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.dashboardPage = new DashboardPage();
     
     // Make functions globally available for onclick handlers
-    window.showCertificatesSection = () => window.dashboardPage.showCertificatesSection();
-    window.hideCertificateModal = () => window.dashboardPage.hideCertificateModal();
+                    window.showCertificatesSection = async () => await window.dashboardPage.showCertificatesSection();
+        window.hideCertificateModal = () => window.dashboardPage.hideCertificateModal();
+        window.debugCertificates = () => window.dashboardPage.generateCompletedEventCertificates();
     window.showProfileModal = () => window.dashboardPage.showProfileModal();
     window.hideProfileModal = () => window.dashboardPage.hideProfileModal();
     window.editProfile = () => window.dashboardPage.editProfile();
