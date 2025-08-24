@@ -429,20 +429,11 @@
                 allEvents = [];
                 eventsSnapshot.forEach((doc) => {
                     const eventData = { id: doc.id, ...doc.data() };
-                    
-                    // Filter out demo events
-                    const demoEventTitles = [
-                        '24-Hour Hackathon',
-                        'AI and Machine Learning Seminar',
-                        'Web Development Workshop'
-                    ];
-                    
-                    if (!demoEventTitles.includes(eventData.title)) {
-                        allEvents.push(eventData);
-                    }
+                    allEvents.push(eventData);
                 });
 
-                console.log('Loaded events (filtered):', allEvents);
+                console.log('Loaded events:', allEvents);
+                console.log('Number of events loaded:', allEvents.length);
 
                 // Update stats
                 await updateStats();
@@ -474,20 +465,11 @@
                 allEvents = [];
                 snapshot.forEach((doc) => {
                     const eventData = { id: doc.id, ...doc.data() };
-                    
-                    // Filter out demo events
-                    const demoEventTitles = [
-                        '24-Hour Hackathon',
-                        'AI and Machine Learning Seminar',
-                        'Web Development Workshop'
-                    ];
-                    
-                    if (!demoEventTitles.includes(eventData.title)) {
-                        allEvents.push(eventData);
-                    }
+                    allEvents.push(eventData);
                 });
 
-                console.log('Updated events (filtered):', allEvents);
+                console.log('Updated events:', allEvents);
+                console.log('Number of events updated:', allEvents.length);
 
                 // Update stats and display
                 await updateStats();
@@ -648,17 +630,29 @@
 
         // Display events in admin panel
         function displayEvents() {
+            console.log('displayEvents called with allEvents:', allEvents);
+            
             const eventsContainer = document.getElementById('admin-events');
             const eventsLoading = document.getElementById('events-loading');
             const eventsEmpty = document.getElementById('events-empty');
+            
+            console.log('Events container:', eventsContainer);
+            console.log('Events loading element:', eventsLoading);
+            console.log('Events empty element:', eventsEmpty);
 
             // Hide loading
-            if (eventsLoading) eventsLoading.classList.add('hidden');
+            if (eventsLoading) {
+                eventsLoading.classList.add('hidden');
+                console.log('Hidden loading element');
+            }
 
             if (allEvents.length === 0) {
+                console.log('No events to display, showing empty state');
                 if (eventsEmpty) eventsEmpty.classList.remove('hidden');
                 return;
             }
+
+            console.log('Displaying', allEvents.length, 'events');
 
             // Hide empty state
             if (eventsEmpty) eventsEmpty.classList.add('hidden');
