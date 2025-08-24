@@ -359,70 +359,83 @@
 
     <!-- AI Chat Popup Modal -->
     <div id="ai-chat-modal" class="fixed inset-0 z-50 hidden">
-        <!-- Backdrop -->
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeAIChat()"></div>
+        <!-- Enhanced Backdrop with Blur -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeAIChat()"></div>
         
-        <!-- Chat Container -->
-        <div class="absolute bottom-4 right-4 w-96 h-[600px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="chat-container">
-            <!-- Chat Header -->
-            <div class="bg-gradient-to-r from-brand-primary to-brand-accent p-4 text-white">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+        <!-- Enhanced Chat Container -->
+        <div class="absolute bottom-6 right-6 w-[420px] h-[680px] bg-gradient-to-br from-white/95 via-white/90 to-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transform transition-all duration-500 scale-95 opacity-0" id="chat-container">
+            <!-- Enhanced Chat Header with Glass Effect -->
+            <div class="relative bg-gradient-to-r from-brand-primary via-brand-primary/90 to-brand-accent p-6 text-white overflow-hidden">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full blur-xl"></div>
+                
+                <div class="relative flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg border border-white/30">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold">Eventify AI Assistant</h3>
-                            <p class="text-xs text-white/80">Ask me anything!</p>
+                            <h3 class="text-xl font-bold tracking-wide">Eventify AI</h3>
+                            <p class="text-sm text-white/90 font-medium">Your Intelligent Assistant</p>
                         </div>
                     </div>
-                    <button onclick="closeAIChat()" class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <button onclick="closeAIChat()" class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center hover:bg-white/30 transition-all duration-300 hover:scale-110 border border-white/30">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                         </svg>
                     </button>
                 </div>
             </div>
 
-            <!-- Chat Messages -->
-            <div id="chat-messages" class="flex-1 p-4 space-y-4 overflow-y-auto max-h-[400px]">
-                <!-- Welcome Message -->
-                <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 bg-gradient-to-br from-brand-accent to-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <!-- Enhanced Chat Messages with Better Spacing -->
+            <div id="chat-messages" class="flex-1 p-6 space-y-6 overflow-y-auto max-h-[450px] bg-gradient-to-b from-white/50 to-white/30">
+                <!-- Enhanced Welcome Message -->
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-accent to-brand-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg border border-white/20">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <div class="bg-brand-accent/10 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
-                        <p class="text-brand-text text-sm">
-                            👋 Hi! I'm your AI assistant. I can help you with:
+                    <div class="bg-gradient-to-br from-brand-accent/10 to-brand-accent/5 rounded-3xl rounded-tl-md px-6 py-4 max-w-xs shadow-lg border border-white/20 backdrop-blur-sm">
+                        <p class="text-brand-text text-sm font-medium mb-3">
+                            👋 Hello! I'm your AI assistant
                         </p>
-                        <ul class="text-brand-muted text-xs mt-2 space-y-1">
-                            <li>• Event information and registration</li>
-                            <li>• Platform features and navigation</li>
-                            <li>• University club activities</li>
-                            <li>• General questions about Eventify</li>
-                        </ul>
-                        <p class="text-brand-text text-sm mt-2">
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2 text-xs text-brand-muted">
+                                <div class="w-2 h-2 bg-brand-accent rounded-full"></div>
+                                <span>Event information & registration</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs text-brand-muted">
+                                <div class="w-2 h-2 bg-brand-primary rounded-full"></div>
+                                <span>Platform features & navigation</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs text-brand-muted">
+                                <div class="w-2 h-2 bg-brand-accent rounded-full"></div>
+                                <span>University club activities</span>
+                            </div>
+                        </div>
+                        <p class="text-brand-text text-sm mt-3 font-medium">
                             What would you like to know?
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Chat Input -->
-            <div class="p-4 border-t border-white/10 bg-white/50">
-                <div class="flex space-x-3">
+            <!-- Enhanced Chat Input with Glass Effect -->
+            <div class="p-6 bg-gradient-to-t from-white/80 to-white/60 backdrop-blur-xl border-t border-white/20">
+                <div class="flex space-x-4 mb-4">
                     <div class="flex-1 relative">
                         <input 
                             type="text" 
                             id="chat-input"
-                            placeholder="Ask me anything..." 
-                            class="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl text-brand-text placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-transparent transition-all"
+                            placeholder="Ask me anything about Eventify..." 
+                            class="w-full px-5 py-4 bg-white/90 backdrop-blur-sm border border-white/40 rounded-2xl text-brand-text placeholder-brand-muted/70 focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent/50 transition-all duration-300 shadow-lg"
                         >
-                        <div id="typing-indicator" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <div id="typing-indicator" class="hidden absolute right-4 top-1/2 transform -translate-y-1/2">
                             <div class="flex space-x-1">
                                 <div class="w-2 h-2 bg-brand-accent rounded-full animate-bounce"></div>
                                 <div class="w-2 h-2 bg-brand-accent rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
@@ -432,59 +445,64 @@
                     </div>
                     <button 
                         id="send-btn"
-                        class="btn btn-primary px-4 py-3 rounded-2xl hover:scale-105 transition-transform duration-300"
-                        onclick="sendMessage()"
+                        class="w-14 h-14 bg-gradient-to-r from-brand-primary to-brand-accent rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center group"
                     >
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
                         </svg>
                     </button>
                 </div>
 
-                <!-- Quick Questions -->
-                <div class="mt-3 flex flex-wrap gap-2">
+                <!-- Enhanced Quick Questions with Better Design -->
+                <div class="grid grid-cols-2 gap-3">
                     <button 
                         onclick="askQuickQuestion('How do I register for an event?')"
-                        class="px-3 py-2 text-xs bg-brand-accent/20 text-brand-accent rounded-full hover:bg-brand-accent/30 transition-colors"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-accent/10 to-brand-accent/5 text-brand-accent rounded-2xl hover:from-brand-accent/20 hover:to-brand-accent/10 transition-all duration-300 border border-brand-accent/20 hover:border-brand-accent/30 hover:scale-105 shadow-md"
                     >
-                        How do I register?
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span class="font-medium">Register</span>
+                        </div>
                     </button>
                     <button 
                         onclick="askQuickQuestion('What types of events are available?')"
-                        class="px-3 py-2 text-xs bg-brand-primary/20 text-brand-primary rounded-full hover:bg-brand-primary/30 transition-colors"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-primary/10 to-brand-primary/5 text-brand-primary rounded-2xl hover:from-brand-primary/20 hover:to-brand-primary/10 transition-all duration-300 border border-brand-primary/20 hover:border-brand-primary/30 hover:scale-105 shadow-md"
                     >
-                        Event types
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                            <span class="font-medium">Event Types</span>
+                        </div>
                     </button>
                     <button 
                         onclick="askQuickQuestion('How do I create a club event?')"
-                        class="px-3 py-2 text-xs bg-brand-accent/20 text-brand-accent rounded-full hover:bg-brand-accent/30 transition-colors"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-brand-accent/10 to-brand-accent/5 text-brand-accent rounded-2xl hover:from-brand-accent/20 hover:to-brand-accent/10 transition-all duration-300 border border-brand-accent/20 hover:border-brand-accent/30 hover:scale-105 shadow-md"
                     >
-                        Create event
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M12 6v6m-3 0h6m-9-3a9 9 0 1190 0 9 9 0 01-9 9z"/>
+                            </svg>
+                            <span class="font-medium">Create Event</span>
+                        </div>
                     </button>
                     <button 
                         onclick="testGeminiAPIConnection()"
-                        class="px-3 py-2 text-xs bg-yellow-500/20 text-yellow-500 rounded-full hover:bg-yellow-500/30 transition-colors"
+                        class="px-4 py-3 text-sm bg-gradient-to-r from-yellow-500/10 to-yellow-500/5 text-yellow-600 rounded-2xl hover:from-yellow-500/20 hover:to-yellow-500/10 transition-all duration-300 border border-yellow-500/20 hover:border-yellow-500/30 hover:scale-105 shadow-md"
                     >
-                        Test API
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                            <span class="font-medium">Test API</span>
+                        </div>
                     </button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Floating Chat Button -->
-    <button 
-        id="floating-chat-btn"
-        onclick="openAIChat()"
-        class="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full shadow-2xl hover:scale-110 transition-all duration-300 z-40 flex items-center justify-center group"
-    >
-        <svg class="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
-        </svg>
-        
-        <!-- Pulse Animation -->
-        <div class="absolute inset-0 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full animate-ping opacity-20"></div>
-    </button>
 
     <!-- Scripts -->
     <script type="module">
@@ -1152,28 +1170,28 @@
         function addMessageToChat(sender, message) {
             const chatMessages = document.getElementById('chat-messages');
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'flex items-start space-x-3';
+            messageDiv.className = 'flex items-start space-x-4';
             
             if (sender === 'user') {
                 messageDiv.innerHTML = `
-                    <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-primary to-brand-accent rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg border border-white/20">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <div class="bg-brand-primary/20 rounded-2xl rounded-tr-md px-4 py-3 max-w-xs ml-auto">
-                        <p class="text-brand-text text-sm">${escapeHtml(message)}</p>
+                    <div class="bg-gradient-to-br from-brand-primary/20 to-brand-primary/10 rounded-3xl rounded-tr-md px-6 py-4 max-w-xs ml-auto shadow-lg border border-white/20 backdrop-blur-sm">
+                        <p class="text-brand-text text-sm font-medium">${escapeHtml(message)}</p>
                     </div>
                 `;
             } else {
                 messageDiv.innerHTML = `
-                    <div class="w-8 h-8 bg-gradient-to-br from-brand-accent to-brand-primary rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-accent to-brand-primary rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg border border-white/20">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <div class="bg-brand-accent/10 rounded-2xl rounded-tl-md px-4 py-3 max-w-xs">
-                        <p class="text-brand-text text-sm">${escapeHtml(message)}</p>
+                    <div class="bg-gradient-to-br from-brand-accent/10 to-brand-accent/5 rounded-3xl rounded-tl-md px-6 py-4 max-w-xs shadow-lg border border-white/20 backdrop-blur-sm">
+                        <p class="text-brand-text text-sm font-medium">${escapeHtml(message)}</p>
                     </div>
                 `;
             }
