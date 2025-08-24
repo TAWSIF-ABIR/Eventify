@@ -102,7 +102,7 @@
             <div class="p-6 space-y-6 max-w-7xl mx-auto">
                 <!-- Quick Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full" onclick="adminDashboardPage.showTotalEventsDetails()">
+                    <div id="total-events-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
                         <div class="w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                             <svg class="w-8 h-8 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -114,7 +114,7 @@
                         <p class="text-xs text-brand-primary mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
                     </div>
 
-                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full" onclick="adminDashboardPage.showUpcomingEventsDetails()">
+                    <div id="upcoming-events-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
                         <div class="w-16 h-16 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                             <svg class="w-8 h-8 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
@@ -126,7 +126,7 @@
                         <p class="text-xs text-brand-success mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
                     </div>
 
-                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full" onclick="adminDashboardPage.showTotalAttendeesDetails()">
+                    <div id="total-attendees-card" class="card p-6 text-center hover:scale-105 transition-all duration-300 group cursor-pointer max-w-sm mx-auto w-full">
                         <div class="w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                             <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
@@ -139,32 +139,7 @@
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer group max-w-md mx-auto w-full" onclick="adminDashboardPage.showAnalyticsDetails()">
-                        <div class="w-16 h-16 bg-gradient-to-br from-brand-accent/20 to-brand-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-8 h-8 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-brand-text mb-2 group-hover:text-brand-accent transition-colors duration-300">View Analytics</h3>
-                        <p class="text-brand-muted text-sm">Monitor event performance and insights</p>
-                        <div class="w-12 h-1 bg-gradient-to-r from-brand-accent to-brand-accent/60 rounded-full mx-auto mt-3 group-hover:w-16 transition-all duration-300"></div>
-                        <p class="text-xs text-brand-accent mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
-                    </div>
 
-                    <div class="card p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer group max-w-md mx-auto w-full" onclick="adminDashboardPage.showRoomsDetails()">
-                        <div class="w-16 h-16 bg-gradient-to-br from-brand-success/20 to-brand-success/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-8 h-8 text-brand-success" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-brand-text mb-2 group-hover:text-brand-success transition-colors duration-300">Manage Rooms</h3>
-                        <p class="text-brand-muted text-sm">Schedule and organize venues</p>
-                        <div class="w-12 h-1 bg-gradient-to-r from-brand-success to-brand-success/60 rounded-full mx-auto mt-3 group-hover:w-16 transition-all duration-300"></div>
-                        <p class="text-xs text-brand-success mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click for details</p>
-                    </div>
-                </div>
 
                 <!-- Admin Events Section - Moved to Bottom -->
                 <div class="space-y-4 max-w-6xl mx-auto">
@@ -277,45 +252,13 @@
         </div>
     </div>
 
-    <!-- Analytics Modal -->
-    <div id="analytics-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-brand-text">Analytics Overview</h3>
-                <button onclick="adminDashboardPage.hideModal('analytics-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="analytics-content" class="space-y-4">
-                <!-- Content will be loaded dynamically -->
-            </div>
-        </div>
-    </div>
 
-    <!-- Rooms Modal -->
-    <div id="rooms-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="card max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-3xl font-bold text-brand-text">Room Management</h3>
-                <button onclick="adminDashboardPage.hideModal('rooms-modal')" class="text-brand-muted hover:text-brand-text transition-colors duration-300">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="rooms-content" class="space-y-4">
-                <!-- Content will be loaded dynamically -->
-            </div>
-        </div>
-    </div>
 
     <!-- Scripts -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, getDocs, query, orderBy, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, getDocs, query, orderBy, where, doc, deleteDoc, onSnapshot, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -355,6 +298,15 @@
             loadDashboardData();
         });
 
+        // Refresh data when page becomes visible (in case user has multiple tabs)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && auth.currentUser) {
+                console.log('Page became visible, refreshing data...');
+                refreshEventsData();
+                updateStats();
+            }
+        });
+
         // Load dashboard data
         async function loadDashboardData() {
             try {
@@ -367,14 +319,34 @@
                 
                 allEvents = [];
                 eventsSnapshot.forEach((doc) => {
-                    allEvents.push({ id: doc.id, ...doc.data() });
+                    const eventData = { id: doc.id, ...doc.data() };
+                    
+                    // Filter out demo events
+                    const demoEventTitles = [
+                        '24-Hour Hackathon',
+                        'AI and Machine Learning Seminar',
+                        'Web Development Workshop'
+                    ];
+                    
+                    if (!demoEventTitles.includes(eventData.title)) {
+                        allEvents.push(eventData);
+                    }
                 });
 
-                console.log('Loaded events:', allEvents);
+                console.log('Loaded events (filtered):', allEvents);
 
                 // Update stats
-                updateStats();
+                await updateStats();
                 displayEvents();
+                
+                // Setup statistics card click listeners
+                setupStatisticsListeners();
+                
+                // Setup real-time listener for events
+                setupRealTimeListener();
+                
+                // Setup real-time listener for attendees
+                setupAttendeesListener();
                 
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
@@ -383,8 +355,117 @@
             }
         }
 
+        // Setup real-time listener for events
+        function setupRealTimeListener() {
+            const eventsRef = collection(db, 'events');
+            const eventsQuery = query(eventsRef, orderBy('createdAt', 'desc'));
+            
+            onSnapshot(eventsQuery, async (snapshot) => {
+                console.log('Real-time update received');
+                
+                allEvents = [];
+                snapshot.forEach((doc) => {
+                    const eventData = { id: doc.id, ...doc.data() };
+                    
+                    // Filter out demo events
+                    const demoEventTitles = [
+                        '24-Hour Hackathon',
+                        'AI and Machine Learning Seminar',
+                        'Web Development Workshop'
+                    ];
+                    
+                    if (!demoEventTitles.includes(eventData.title)) {
+                        allEvents.push(eventData);
+                    }
+                });
+
+                console.log('Updated events (filtered):', allEvents);
+
+                // Update stats and display
+                await updateStats();
+                displayEvents();
+                
+                // Update any open modals
+                updateOpenModals();
+            }, (error) => {
+                console.error('Real-time listener error:', error);
+            });
+        }
+
+        // Setup real-time listener for attendees to keep counts in sync
+        function setupAttendeesListener() {
+            const attendeesRef = collection(db, 'attendees');
+            
+            onSnapshot(attendeesRef, async (snapshot) => {
+                console.log('Attendees real-time update received');
+                
+                // Update stats and display when attendees change
+                await updateStats();
+                displayEvents();
+                
+                // Update any open modals
+                updateOpenModals();
+                
+                // Force refresh of events to get latest attendeeCount values
+                await refreshEventsData();
+            }, (error) => {
+                console.error('Attendees real-time listener error:', error);
+            });
+        }
+
+        // Refresh events data to get latest attendeeCount values
+        async function refreshEventsData() {
+            try {
+                console.log('Refreshing events data to get latest attendee counts...');
+                
+                // Fetch latest events data
+                const eventsRef = collection(db, 'events');
+                const eventsQuery = query(eventsRef, orderBy('createdAt', 'desc'));
+                const eventsSnapshot = await getDocs(eventsQuery);
+                
+                // Update allEvents array with fresh data
+                allEvents = [];
+                eventsSnapshot.forEach((doc) => {
+                    const eventData = { id: doc.id, ...doc.data() };
+                    
+                    // Filter out demo events
+                    const demoEventTitles = [
+                        '24-Hour Hackathon',
+                        'AI and Machine Learning Seminar',
+                        'Web Development Workshop'
+                    ];
+                    
+                    if (!demoEventTitles.includes(eventData.title)) {
+                        allEvents.push(eventData);
+                    }
+                });
+
+                console.log('Events data refreshed with latest attendee counts:', allEvents);
+                
+                // Update display
+                displayEvents();
+                
+            } catch (error) {
+                console.error('Error refreshing events data:', error);
+            }
+        }
+
+        // Update open modals with fresh data
+        function updateOpenModals() {
+            // Check which modals are open and update them
+            if (!document.getElementById('total-events-modal').classList.contains('hidden')) {
+                populateTotalEventsModal();
+            }
+            if (!document.getElementById('upcoming-events-modal').classList.contains('hidden')) {
+                populateUpcomingEventsModal();
+            }
+            if (!document.getElementById('total-attendees-modal').classList.contains('hidden')) {
+                populateTotalAttendeesModal();
+            }
+        }
+
         // Update dashboard stats
-        function updateStats() {
+        async function updateStats() {
             const totalEventsEl = document.getElementById('total-events');
             const upcomingEventsEl = document.getElementById('upcoming-events');
             const totalAttendeesEl = document.getElementById('total-attendees');
@@ -397,11 +478,70 @@
                 return eventDate > now;
             }).length;
             
-            const totalAttendees = allEvents.reduce((sum, event) => sum + (event.attendeeCount || 0), 0);
+            // Get real attendee counts from attendees collection and sync with events
+            let totalAttendees = 0;
+            let eventsWithAttendees = [];
+            
+            try {
+                const attendeesRef = collection(db, 'attendees');
+                const attendeesSnapshot = await getDocs(attendeesRef);
+                
+                console.log('Fetched attendees snapshot:', attendeesSnapshot.size, 'documents');
+                
+                // Group attendees by event
+                const attendeesByEvent = {};
+                attendeesSnapshot.forEach((doc) => {
+                    const attendee = { id: doc.id, ...doc.data() };
+                    console.log('Processing attendee:', attendee);
+                    if (!attendeesByEvent[attendee.eventId]) {
+                        attendeesByEvent[attendee.eventId] = [];
+                    }
+                    attendeesByEvent[attendee.eventId].push(attendee);
+                });
+                
+                console.log('Grouped attendees by event:', attendeesByEvent);
+                
+                // Update events with real attendee counts from both sources
+                allEvents.forEach(event => {
+                    // Get count from attendees collection
+                    const attendeesCollectionCount = attendeesByEvent[event.id] ? attendeesByEvent[event.id].length : 0;
+                    
+                    // Get count from event document (updated by registration process)
+                    const eventDocumentCount = event.attendeeCount || 0;
+                    
+                    // Use the higher count to ensure accuracy
+                    const realAttendeeCount = Math.max(attendeesCollectionCount, eventDocumentCount);
+                    
+                    event.realAttendeeCount = realAttendeeCount;
+                    totalAttendees += realAttendeeCount;
+                    
+                    // Log for debugging
+                    console.log(`Event ${event.title} (${event.id}): attendees collection=${attendeesCollectionCount}, event document=${eventDocumentCount}, using=${realAttendeeCount}`);
+                });
+                
+                eventsWithAttendees = attendeesByEvent;
+                
+            } catch (error) {
+                console.error('Error counting attendees:', error);
+                // Fallback to event attendeeCount if attendees collection fails
+                totalAttendees = allEvents.reduce((sum, event) => sum + (event.attendeeCount || 0), 0);
+                console.log('Using fallback attendee count:', totalAttendees);
+            }
+
+            console.log('Final stats - Total Events:', totalEvents, 'Upcoming:', upcomingEvents, 'Total Attendees:', totalAttendees);
 
             if (totalEventsEl) totalEventsEl.textContent = totalEvents;
             if (upcomingEventsEl) upcomingEventsEl.textContent = upcomingEvents;
             if (totalAttendeesEl) totalAttendeesEl.textContent = totalAttendees;
+
+            // Store stats for modals
+            window.dashboardStats = {
+                totalEvents,
+                upcomingEvents,
+                totalAttendees,
+                allEvents,
+                eventsWithAttendees
+            };
         }
 
         // Display events in admin panel
@@ -464,7 +604,7 @@
                                         <svg class="w-4 h-4 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
                                         </svg>
-                                        <span class="text-brand-text">${event.attendeeCount || 0} attending</span>
+                                        <span class="text-brand-text">${event.realAttendeeCount || 0} attending</span>
                                     </div>
                                 </div>
                             </div>
@@ -487,14 +627,196 @@
 
         // Global functions for event actions
         window.editEvent = function(eventId) {
-            alert(`Edit event functionality will be implemented. Event ID: ${eventId}`);
-        };
+            try {
+                console.log('Edit event called with ID:', eventId);
+                console.log('All events:', allEvents);
+                
+                const event = allEvents.find(e => e.id === eventId);
+                console.log('Found event:', event);
+                
+                if (!event) {
+                    showToast('Event not found', 'error');
+                    return;
+                }
 
-        window.deleteEvent = function(eventId) {
-            if (confirm('Are you sure you want to delete this event?')) {
-                alert(`Delete event functionality will be implemented. Event ID: ${eventId}`);
+                // Store event data in localStorage for edit page
+                const eventDataString = JSON.stringify(event);
+                console.log('Storing event data in localStorage:', eventDataString);
+                localStorage.setItem('editEventData', eventDataString);
+                
+                // Redirect to edit page
+                console.log('Redirecting to edit-event.html');
+                window.location.href = 'edit-event.html';
+            } catch (error) {
+                console.error('Error preparing edit:', error);
+                showToast('Failed to prepare edit operation', 'error');
             }
         };
+
+        window.deleteEvent = async function(eventId) {
+            try {
+                const event = allEvents.find(e => e.id === eventId);
+                if (!event) {
+                    showToast('Event not found', 'error');
+                    return;
+                }
+
+                // Show beautiful delete confirmation
+                showDeleteConfirmation(event.title, eventId);
+            } catch (error) {
+                console.error('Error preparing delete:', error);
+                showToast('Failed to prepare delete operation', 'error');
+            }
+        };
+
+        // Beautiful delete confirmation popup
+        function showDeleteConfirmation(eventTitle, eventId) {
+            // Create modal backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            backdrop.id = 'delete-confirmation-backdrop';
+            
+            // Create modal content
+            const modal = document.createElement('div');
+            modal.className = 'card max-w-md w-full p-6 transform scale-95 opacity-0 transition-all duration-300';
+            modal.innerHTML = `
+                <div class="text-center">
+                    <!-- Warning Icon -->
+                    <div class="w-20 h-20 bg-gradient-to-br from-red-500/20 to-red-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h3 class="text-xl font-bold text-brand-text mb-3">Delete Event</h3>
+                    
+                    <!-- Message -->
+                    <p class="text-brand-muted mb-6">
+                        Are you sure you want to delete 
+                        <span class="font-semibold text-brand-text">"${eventTitle}"</span>?
+                    </p>
+                    <p class="text-sm text-red-400 mb-6">This action cannot be undone.</p>
+                    
+                    <!-- Buttons -->
+                    <div class="flex space-x-3">
+                        <button onclick="cancelDelete()" class="flex-1 btn btn-secondary px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                            Cancel
+                        </button>
+                        <button onclick="confirmDelete('${eventId}')" class="flex-1 btn btn-danger px-4 py-2 rounded-lg font-medium hover:scale-105 transition-transform duration-300">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            Delete Event
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add to page
+            backdrop.appendChild(modal);
+            document.body.appendChild(backdrop);
+            
+            // Animate in
+            setTimeout(() => {
+                modal.classList.remove('scale-95', 'opacity-0');
+                modal.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Cancel delete function
+        window.cancelDelete = function() {
+            const backdrop = document.getElementById('delete-confirmation-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+        };
+
+        // Confirm delete function
+        window.confirmDelete = async function(eventId) {
+            try {
+                // Show loading state
+                const deleteBtn = document.querySelector('button[onclick*="confirmDelete"]');
+                if (deleteBtn) {
+                    deleteBtn.innerHTML = `
+                        <svg class="w-4 h-4 mr-2 animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                        </svg>
+                        Deleting...
+                    `;
+                    deleteBtn.disabled = true;
+                }
+
+                // Delete the event from Firestore
+                const eventRef = doc(db, 'events', eventId);
+                await deleteDoc(eventRef);
+                
+                // Remove from local array
+                allEvents = allEvents.filter(e => e.id !== eventId);
+                
+                // Update display
+                await updateStats();
+                displayEvents();
+                
+                // Show success message
+                showToast('Event deleted successfully!', 'success');
+                
+                // Close modal with animation
+                const backdrop = document.getElementById('delete-confirmation-backdrop');
+                if (backdrop) {
+                    const modal = backdrop.querySelector('.card');
+                    modal.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        backdrop.remove();
+                    }, 300);
+                }
+                
+            } catch (error) {
+                console.error('Error deleting event:', error);
+                showToast('Failed to delete event. Please try again.', 'error');
+                
+                // Reset button
+                const deleteBtn = document.querySelector('button[onclick*="confirmDelete"]');
+                if (deleteBtn) {
+                    deleteBtn.innerHTML = `
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Delete Event
+                    `;
+                    deleteBtn.disabled = false;
+                }
+            }
+        };
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg font-medium transform translate-x-full transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                type === 'warning' ? 'bg-yellow-500 text-white' :
+                'bg-blue-500 text-white'
+            }`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
 
         // Refresh events
         document.getElementById('refresh-events').addEventListener('click', () => {
@@ -511,40 +833,611 @@
             }
         });
 
+
+
+
+
+
+
+
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                window.location.href = 'auth-new.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+
+
         // Theme toggle
         document.getElementById('theme-toggle').addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
         });
 
-        // Placeholder functions for modal clicks
+        // Beautiful modal functions for statistics
         window.adminDashboardPage = {
             showTotalEventsDetails: () => {
-                alert(`Total Events: ${allEvents.length}\n\nEvents created: ${allEvents.map(e => e.title).join(', ')}`);
+                showModal('total-events-modal');
+                populateTotalEventsModal();
             },
             showUpcomingEventsDetails: () => {
-                const upcoming = allEvents.filter(event => {
-                    if (!event.startAt) return false;
-                    const eventDate = new Date(event.startAt.seconds * 1000);
-                    return eventDate > new Date();
-                });
-                alert(`Upcoming Events: ${upcoming.length}\n\nUpcoming: ${upcoming.map(e => e.title).join(', ')}`);
+                showModal('upcoming-events-modal');
+                populateUpcomingEventsModal();
             },
             showTotalAttendeesDetails: () => {
-                const totalAttendees = allEvents.reduce((sum, event) => sum + (event.attendeeCount || 0), 0);
-                alert(`Total Attendees: ${totalAttendees}\n\nAcross all events`);
+                showModal('total-attendees-modal');
+                populateTotalAttendeesModal();
             },
-            showAnalyticsDetails: () => {
-                alert('Analytics feature will be implemented soon!');
-            },
-            showRoomsDetails: () => {
-                alert('Room management feature will be implemented soon!');
-            },
+
             hideModal: (modalId) => {
-                document.getElementById(modalId).classList.add('hidden');
+                hideModal(modalId);
+            }
+        };
+
+        // Show modal with animation
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                const modalContent = modal.querySelector('.card');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+        }
+
+        // Hide modal with animation
+        function hideModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                const modalContent = modal.querySelector('.card');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Populate total events modal
+        function populateTotalEventsModal() {
+            const container = document.getElementById('total-events-list');
+            if (!container) return;
+
+            if (allEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-brand-muted/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <p class="text-brand-muted">No events found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = allEvents.map(event => `
+                <div class="card p-4 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h4 class="text-lg font-semibold text-brand-text mb-2">${event.title}</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <span class="text-brand-muted">Category:</span>
+                                    <span class="text-brand-text ml-2 capitalize">${event.category || 'N/A'}</span>
+                                </div>
+                                <div>
+                                    <span class="text-brand-muted">Status:</span>
+                                    <span class="text-brand-text ml-2 capitalize">${event.status || 'N/A'}</span>
+                                </div>
+                                <div>
+                                    <span class="text-brand-muted">Attendees:</span>
+                                    <span class="text-brand-text ml-2">${event.realAttendeeCount || 0}</span>
+                                </div>
+                                <div>
+                                    <span class="text-brand-muted">Created:</span>
+                                    <span class="text-brand-text ml-2">${formatDate(event.createdAt)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 ml-4">
+                            <button onclick="editEvent('${event.id}')" class="btn btn-primary px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
+                                Edit
+                            </button>
+                            <button onclick="deleteEvent('${event.id}')" class="btn btn-danger px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Populate upcoming events modal
+        function populateUpcomingEventsModal() {
+            const container = document.getElementById('upcoming-events-list');
+            if (!container) return;
+
+            const now = new Date();
+            const upcomingEvents = allEvents.filter(event => {
+                if (!event.startAt) return false;
+                const eventDate = new Date(event.startAt.seconds * 1000);
+                return eventDate > now;
+            });
+
+            if (upcomingEvents.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-brand-muted/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <p class="text-brand-muted">No upcoming events</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = upcomingEvents.map(event => `
+                <div class="card p-4 hover:scale-105 transition-transform duration-300">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h4 class="text-lg font-semibold text-brand-text mb-2">${event.title}</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div>
+                                    <span class="text-brand-muted">Start:</span>
+                                    <span class="text-brand-text ml-2">${formatDate(event.startAt)}</span>
+                                </div>
+                                <div>
+                                    <span class="text-brand-muted">End:</span>
+                                    <span class="text-brand-text ml-2">${formatDate(event.endAt)}</span>
+                                </div>
+                                <div>
+                                    <span class="text-brand-muted">Location:</span>
+                                    <span class="text-brand-text ml-2">${event.location || 'N/A'}</span>
+                                </div>
+                                <div>
+                                    <span class="text-brand-muted">Attendees:</span>
+                                    <span class="text-brand-text ml-2">${event.realAttendeeCount || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 ml-4">
+                            <button onclick="editEvent('${event.id}')" class="btn btn-primary px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
+                                Edit
+                            </button>
+                            <button onclick="deleteEvent('${event.id}')" class="btn btn-danger px-3 py-2 text-sm hover:scale-105 transition-transform duration-300">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Populate total attendees modal
+        async function populateTotalAttendeesModal() {
+            const container = document.getElementById('total-attendees-list');
+            if (!container) return;
+
+            try {
+                // Use cached attendee data from updateStats if available
+                let eventsWithAttendees = [];
+                let attendeesByEvent = {};
+                
+                if (window.dashboardStats && window.dashboardStats.eventsWithAttendees) {
+                    attendeesByEvent = window.dashboardStats.eventsWithAttendees;
+                    eventsWithAttendees = allEvents.filter(event => 
+                        attendeesByEvent[event.id] && attendeesByEvent[event.id].length > 0
+                    );
+                } else {
+                    // Fallback: fetch attendees if not cached
+                    container.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="inline-flex items-center justify-center w-12 h-12 bg-brand-accent/20 rounded-full mb-4">
+                                <svg class="w-6 h-6 text-brand-accent animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <p class="text-brand-muted">Loading attendees...</p>
+                    </div>
+                `;
+
+                    const attendeesRef = collection(db, 'attendees');
+                    const attendeesSnapshot = await getDocs(attendeesRef);
+                    
+                    if (attendeesSnapshot.empty) {
+                        container.innerHTML = `
+                            <div class="text-center py-12">
+                                <div class="w-16 h-16 bg-brand-muted/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <p class="text-brand-muted">No attendees found</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    attendeesSnapshot.forEach((doc) => {
+                        const attendee = { id: doc.id, ...doc.data() };
+                        if (!attendeesByEvent[attendee.eventId]) {
+                            attendeesByEvent[attendee.eventId] = [];
+                        }
+                        attendeesByEvent[attendee.eventId].push(attendee);
+                    });
+
+                    eventsWithAttendees = allEvents.filter(event => 
+                        attendeesByEvent[event.id] && attendeesByEvent[event.id].length > 0
+                    );
+                }
+
+                if (eventsWithAttendees.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-12">
+                            <div class="w-16 h-16 bg-brand-muted/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-brand-muted" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <p class="text-brand-muted">No events with attendees found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = eventsWithAttendees.map(event => {
+                    const eventAttendees = attendeesByEvent[event.id] || [];
+                    return `
+                        <div class="card p-4 mb-4 hover:shadow-lg transition-all duration-300 cursor-pointer group" onclick="viewEventAttendees('${event.id}')">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-semibold text-brand-text group-hover:text-brand-primary transition-colors duration-300">${event.title}</h4>
+                                    <div class="flex items-center space-x-4 mt-1">
+                                        <span class="bg-brand-primary/20 text-brand-primary px-3 py-1 rounded-full text-sm font-medium">
+                                            ${eventAttendees.length} attendee${eventAttendees.length > 1 ? 's' : ''}
+                                        </span>
+                                        <span class="text-sm text-brand-muted">Click to view details</span>
+                                    </div>
+                                </div>
+                                <div class="w-8 h-8 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-4 h-4 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-brand-card/50 rounded-lg p-4 mb-4">
+                                <p class="text-brand-muted text-sm mb-3">Event Details:</p>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-brand-muted">Category:</span>
+                                        <span class="text-brand-text ml-2 capitalize">${event.category || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-brand-muted">Location:</span>
+                                        <span class="text-brand-text ml-2">${event.location || 'N/A'}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-brand-muted">Date:</span>
+                                        <span class="text-brand-text ml-2">${formatDate(event.startAt)}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <p class="text-brand-muted text-sm font-medium">Sample Attendees (${eventAttendees.length} total):</p>
+                                ${eventAttendees.slice(0, 3).map(attendee => `
+                                    <div class="flex items-center justify-between bg-brand-surface/50 p-3 rounded-lg">
+                                        <div class="flex-1">
+                                            <p class="font-medium text-brand-text">${attendee.userName || 'Unknown User'}</p>
+                                            <p class="text-sm text-brand-muted">${attendee.userEmail}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-xs text-brand-accent">
+                                                ${new Date(attendee.registeredAt.seconds * 1000).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                                ${eventAttendees.length > 3 ? `
+                                    <div class="text-center pt-2">
+                                        <p class="text-sm text-brand-muted">
+                                            +${eventAttendees.length - 3} more attendees
+                                        </p>
+                                        <p class="text-xs text-brand-accent mt-1">Click to view all</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading attendees:', error);
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <p class="text-red-400">Error loading attendees</p>
+                        <p class="text-sm text-brand-muted mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+                // Helper function to format dates
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            
+            let date;
+            if (timestamp.toDate) {
+                date = timestamp.toDate();
+            } else if (timestamp.seconds) {
+                date = new Date(timestamp.seconds * 1000);
+            } else {
+                date = new Date(timestamp);
+            }
+            
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Setup statistics card click listeners
+        function setupStatisticsListeners() {
+            // Total Events card
+            const totalEventsCard = document.getElementById('total-events-card');
+            if (totalEventsCard) {
+                totalEventsCard.addEventListener('click', () => {
+                    console.log('Total events card clicked');
+                    showModal('total-events-modal');
+                    populateTotalEventsModal();
+                });
+            }
+
+            // Upcoming Events card
+            const upcomingEventsCard = document.getElementById('upcoming-events-card');
+            if (upcomingEventsCard) {
+                upcomingEventsCard.addEventListener('click', () => {
+                    console.log('Upcoming events card clicked');
+                    showModal('upcoming-events-modal');
+                    populateUpcomingEventsModal();
+                });
+            }
+
+            // Total Attendees card
+            const totalAttendeesCard = document.getElementById('total-attendees-card');
+            if (totalAttendeesCard) {
+                totalAttendeesCard.addEventListener('click', () => {
+                    console.log('Total attendees card clicked');
+                    // Redirect to attendees overview page
+                    window.location.href = 'attendees-overview.html';
+                });
+            }
+        }
+
+        // Load and display attendees in admin dashboard
+        async function loadAdminAttendees() {
+            try {
+                const attendeesContainer = document.getElementById('admin-attendees');
+                const attendeesLoading = document.getElementById('attendees-loading');
+                const attendeesEmpty = document.getElementById('attendees-empty');
+
+                // Hide loading
+                if (attendeesLoading) attendeesLoading.classList.add('hidden');
+
+                // Use cached attendee data from updateStats if available
+                let attendeesByEvent = {};
+                let eventsWithAttendees = [];
+                
+                if (window.dashboardStats && window.dashboardStats.eventsWithAttendees) {
+                    attendeesByEvent = window.dashboardStats.eventsWithAttendees;
+                    eventsWithAttendees = allEvents.filter(event => 
+                        attendeesByEvent[event.id] && attendeesByEvent[event.id].length > 0
+                    );
+                } else {
+                    // Fallback: fetch attendees if not cached
+                    const attendeesRef = collection(db, 'attendees');
+                    const attendeesSnapshot = await getDocs(attendeesRef);
+                    
+                    if (attendeesSnapshot.empty) {
+                        if (attendeesEmpty) attendeesEmpty.classList.remove('hidden');
+                        return;
+                    }
+
+                    attendeesSnapshot.forEach((doc) => {
+                        const attendee = { id: doc.id, ...doc.data() };
+                        if (!attendeesByEvent[attendee.eventId]) {
+                            attendeesByEvent[attendee.eventId] = [];
+                        }
+                        attendeesByEvent[attendee.eventId].push(attendee);
+                    });
+
+                    eventsWithAttendees = allEvents.filter(event => 
+                        attendeesByEvent[event.id] && attendeesByEvent[event.id].length > 0
+                    );
+                }
+
+                // Hide empty state
+                if (attendeesEmpty) attendeesEmpty.classList.add('hidden');
+
+                if (eventsWithAttendees.length === 0) {
+                    if (attendeesEmpty) attendeesEmpty.classList.remove('hidden');
+                    return;
+                }
+
+                const attendeesHTML = eventsWithAttendees.map(event => {
+                    const eventAttendees = attendeesByEvent[event.id] || [];
+                    return `
+                        <div class="card p-6 hover:shadow-xl transition-all duration-300 cursor-pointer group" onclick="viewEventAttendees('${event.id}')">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-semibold text-brand-text group-hover:text-brand-primary transition-colors duration-300">${event.title}</h3>
+                                    <p class="text-sm text-brand-muted">${event.category || 'General'} • ${event.location || 'TBD'}</p>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="bg-brand-primary/20 text-brand-primary px-3 py-2 rounded-full text-sm font-medium">
+                                        ${eventAttendees.length} attendee${eventAttendees.length > 1 ? 's' : ''}
+                                    </span>
+                                    <div class="w-8 h-8 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <svg class="w-4 h-4 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <p class="text-sm text-brand-muted font-medium">Recent Registrations:</p>
+                                ${eventAttendees.slice(0, 3).map(attendee => `
+                                    <div class="flex items-center justify-between bg-brand-surface/50 p-3 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-brand-primary to-brand-accent rounded-full flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-brand-text text-sm">${attendee.userName || 'Unknown User'}</p>
+                                                <p class="text-xs text-brand-muted">${attendee.userEmail}</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-xs text-brand-accent">
+                                                ${new Date(attendee.registeredAt.seconds * 1000).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                                ${eventAttendees.length > 3 ? `
+                                    <div class="text-center pt-2">
+                                        <p class="text-sm text-brand-muted">
+                                            +${eventAttendees.length - 3} more attendees
+                                        </p>
+                                        <p class="text-xs text-brand-accent mt-1">Click to view all</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                attendeesContainer.innerHTML = attendeesHTML;
+            } catch (error) {
+                console.error('Error loading admin attendees:', error);
+                const attendeesContainer = document.getElementById('admin-attendees');
+                attendeesContainer.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <p class="text-red-400">Failed to load attendees</p>
+                        <p class="text-sm text-brand-muted mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Global function to view event attendees
+        window.viewEventAttendees = function(eventId) {
+            try {
+                console.log('Viewing attendees for event:', eventId);
+                // Redirect to attendees page with event ID
+                window.location.href = `attendees.html?eventId=${eventId}`;
+            } catch (error) {
+                console.error('Error redirecting to attendees page:', error);
+                showToast('Failed to open attendees page', 'error');
             }
         };
 
         console.log('Admin dashboard script loaded');
     </script>
+
+    <!-- Statistics Modals -->
+    <!-- Total Events Modal -->
+    <div id="total-events-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-brand-text">All Events</h3>
+                        <button onclick="hideModal('total-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                    <div id="total-events-list" class="space-y-4">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Events Modal -->
+    <div id="upcoming-events-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+                <div class="p-6 border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-brand-text">Upcoming Events</h3>
+                        <button onclick="hideModal('upcoming-events-modal')" class="text-brand-muted hover:text-brand-text transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-[90vh]">
+                    <div id="upcoming-events-list" class="space-y-4">
+                        <!-- Upcoming events will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Attendees Modal -->
+    <div id="total-attendees-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card max-w-4xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300">
+                <div class="p-6 border-b border-b border-white/10">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-brand-text">Event Attendees</h3>
+                        <button onclick="hideModal('total-attendees-modal')" class="text-brand-muted hover:text-brand-text transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-[90vh]">
+                    <div id="total-attendees-list" class="space-y-6">
+                        <!-- Attendees will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
